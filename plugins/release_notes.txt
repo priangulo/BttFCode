@@ -1,0 +1,71 @@
+CHANGES IN RELEASE
+
+*************************************************
+FeaturePartitioning_1.0.0.201607262140.jar
+Release date: 07/26/2016
+*************************************************
+New things in BttF:
+(1) upload file in Partitions tab
+
+Errors fixed:
+(1) Tag file won't be generated if there is no active partition task, and the user will be notified of this.
+
+*************************************************
+FeaturePartitioning_1.0.0.201607261533.jar
+Release date: 07/26/2016
+*************************************************
+New things in BttF:
+(1) when csv file is saved, also the task is saved in a .tag file
+(2) after asking for FwPi partitioning, BttF asks for a .tag file, and also uploads the csv file.
+
+Errors fixed:
+(1) the odd entries in Mixin's csv were fixed, they were proprietary declarations.
+
+
+*************************************************
+FeaturePartitioning_1.0.0.201607251946.jar
+Release date: 07/25/2016
+*************************************************
+(1) centering progress bar and scroll down contents
+(2) error in generating csv, error found in PrologDB
+(3) error loading ahead
+(4) improvement of error log when getting CRG
+(5) error on BttF windows flows, it wasn't disposing resources correctly
+
+
+*************************************************
+FeaturePartitioning_1.0.0.201607231624.jar
+Release date: 07/23/2016
+*************************************************
+(1) add progress bar
+(2) notify when there is no open project
+
+*************************************************
+FeaturePartitioning_1.0.0.201607221842.jar
+Release date: 07/22/2016
+*************************************************
+(1) fix of error BttF wasn't loading all declarations in csv, error found using Gates
+
+
+*************************************************
+FeaturePartitioning_1.0.0.201607221557.jar
+Release date: 07/22/2016
+*************************************************
+(1) fix of error found when loading prologdb project
+
+
+*************************************************
+FeaturePartitioning_1.0.0.201607191457.jar
+Release date: 07/19/206
+*************************************************
+(1) fw+pi rule: no partition of non-terminal classes
+(2) csv input file error messages display, more clear english
+(3) fprivate of fields should not propagate to methods, they may be hook. Based on error found in gates wire constructor case
+(4) new order of csv file columns: Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,
+	Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences
+(5) constructors and initializers have new unique typeids
+(6) for recursive partitioning, the rule of last feature being fprivate will apply as follows:
+	for the base task, the last feature will be fprivate
+	for recursive tasks, the last child of the last feature will be fprivate
+
+

@@ -45,3 +45,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.class
+plugins/plugins/Annotation_1.0.0.201607191457.jar
+plugins/plugins/Annotation_1.0.0.201607251946.jar
+plugins/plugins/FeaturePartitioning_1.0.0.201607191457.jar
