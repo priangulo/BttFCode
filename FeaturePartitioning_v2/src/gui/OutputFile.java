@@ -17,6 +17,7 @@ import bttf.Fact;
 import bttf.Feature;
 import bttf.Inference;
 import bttf.Partition;
+import bttf.Reference;
 
 public class OutputFile {
 	private JFrame main_window;
@@ -26,6 +27,36 @@ public class OutputFile {
 	
 	public OutputFile(JFrame main_window) {
 		this.main_window = main_window;
+	}
+	
+	public void save_reference_list(ArrayList<Reference> references_list, String project_name){
+		try{
+			if(references_list != null && references_list.size() > 0){
+				String file_name = file_path + project_name + "_referencesList.txt";
+				writer = new BufferedWriter( new FileWriter(file_name,false));
+				for(Reference r : references_list){
+					writer.append(r.toString());
+				}
+				writer.flush();
+				JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+		}catch (IOException e){
+			JOptionPane.showMessageDialog(main_window.getContentPane(), "Error saving references file.", "Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		finally
+		{
+		    try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    	e.printStackTrace();
+		    }
+		}
 	}
 	
 	private void save_feature_model(String task, String tag_file_name){

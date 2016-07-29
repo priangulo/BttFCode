@@ -128,6 +128,9 @@ public class BttFMain extends JFrame {
 		this.partition = partition;
 		inputFile = new InputFile(this, this.partition);
 		dbaccess = new DBAccess(this);
+		
+		outputFile.save_reference_list(this.partition.get_references_list(), this.project_name);
+		
 		//ask for Framework-Plugin refactoring
 		int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to partition into Framework and Plugin?", "Partition type.", JOptionPane.YES_NO_OPTION);
 		if(answer == JOptionPane.YES_OPTION){
@@ -898,7 +901,8 @@ public class BttFMain extends JFrame {
 		{
 
 			//======== pn_actions ========
-			{				//---- lb_addAction ----
+			{				
+				//---- lb_addAction ----
 				lb_addAction.setText("Add task:");
 
 				//---- bt_addAction ----
