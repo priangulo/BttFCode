@@ -112,7 +112,11 @@ public class Reference {
 		this.call_from = call_from;
 		this.call_to = call_to;
 	}
-
+	
+	public String toString_v2() {
+		return call_from + "#" + call_to + "\r\n";
+	}
+			 
 	@Override
 	public String toString() {
 		return "Reference [call_from=" + call_from + ", call_to=" + call_to + "] \n";

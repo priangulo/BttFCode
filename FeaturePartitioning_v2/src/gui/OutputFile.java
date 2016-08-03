@@ -34,8 +34,10 @@ public class OutputFile {
 			if(references_list != null && references_list.size() > 0){
 				String file_name = file_path + project_name + "_referencesList.txt";
 				writer = new BufferedWriter( new FileWriter(file_name,false));
+				writer.append("from#to\r\n");
 				for(Reference r : references_list){
-					writer.append(r.toString());
+					//writer.append(r.toString());
+					writer.append(r.toString_v2());
 				}
 				writer.flush();
 				JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);

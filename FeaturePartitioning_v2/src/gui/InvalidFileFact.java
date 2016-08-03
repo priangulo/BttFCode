@@ -6,6 +6,7 @@ public class InvalidFileFact {
 	public final static String FEATURE_DOESNT_EXIST = "BttF says: Feature doesn't exist.";
 	public final static String FEATURE_ASSIGNED = "BttF insists it belongs to";
 	public final static String FEATURE_INVALID = "BttF says the selected feature is not valid";
+	public final static String INVALID_BOUNDS = "BttF says a contradiction was discovered in feature bounds for this declaration.";
 	
 	private String element_identifier;
 	private String fact;

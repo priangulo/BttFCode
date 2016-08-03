@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import errors.InvalidFeatureBounds;
 import gui.InvalidFileFact;
 
 public class Partition {
@@ -271,11 +272,6 @@ public class Partition {
 			}
 		}
 		
-		//assign elements that their bounds are assigned to the same feature
-		for(Element elem : elements_to_classify){
-			assign_elements_with_bounds_in_same_feature(elem, parent_feature);
-		}
-		
 		//refresh after recalling past facts
 		elements_to_classify = get_elems_to_classify(parent_feature);
 		
@@ -293,6 +289,19 @@ public class Partition {
 						p -> p.getFeature() != null).collect(Collectors.toList()).size() 
 				== e.getRefFromThis().size()
 				).collect(Collectors.toList());
+		
+		boolean change = false;
+		for(Element elem : elements_to_classify){
+			System.out.println("try to assign: " + elem.getIdentifier());
+			boolean temp_change = assign_elements_with_bounds_in_same_feature(elem, parent_feature);
+			if(!change && temp_change){
+				change = true;
+			}
+		}
+		
+		if(change){
+			return get_elems_to_classify(parent_feature);
+		}
 		
 		return elements_to_classify;
 	}
@@ -318,22 +327,29 @@ public class Partition {
 	 * If callers and calls-to are all classified in the same feature (left and right bounds in same feature)
 	 * Add element to that feature too
 	 */
-	private void assign_elements_with_bounds_in_same_feature(Element element, Feature parent_feature){
-		
-		ArrayList<Feature> options = (ArrayList<Feature>) get_element_feature_bounds(element, parent_feature)
-				.stream()
-				.filter(f -> f.getIn_current_task() == true)
-				.collect(Collectors.toList());
-		if(options.size() == 1){
-			Feature feature = options.get(0);
-			if(feature.getOrder() == get_latest_feature_in_task()){
-				element.setIs_fPrivate(true);
-				element.setIs_fPublic(false);
+	private boolean assign_elements_with_bounds_in_same_feature(Element element, Feature parent_feature){
+		try{
+			ArrayList<Feature> options = (ArrayList<Feature>) get_element_feature_bounds(element, parent_feature)
+					.stream()
+					.filter(f -> f.getIn_current_task() == true)
+					.collect(Collectors.toList());
+			
+			if(options.size() == 1){
+				Feature feature = options.get(0);
+				if(feature.getOrder() == get_latest_feature_in_task()){
+					element.setIs_fPrivate(true);
+					element.setIs_fPublic(false);
+				}
+				feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
+				//Add inference to last fact
+				factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because of its bounds.", element, feature);
+				return true;
 			}
-			feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
-			//Add inference to last fact
-			factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because of its bounds.", element, feature);
 		}
+		catch(InvalidFeatureBounds ex){
+			System.out.println("Invalid feature bounds found for " + element.getIdentifier() + "\n" + ex.getMessage());
+		}		
+		return false;
 	}
 	
 	/*
@@ -347,6 +363,10 @@ public class Partition {
 		Feature latest_bound = get_latest_bound(element, feature_options, parent_feature);
 		
 		if(earliest_bound != null && latest_bound != null){
+			if(earliest_bound.getOrder() > latest_bound.getOrder()){
+				throw new InvalidFeatureBounds(earliest_bound.getFeature_name() + " > " + latest_bound.getFeature_name());
+			}
+			
 			feature_options = (ArrayList<Feature>) feature_list.stream()
 					.filter(f -> f.getOrder() >= earliest_bound.getOrder() && f.getOrder() <= latest_bound.getOrder())
 					.collect(Collectors.toList());
@@ -489,17 +509,23 @@ public class Partition {
 				if(element != null){
 					//it is a fresh element, no feature assigned (happy path!)
 					if (element.getFeature() == null){
-						ArrayList<Feature> options = get_element_feature_bounds(element, null);
-						if(options.contains(file_elem.getFeature())){
-							Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
-							add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+						try{
+							ArrayList<Feature> options = get_element_feature_bounds(element, null);
+							if(options.contains(file_elem.getFeature())){
+								Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
+								add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+							}
+							//asked feature is outside bounds
+							else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+									+ ", valid features are: " 
+									+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+									+"."));
+							}
 						}
-						//asked feature is outside bounds
-						else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
-								+ ", valid features are: " 
-								+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
-								+"."));
+						catch (InvalidFeatureBounds ex){
+							invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
 						}
+						
 					}
 					//feature already assigned
 					else{

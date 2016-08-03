@@ -48,7 +48,7 @@ import bttf.ElementType;
 import bttf.Fact;
 import bttf.Feature;
 import bttf.Partition;
-
+import errors.InvalidFeatureBounds;
 import app.AnnotationMain;
 
 
@@ -639,143 +639,149 @@ public class BttFMain extends JFrame {
 	private String set_element_options(Element current_element){
 		String explanations_text = "";
 		
-		//get feature bound
-		ArrayList<Feature> feature_options = partition.get_element_feature_bounds(current_element, this.parent_feature);
-		
-		//get RefTo
-		ArrayList<Feature> refToFeatures = current_element.getRefToFeatures();
-		ArrayList<Feature> layeredRefToFeatures = current_element.getLayeredRefToFeatures();
-		ArrayList<Feature> nonLayeredRefToFeatures = current_element.getNonLayeredRefToFeatures();
-		
-		ArrayList<Element> assignedLayered = (ArrayList<Element>) current_element.getLayeredRefToThis().stream()
-				.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
-				.collect(Collectors.toList());
-		
-		ArrayList<Element> assignedNonLayered = (ArrayList<Element>) current_element.getNonLayeredRefToThis().stream()
-				.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
-				.collect(Collectors.toList());
-		
-		ArrayList<Element> assignedRefTo = (ArrayList<Element>) current_element.getRefToThis().stream()
-				.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
-				.collect(Collectors.toList());
-		
-		boolean reduced_options = (feature_options.size() < partition.get_features_in_task().size());
-		if(reduced_options){
-			explanations_text = "Available feature options are calculated "
-					+ "\nbased on this declaration's feature bounds.";
-		}
-		
-		System.out.println("Feature options: \n" + feature_options.toString());
-		
-		//SCENARIO#RECURSIVE
-		if(recursive_partition && (current_element.isIs_fPrivate() || current_element.isIs_fPublic())){
-			ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
-			for(String f : feature_options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList())){
-
-				button_options.add(new OptionButton(f, current_element.isIs_fPrivate(), current_element.isIs_fPublic()));
-			}
-			refresh_buttons(button_options);
-			explanations_text = explanations_text + "\nSince this is a RECURSIVE TASK, the original modifier"
-					+ "\nfprivate/fpublic remains.";
-		}
-		//NORMAL CASES
-		else 
-		{
-			ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
-			//latest_feature is omega. Omega is the last feature on the first partition task,
-			//or the last child of the last feature
-			int latest_feature_order = partition.get_latest_feature_in_task();
-
-			//CASE#0 if omega is in bounds then e can only be fprivate of it, not public
-			//CASE#1 a declaration can be fpublic of any feature in bounds
-			for(Feature f : feature_options){
-				if(f.getOrder() == latest_feature_order){
-					button_options.add(new OptionButton(f.getFeature_name(), true, false));
-				}
-				else{	
-					button_options.add(new OptionButton(f.getFeature_name(), false, true));
-				}
+		try{
+			//get feature bounds
+			ArrayList<Feature> feature_options = partition.get_element_feature_bounds(current_element, this.parent_feature);
+			
+			//get RefTo
+			ArrayList<Feature> refToFeatures = current_element.getRefToFeatures();
+			ArrayList<Feature> layeredRefToFeatures = current_element.getLayeredRefToFeatures();
+			ArrayList<Feature> nonLayeredRefToFeatures = current_element.getNonLayeredRefToFeatures();
+			
+			ArrayList<Element> assignedLayered = (ArrayList<Element>) current_element.getLayeredRefToThis().stream()
+					.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
+					.collect(Collectors.toList());
+			
+			ArrayList<Element> assignedNonLayered = (ArrayList<Element>) current_element.getNonLayeredRefToThis().stream()
+					.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
+					.collect(Collectors.toList());
+			
+			ArrayList<Element> assignedRefTo = (ArrayList<Element>) current_element.getRefToThis().stream()
+					.filter(e -> e.getFeature() != null && e.getFeature() != this.parent_feature)
+					.collect(Collectors.toList());
+			
+			boolean reduced_options = (feature_options.size() < partition.get_features_in_task().size());
+			if(reduced_options){
+				explanations_text = "Available feature options are calculated "
+						+ "\nbased on this declaration's feature bounds.";
 			}
 			
-			//CASE#2 If none of the declarations in RefTo(e) has been assigned,
-			// e can be fprivate of any feature in bounds
-			if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
+			System.out.println("Feature options: \n" + feature_options.toString());
+			
+			//SCENARIO#RECURSIVE
+			if(recursive_partition && (current_element.isIs_fPrivate() || current_element.isIs_fPublic())){
+				ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
+				for(String f : feature_options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList())){
+
+					button_options.add(new OptionButton(f, current_element.isIs_fPrivate(), current_element.isIs_fPublic()));
+				}
+				refresh_buttons(button_options);
+				explanations_text = explanations_text + "\nSince this is a RECURSIVE TASK, the original modifier"
+						+ "\nfprivate/fpublic remains.";
+			}
+			//NORMAL CASES
+			else 
+			{
+				ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
+				//latest_feature is omega. Omega is the last feature on the first partition task,
+				//or the last child of the last feature
+				int latest_feature_order = partition.get_latest_feature_in_task();
+
+				//CASE#0 if omega is in bounds then e can only be fprivate of it, not public
+				//CASE#1 a declaration can be fpublic of any feature in bounds
 				for(Feature f : feature_options){
-					OptionButton op = new OptionButton(f.getFeature_name(), true, false);
-					if(!button_options.contains(op)){
-						button_options.add(op);
+					if(f.getOrder() == latest_feature_order){
+						button_options.add(new OptionButton(f.getFeature_name(), true, false));
+					}
+					else{	
+						button_options.add(new OptionButton(f.getFeature_name(), false, true));
 					}
 				}
-			}
-			
-			//CASE#3 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
-			//same feature, and it is in bounds, then e can be fprivate of it
-			if(assignedLayered != null && assignedLayered.containsAll(assignedRefTo)
-					&& layeredRefToFeatures != null && layeredRefToFeatures.size() > 0
-					&& layeredRefToFeatures.stream()
+				
+				//CASE#2 If none of the declarations in RefTo(e) has been assigned,
+				// e can be fprivate of any feature in bounds
+				if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
+					for(Feature f : feature_options){
+						OptionButton op = new OptionButton(f.getFeature_name(), true, false);
+						if(!button_options.contains(op)){
+							button_options.add(op);
+						}
+					}
+				}
+				
+				//CASE#3 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
+				//same feature, and it is in bounds, then e can be fprivate of it
+				if(assignedLayered != null && assignedLayered.containsAll(assignedRefTo)
+						&& layeredRefToFeatures != null && layeredRefToFeatures.size() > 0
+						&& layeredRefToFeatures.stream()
+								.filter(f -> f != null && f != this.parent_feature)
+								.distinct().collect(Collectors.toList()).size() == 1){
+					Feature shared = layeredRefToFeatures.stream()
 							.filter(f -> f != null && f != this.parent_feature)
-							.distinct().collect(Collectors.toList()).size() == 1){
-				Feature shared = layeredRefToFeatures.stream()
-						.filter(f -> f != null && f != this.parent_feature)
-						.distinct().collect(Collectors.toList()).get(0);
-				if(shared != null && feature_options.contains(shared)){
-					OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
-					if(!button_options.contains(op)){
-						button_options.add(op);
+							.distinct().collect(Collectors.toList()).get(0);
+					if(shared != null && feature_options.contains(shared)){
+						OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
+						if(!button_options.contains(op)){
+							button_options.add(op);
+						}
 					}
 				}
-			}
-			
-			//CASE#4 If only methods in RefTo(e) have been assigned, and the latest of their is in bounds,
-			// then e can be fprivate of it
-			if(assignedNonLayered != null && assignedNonLayered.containsAll(assignedRefTo) 
-					&& nonLayeredRefToFeatures != null && nonLayeredRefToFeatures.size() > 0){
-				Feature latest_of_nonlay = null;
-				try{
-					latest_of_nonlay = nonLayeredRefToFeatures.stream()
+				
+				//CASE#4 If only methods in RefTo(e) have been assigned, and the latest of their is in bounds,
+				// then e can be fprivate of it
+				if(assignedNonLayered != null && assignedNonLayered.containsAll(assignedRefTo) 
+						&& nonLayeredRefToFeatures != null && nonLayeredRefToFeatures.size() > 0){
+					Feature latest_of_nonlay = null;
+					try{
+						latest_of_nonlay = nonLayeredRefToFeatures.stream()
+								.filter(f -> f != null && f != this.parent_feature)
+								.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+								.get();
+					}catch(NoSuchElementException ex){}
+					if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
+						OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false);
+						if(!button_options.contains(op)){
+							button_options.add(op);
+						}
+					}
+				}
+				
+				//CASE#5 There is a mixture of nonLay and lay declarations assigned. 
+				// If all assigned lay decs share the same feature,
+				// and that feature is at or after the latest of nonLay assigned decs
+				// e can be fprivate of it
+				if( assignedLayered != null && assignedLayered.size() > 0 
+						&& assignedNonLayered != null && assignedNonLayered.size() > 0
+						&& layeredRefToFeatures.stream()
 							.filter(f -> f != null && f != this.parent_feature)
-							.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-							.get();
-				}catch(NoSuchElementException ex){}
-				if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
-					OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false);
-					if(!button_options.contains(op)){
-						button_options.add(op);
-					}
-				}
-			}
-			
-			//CASE#5 There is a mixture of nonLay and lay declarations assigned. 
-			// If all assigned lay decs share the same feature,
-			// and that feature is at or after the latest of nonLay assigned decs
-			// e can be fprivate of it
-			if( assignedLayered != null && assignedLayered.size() > 0 
-					&& assignedNonLayered != null && assignedNonLayered.size() > 0
-					&& layeredRefToFeatures.stream()
-						.filter(f -> f != null && f != this.parent_feature)
-						.distinct().collect(Collectors.toList()).size() == 1
-					){
-				Feature shared = layeredRefToFeatures.stream()
-						.filter(f -> f != null && f != this.parent_feature)
-						.distinct().collect(Collectors.toList()).get(0);
-				Feature latest_of_nonlay = null;
-				try{
-					latest_of_nonlay = nonLayeredRefToFeatures.stream()
+							.distinct().collect(Collectors.toList()).size() == 1
+						){
+					Feature shared = layeredRefToFeatures.stream()
 							.filter(f -> f != null && f != this.parent_feature)
-							.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-							.get();
-				}catch(NoSuchElementException ex){}
-				if(shared != null && latest_of_nonlay != null && shared.getOrder() >= latest_of_nonlay.getOrder() && feature_options.contains(shared)){
-					OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
-					if(!button_options.contains(op)){
-						button_options.add(op);
+							.distinct().collect(Collectors.toList()).get(0);
+					Feature latest_of_nonlay = null;
+					try{
+						latest_of_nonlay = nonLayeredRefToFeatures.stream()
+								.filter(f -> f != null && f != this.parent_feature)
+								.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+								.get();
+					}catch(NoSuchElementException ex){}
+					if(shared != null && latest_of_nonlay != null && shared.getOrder() >= latest_of_nonlay.getOrder() && feature_options.contains(shared)){
+						OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
+						if(!button_options.contains(op)){
+							button_options.add(op);
+						}
 					}
 				}
+				
+				refresh_buttons(button_options);
 			}
-			
-			
-			refresh_buttons(button_options);
 		}
+		catch(InvalidFeatureBounds ex){
+			JOptionPane.showMessageDialog(getContentPane(), "Contradiction discovered in feature bounds for this declaration:\n" + ex.getMessage(), "Contradiction in feature bounds.", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		
 		
 		return explanations_text;
 	}
