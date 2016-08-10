@@ -60,6 +60,9 @@ public class BttFMain extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Font buttonFont = new Font("Tahoma", Font.PLAIN, 11);
+	private Font buttonFont_bold = new Font("Tahoma", Font.BOLD, 11);
+	
 	private final String SKIP_TEXT = "Skip";
 	private final String BASE_TASK_REGEX = "\\w+ : (Base|BASE) (\\w+(( \\+ )|( ?)))+";
 	private final String RECURSIVE_TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
@@ -69,7 +72,7 @@ public class BttFMain extends JFrame {
 	private final String PUB_ENDFIX = "-pub";
 	private final String FWPI_ACTION = "PROGRAM : FRAMEWORK PLUGIN";
 	private final String CSV_EXTENSION = ".csv"; 
-	private final String TAG_EXTENSION = ".tag";
+	private final String BFFT_EXTENSION = ".bttf";
 	
 	private DefaultListModel<String> tasks_listmodel = new DefaultListModel<String>();
 	private ArrayList<String> partition_names;
@@ -144,9 +147,9 @@ public class BttFMain extends JFrame {
 			answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload Feature Model?", "Feature Model.", JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.YES_OPTION){
 				boolean correct = false;
-				String fm_file = getFileFromFileDialog(TAG_EXTENSION);
+				String fm_file = getFileFromFileDialog(BFFT_EXTENSION);
 				if(fm_file != null){
-					ArrayList<String> tasks = inputFile.get_featuremodel_from_tagfile(fm_file);
+					ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
 					if(tasks != null){
 						boolean recursive = false;
 						for(String task : tasks){
@@ -154,8 +157,9 @@ public class BttFMain extends JFrame {
 							recursive = true;
 						}
 						if(tasks.size() == 1 && correct){
-							int end_index = fm_file.lastIndexOf(TAG_EXTENSION);
-							correct = validate_and_process_task(tasks.get(0), 0, fm_file.substring(0, end_index));
+							int end_index = fm_file.lastIndexOf(BFFT_EXTENSION);
+							String csv_file_name = fm_file.substring(0, end_index) + CSV_EXTENSION;
+							correct = validate_and_process_task(tasks.get(0), 0, csv_file_name);
 						}
 					}
 				}
@@ -362,7 +366,7 @@ public class BttFMain extends JFrame {
 		String file_name = (getFileFromFileDialog(CSV_EXTENSION));
 		if(file_name != null){
 			inputFile.get_elements_from_csv_file(file_name, partition_names, true);
-			System.out.println(partition.get_elements_from_file().toString());
+			//System.out.println(partition.get_elements_from_file().toString());
 		}
 		
 		display_next_element();
@@ -399,7 +403,7 @@ public class BttFMain extends JFrame {
 		
 		if(file_name != null){
 			inputFile.get_elements_from_csv_file(file_name, partition_names, false);
-			System.out.println(partition.get_elements_from_file().toString());
+			//System.out.println(partition.get_elements_from_file().toString());
 		}
 		
 		display_next_element();
@@ -578,7 +582,7 @@ public class BttFMain extends JFrame {
 	 */
 	private void create_partition_button(String name, String text, String partition_name, Boolean fprivate){
 		JButton button = new JButton();
-		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		button.setFont(buttonFont);
 		button.setPreferredSize(new Dimension(140, 35));
 		button.setName(name);
 		button.setText(text);				
@@ -612,7 +616,7 @@ public class BttFMain extends JFrame {
 			current_element = null;
 			ta_element.setText("");
 			JOptionPane.showMessageDialog(this.getContentPane(), "No more elements to classify.", "Done!", JOptionPane.INFORMATION_MESSAGE);
-			refresh_buttons(get_allOff_option_buttons());
+			refresh_buttons(get_allOff_option_buttons(), false);
 		}
 		//we still have elements to classify
 		else{
@@ -635,6 +639,7 @@ public class BttFMain extends JFrame {
 		ta_explanations.setText(explanations_text);
 		refresh_facts();
 	}
+	
 	
 	private String set_element_options(Element current_element){
 		String explanations_text = "";
@@ -666,16 +671,15 @@ public class BttFMain extends JFrame {
 						+ "\nbased on this declaration's feature bounds.";
 			}
 			
-			System.out.println("Feature options: \n" + feature_options.toString());
+			//System.out.println("Feature options: \n" + feature_options.toString());
 			
 			//SCENARIO#RECURSIVE
 			if(recursive_partition && (current_element.isIs_fPrivate() || current_element.isIs_fPublic())){
 				ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
-				for(String f : feature_options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList())){
-
-					button_options.add(new OptionButton(f, current_element.isIs_fPrivate(), current_element.isIs_fPublic()));
+				for(Feature f : feature_options){
+					button_options.add(new OptionButton(f.getFeature_name(), current_element.isIs_fPrivate(), current_element.isIs_fPublic(), partition.is_same_than_container_feature(current_element,f)));
 				}
-				refresh_buttons(button_options);
+				refresh_buttons(button_options, true);
 				explanations_text = explanations_text + "\nSince this is a RECURSIVE TASK, the original modifier"
 						+ "\nfprivate/fpublic remains.";
 			}
@@ -691,10 +695,10 @@ public class BttFMain extends JFrame {
 				//CASE#1 a declaration can be fpublic of any feature in bounds
 				for(Feature f : feature_options){
 					if(f.getOrder() == latest_feature_order){
-						button_options.add(new OptionButton(f.getFeature_name(), true, false));
+						button_options.add(new OptionButton(f.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,f)));
 					}
 					else{	
-						button_options.add(new OptionButton(f.getFeature_name(), false, true));
+						button_options.add(new OptionButton(f.getFeature_name(), false, true, partition.is_same_than_container_feature(current_element,f)));
 					}
 				}
 				
@@ -702,7 +706,7 @@ public class BttFMain extends JFrame {
 				// e can be fprivate of any feature in bounds
 				if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
 					for(Feature f : feature_options){
-						OptionButton op = new OptionButton(f.getFeature_name(), true, false);
+						OptionButton op = new OptionButton(f.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,f));
 						if(!button_options.contains(op)){
 							button_options.add(op);
 						}
@@ -720,7 +724,7 @@ public class BttFMain extends JFrame {
 							.filter(f -> f != null && f != this.parent_feature)
 							.distinct().collect(Collectors.toList()).get(0);
 					if(shared != null && feature_options.contains(shared)){
-						OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
+						OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
 						if(!button_options.contains(op)){
 							button_options.add(op);
 						}
@@ -739,7 +743,7 @@ public class BttFMain extends JFrame {
 								.get();
 					}catch(NoSuchElementException ex){}
 					if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
-						OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false);
+						OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,latest_of_nonlay));
 						if(!button_options.contains(op)){
 							button_options.add(op);
 						}
@@ -767,14 +771,14 @@ public class BttFMain extends JFrame {
 								.get();
 					}catch(NoSuchElementException ex){}
 					if(shared != null && latest_of_nonlay != null && shared.getOrder() >= latest_of_nonlay.getOrder() && feature_options.contains(shared)){
-						OptionButton op = new OptionButton(shared.getFeature_name(), true, false);
+						OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
 						if(!button_options.contains(op)){
 							button_options.add(op);
 						}
 					}
 				}
 				
-				refresh_buttons(button_options);
+				refresh_buttons(button_options, true);
 			}
 		}
 		catch(InvalidFeatureBounds ex){
@@ -798,13 +802,34 @@ public class BttFMain extends JFrame {
 		ls_inferences.setListData(new String[0]);
 	}
 	
-	private void refresh_buttons(ArrayList<OptionButton> options){
+	private void refresh_buttons(ArrayList<OptionButton> options, Boolean show_skip){
 		for(JButton button : bt_partitions_list){
 			button.setEnabled(false);
+			button.setFont(buttonFont);
+			
+			if(button.getText().equals(SKIP_TEXT) && show_skip){
+				button.setEnabled(true);
+			}
 		}
+		
+		//System.out.println("OPTIONS:\n" + options.toString());
 		
 		for(OptionButton option : options){
 			for(JButton button : bt_partitions_list){
+				if( 
+					( option.getFpublic() && button.getText().endsWith("-" + option.getPartition_name() + PUB_ENDFIX))
+					|| ( option.getFprivate() && button.getText().endsWith("-" + option.getPartition_name() + PRIV_ENDFIX))
+					|| ( button.getText().equals(SKIP_TEXT) && option.getPartition_name().equals(SKIP_TEXT) ) 
+				){
+					button.setEnabled(true);
+					if(option.getIs_container_feature()){
+						//System.out.println(option.toString());
+						button.setFont(buttonFont_bold);
+					}
+				}
+				
+				
+				/*
 				if( button.getText().contains(option.getPartition_name()) && 
 					( 
 						( option.getFpublic() && button.getText().endsWith(PUB_ENDFIX) )
@@ -812,15 +837,19 @@ public class BttFMain extends JFrame {
 					) 
 				){
 					button.setEnabled(true);
-				}
+					if(option.getIs_container_feature()){
+						System.out.println(option.toString());
+						button.setFont(buttonFont_bold);
+					}
+				}*/
 			}
 		}
 	}
-	
+	/*
 	private ArrayList<OptionButton> get_allOn_option_buttons(){
 		ArrayList<OptionButton> options = new ArrayList<OptionButton>();
 		for(String part : partition_names){
-			options.add(new OptionButton(part, true, true));
+			options.add(new OptionButton(part, true, true, false));
 		}
 		return options;
 	}
@@ -828,15 +857,15 @@ public class BttFMain extends JFrame {
 	private ArrayList<OptionButton> get_fpublic_option_buttons(){
 		ArrayList<OptionButton> options = new ArrayList<OptionButton>();
 		for(String part : partition_names){
-			options.add(new OptionButton(part, false, true));
+			options.add(new OptionButton(part, false, true,false));
 		}
 		return options;
 	}
-	
+	*/
 	private ArrayList<OptionButton> get_allOff_option_buttons(){
 		ArrayList<OptionButton> options = new ArrayList<OptionButton>();
 		for(String part : partition_names){
-			options.add(new OptionButton(part, false, false));
+			options.add(new OptionButton(part, false, false, false));
 		}
 		return options;
 	}

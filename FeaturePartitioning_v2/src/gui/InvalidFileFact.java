@@ -7,6 +7,8 @@ public class InvalidFileFact {
 	public final static String FEATURE_ASSIGNED = "BttF insists it belongs to";
 	public final static String FEATURE_INVALID = "BttF says the selected feature is not valid";
 	public final static String INVALID_BOUNDS = "BttF says a contradiction was discovered in feature bounds for this declaration.";
+	public final static String CONTAINER_UNASSIGNED = "BttF says: Declaration's container has not been assigned to a feature.";
+	public final static String NO_CONTAINER = "BttF says: Declaration has no container.";
 	
 	private String element_identifier;
 	private String fact;

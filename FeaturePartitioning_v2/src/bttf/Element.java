@@ -188,10 +188,12 @@ public class Element implements Comparable<Element>{
 				name_end_index = identifier.indexOf("(");
 			}
 			int name_begin_index = identifier.lastIndexOf(".",name_end_index);
+			name = identifier.substring(name_begin_index+1);
+			
 			int class_name_begin_index = -1;
 			
 			if(name_begin_index != -1 && name_end_index != -1){
-				name = identifier.substring(name_begin_index+1, name_end_index);
+				//name = identifier.substring(name_begin_index+1, name_end_index);
 				pack_and_class = identifier.substring(0, name_begin_index);
 				class_name_begin_index = pack_and_class.lastIndexOf(".");
 			}

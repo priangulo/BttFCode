@@ -61,11 +61,11 @@ public class OutputFile {
 		}
 	}
 	
-	private void save_feature_model(String task, String tag_file_name){
+	private void save_feature_model(String task, String fm_file_name){
 		if(task != null){
 			try{
 				//write feature model - partition task
-				writer = new BufferedWriter( new FileWriter(tag_file_name,false));
+				writer = new BufferedWriter( new FileWriter(fm_file_name,false));
 				writer.append(partition.current_task);
 				writer.flush();
 			}catch (IOException e){
@@ -96,11 +96,12 @@ public class OutputFile {
 		this.partition = partition;
 		if(partition != null && partition.get_elements() != null && partition.get_elements().size() > 0){
 			String datetime = new Date().toString().replace(":", ".");
-			String file_name = file_path + "BttF - " + partition.get_project_name() + " - " + datetime + ".csv";
-			String tag_file_name = file_name + ".tag";
+			String file_name = file_path + "BttF - " + partition.get_project_name() + " - " + datetime;
+			String fm_file_name = file_name + ".bttf";
+			file_name = file_name + ".csv";
 			
 			try{
-				save_feature_model(partition.current_task, tag_file_name);
+				save_feature_model(partition.current_task, fm_file_name);
 				
 				writer = new BufferedWriter( new FileWriter(file_name,false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"

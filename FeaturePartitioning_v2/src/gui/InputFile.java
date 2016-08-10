@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
@@ -31,6 +33,8 @@ public class InputFile {
 	private final int inferred_column = 8;
 	private final int parentfeatures_column = 9;
 	private final int isterminal_column = 10;
+	public final static String container_feature_name = "^";
+	private final Feature container_feature = new Feature(container_feature_name, -1, true, null, false);
 	
 	public InputFile(JFrame main_window, Partition partition) {
 		this.partition = partition;
@@ -38,7 +42,7 @@ public class InputFile {
 		this.output = new OutputFile(main_window);
 	}
 	
-	public ArrayList<String> get_featuremodel_from_tagfile(String file_name){
+	public ArrayList<String> get_featuremodel_from_bttffile(String file_name){
 		BufferedReader reader = null;
 		ArrayList<String> tasks = new ArrayList<String>();
 		try {
@@ -111,7 +115,12 @@ public class InputFile {
 						Boolean ignore_inferred = false;
 						
 						//GET FEATURE
-						feature = partition.get_feature_by_name(feature_name);
+						if(feature_name.startsWith(container_feature_name)){
+							feature = container_feature;
+						}
+						else{
+							feature = partition.get_feature_by_name(feature_name);
+						}
 						
 						//feature is in task, everything is cool
 						//ignore inferred
@@ -187,7 +196,7 @@ public class InputFile {
 				}
 				//sanity_check is false
 				else{
-					JOptionPane.showMessageDialog(main_window.getContentPane(), "File contents are invalid.\nColumn identifier doesn't match package+class+member columns.", "Invalid file contents.", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(main_window.getContentPane(), "File contents are invalid.\nColumn identifier doesn't match package+class+member columns. Line# " + line_number +".", "Invalid file contents.", JOptionPane.ERROR_MESSAGE);
 					break;
 				}
 				
@@ -209,6 +218,7 @@ public class InputFile {
 		}
 		
 		if(sanity_check){
+			sort_elements_by_type(file_elements);
 			invalid_facts.addAll(partition.add_elements_from_facts_file(file_elements, reload));
 			if(invalid_facts.size() > 0){
 				System.out.println("These facts where not valid: \n");
@@ -224,33 +234,45 @@ public class InputFile {
 		}
 	}
 	
+	private void sort_elements_by_type(ArrayList<Element> file_elements){
+		Collections.sort(file_elements, new Comparator<Element>() {
+	        @Override
+	        public int compare(Element e1, Element e2)
+	        {
+	        	return Integer.valueOf(e1.getElement_type().get_element_granularity()).compareTo(e2.getElement_type().get_element_granularity());
+	            
+	        }
+	    });
+	}
+	
 	private boolean sanity_check(String[] fields){
 		String identifier = fields[identifier_column].trim().replace(";", ",");
 		String type = fields[type_column].trim().toUpperCase();
 		ElementType elementType = get_type(type);
 		if(elementType.equals(ElementType.ELEM_TYPE_PACKAGE)){
-			if(identifier.equals(fields[package_column])){
+			if(identifier.toUpperCase().equals(fields[package_column].toUpperCase())){
 				return true;
 			}
 		}
 		else if(elementType.equals(ElementType.ELEM_TYPE_CLASS)){
 			String name = fields[package_column] + "." + fields[class_column];
-			if(identifier.equals(name)){
+			if(identifier.toUpperCase().equals(name.toUpperCase())){
 				return true;
 			}
 		}
-		else if(elementType.equals(ElementType.ELEM_TYPE_FIELD)){
+		else if(elementType.equals(ElementType.ELEM_TYPE_FIELD) || elementType.equals(ElementType.ELEM_TYPE_METHOD) ){
 			String name = fields[package_column] + "." + fields[class_column] + "." + fields[member_column];
-			if(identifier.equals(name)){
+			name = name.replace(";", ",");
+			if(identifier.toUpperCase().equals(name.toUpperCase())){
 				return true;
 			}
 		}
-		else if(elementType.equals(ElementType.ELEM_TYPE_METHOD)){
+		/*else if(elementType.equals(ElementType.ELEM_TYPE_METHOD)){
 			String name = fields[package_column] + "." + fields[class_column] + "." + fields[member_column];
-			if(identifier.substring(0,identifier.indexOf("(")).equals(name)){
+			if(identifier.substring(0,identifier.indexOf("(")).toUpperCase().equals(name.toUpperCase())){
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 	

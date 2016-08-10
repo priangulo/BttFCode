@@ -145,7 +145,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 							
 						}
 						
-						System.out.println(allSuperClasses.toString());
+						//System.out.println(allSuperClasses.toString());
 						
 						for(CompilationUnit compilationUnit : compilationUnits){
 							StringBuilder progress_text = new StringBuilder();
