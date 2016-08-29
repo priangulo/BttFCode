@@ -107,7 +107,7 @@ public class PartitionInferencingHandler {
 		}
 	}
 	
-	/*
+	/* DEPRECATED
 	 * Assigns the same feature to child of a container that only calls siblings
 	 * this recursive method is triggered by adding a container as fprivate
 	 */
@@ -136,7 +136,7 @@ public class PartitionInferencingHandler {
 		}
 	}
 	
-	/*
+	/* DEPRECATED
 	 * Checks if an element only calls to brother or father elements 
 	 */
 	private boolean check_only_call_relatives(Element element){

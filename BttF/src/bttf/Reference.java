@@ -116,6 +116,11 @@ public class Reference {
 	public String toString_v2() {
 		return call_from + "#" + call_to + "\r\n";
 	}
+	
+	public boolean isThisValid(){
+		return (this.call_from != null && this.call_to != null 
+				&& this.call_from_type != null && this.call_to_type != null);
+	}
 			 
 	@Override
 	public String toString() {

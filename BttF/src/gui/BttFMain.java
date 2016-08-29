@@ -48,6 +48,7 @@ import bttf.ElementType;
 import bttf.Fact;
 import bttf.Feature;
 import bttf.Partition;
+import bttf.Reference;
 import errors.InvalidFeatureBounds;
 import app.AnnotationMain;
 
@@ -96,10 +97,35 @@ public class BttFMain extends JFrame {
 	/*SETTINGS*/
 	private boolean usedb = false;
 	private boolean cycle_stuff_on = false;
-
+	private boolean standalone = false;
+	
 	
 	public BttFMain() {
 		JOptionPane.showMessageDialog(this.getContentPane(), "There is no open project in Project Explorer.", "No open project.", JOptionPane.ERROR_MESSAGE);		   
+	}
+	
+	public BttFMain(boolean standalone) {
+		this.standalone = standalone;
+		inputFile = new InputFile(this, null);
+		initComponents();
+		this.setTitle("Back to the Future - Standalone");
+		
+		//get crg file
+		String file_name = (getFileFromFileDialog(CSV_EXTENSION, "CRG required. "));
+		if(file_name != null){
+			this.project_name = getProjectNameFromFileName(file_name);
+			//get references from file
+			ArrayList<Reference> ref_list = inputFile.get_crg_from_csv(file_name, inputFile.GAML_LANGUAGE);
+			if(ref_list != null && !ref_list.isEmpty()){
+				Partition partition = new Partition(ref_list, getProjectNameFromFileName(file_name));
+				start_partitioning(partition);
+			}
+		}
+		else{
+			JOptionPane.showMessageDialog(this.getContentPane(), "Invalid CRG file.", "BttF. Invalid CRG file.", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
 	}
 	
 	public BttFMain(String project_path, String project_name) {
@@ -132,7 +158,9 @@ public class BttFMain extends JFrame {
 		inputFile = new InputFile(this, this.partition);
 		dbaccess = new DBAccess(this);
 		
-		outputFile.save_reference_list(this.partition.get_references_list(), this.project_name);
+		if(!standalone){
+			outputFile.save_reference_list(this.partition.get_references_list(), this.project_name);
+		}
 		
 		//ask for Framework-Plugin refactoring
 		int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to partition into Framework and Plugin?", "Partition type.", JOptionPane.YES_NO_OPTION);
@@ -147,7 +175,7 @@ public class BttFMain extends JFrame {
 			answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload Feature Model?", "Feature Model.", JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.YES_OPTION){
 				boolean correct = false;
-				String fm_file = getFileFromFileDialog(BFFT_EXTENSION);
+				String fm_file = getFileFromFileDialog(BFFT_EXTENSION,"");
 				if(fm_file != null){
 					ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
 					if(tasks != null){
@@ -168,9 +196,11 @@ public class BttFMain extends JFrame {
 				}
 			}
 		}
+		
+		this.setTitle(this.getTitle() + " - " + this.project_name);
 		this.setVisible(true);
-		bt_refactor.setVisible(is_fwpi);
-		bt_annotate.setVisible(!is_fwpi);
+		bt_refactor.setVisible(!standalone && is_fwpi);
+		bt_annotate.setVisible(!standalone && !is_fwpi);
 	}
 	
 	public void setCycle_same_feature(boolean cycle_same_feature) {
@@ -178,6 +208,14 @@ public class BttFMain extends JFrame {
 	}
 	
 
+	private String getProjectNameFromFileName(String file_name){
+		int idxSlash = file_name.lastIndexOf('\\');
+		int idxDot = file_name.lastIndexOf('.');
+		if (idxSlash != -1 && idxDot != -1 && idxSlash < idxDot){
+			return file_name.substring(idxSlash+1, idxDot);
+		}
+		return "";
+	}
 	/*
 	 * add a task button
 	 */
@@ -363,7 +401,7 @@ public class BttFMain extends JFrame {
 	
 	private void reload_partitionpanel(){
 		
-		String file_name = (getFileFromFileDialog(CSV_EXTENSION));
+		String file_name = (getFileFromFileDialog(CSV_EXTENSION, ""));
 		if(file_name != null){
 			inputFile.get_elements_from_csv_file(file_name, partition_names, true);
 			//System.out.println(partition.get_elements_from_file().toString());
@@ -397,7 +435,7 @@ public class BttFMain extends JFrame {
 		if(file_name == null){
 			int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload a csv facts file?", "Input file.", JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.YES_OPTION){
-				file_name = (getFileFromFileDialog(CSV_EXTENSION));			
+				file_name = (getFileFromFileDialog(CSV_EXTENSION, ""));			
 			}
 		}
 		
@@ -411,8 +449,8 @@ public class BttFMain extends JFrame {
 		bt_uploadcvs.setEnabled(true);
 	}
 	
-	private String getFileFromFileDialog(String extension){
-		FileDialog fd = new FileDialog(this, "Choose a " + extension + " file", FileDialog.LOAD);
+	private String getFileFromFileDialog(String extension, String message){
+		FileDialog fd = new FileDialog(this, message + "Choose a " + extension + " file", FileDialog.LOAD);
 		fd.setDirectory(System.getProperty("user.home") + "\\Desktop");
 		fd.setFile("*" + extension);
 		fd.setVisible(true);

@@ -14,15 +14,23 @@ import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import adapter.GAML_Adapter;
 import bttf.Element;
 import bttf.ElementType;
 import bttf.Feature;
 import bttf.Partition;
+import bttf.Reference;
 
 public class InputFile {
+	public final static String container_feature_name = "^";
+	public final static String GAML_LANGUAGE = "GAML";
+	
 	private Partition partition;
 	private JFrame main_window;
 	private OutputFile output;
+	
+	private final String comma = ",";
+	
 	private final int identifier_column = 0;
 	private final int type_column = 2;
 	private final int package_column = 3;
@@ -33,13 +41,40 @@ public class InputFile {
 	private final int inferred_column = 8;
 	private final int parentfeatures_column = 9;
 	private final int isterminal_column = 10;
-	public final static String container_feature_name = "^";
 	private final Feature container_feature = new Feature(container_feature_name, -1, true, null, false);
+	
+	private final int call_from_column = 0;
+	private final int call_to_column = 1;
+	private final int call_from_type_column = 2;
+	private final int call_to_type_column = 3;
+	private final int call_from_mod_column = 4;
+	private final int call_to_mod_column = 5;
+	private final int call_from_code_column = 6;
+	private final int call_to_code_column = 7;
+	private final int call_from_isterminal_column = 8;
+	private final int call_to_isterminal_column = 9;
+	private final int number_fields_crg_file = 10;
+	private final String call_from_name	= "call_from";
+	private final String call_to_name = "call_to";
+	private final String call_from_type_name = "call_from_type";
+	private final String call_to_type_name = "call_to_type"; 
+	private final String call_from_mod_name = "call_from_mod";
+	private final String call_to_mod_name = "call_to_mod";
+	private final String call_from_code_name = "call_from_code";
+	private final String call_to_code_name = "call_to_code";
+	private final String call_from_isterminal_name = "call_from_isterminal";
+	private final String call_to_isterminal_name = "call_to_isterminal";
+
+	
 	
 	public InputFile(JFrame main_window, Partition partition) {
 		this.partition = partition;
 		this.main_window = main_window;
 		this.output = new OutputFile(main_window);
+	}
+	
+	public void set_partition(Partition partition){
+		this.partition = partition;
 	}
 	
 	public ArrayList<String> get_featuremodel_from_bttffile(String file_name){
@@ -79,7 +114,6 @@ public class InputFile {
 		int latest_feature_order = partition.get_latest_feature_in_task();
 		boolean sanity_check = true;
 		BufferedReader reader = null;
-		String comma = ",";
 		String line = "";
 			
 		ArrayList<Element> file_elements = new ArrayList<Element>();
@@ -282,6 +316,99 @@ public class InputFile {
 		else if(type.equals("CLASS")){return ElementType.ELEM_TYPE_CLASS; }
 		else if(type.equals("PACKAGE")){return ElementType.ELEM_TYPE_PACKAGE; }
 		else{ return null;}
+	}
+	
+	public ArrayList<Reference> get_crg_from_csv(String file_name, String language){
+		BufferedReader reader = null;
+		String comma = ",";
+		String line = "";
+		ArrayList<Reference> ref_list = new ArrayList<Reference>();
+		ArrayList<String> error_log = new ArrayList<String>();
+		
+		try {
+			reader = new BufferedReader(new FileReader(file_name));
+			//send first line (header) for check
+			if(crg_csv_sanity_check(reader.readLine())){
+				int line_number = 1;
+				while ((line = reader.readLine()) != null) {
+					String[] fields = line.split(comma);
+					if(fields.length == number_fields_crg_file){
+						Reference ref = new Reference(
+								fields[call_from_column], 
+								fields[call_to_column], 
+								mapElementType(fields[call_from_type_column], language), 
+								mapElementType(fields[call_to_type_column], language),
+								fields[call_from_mod_column], 
+								fields[call_to_mod_column], 
+								fields[call_from_code_column], 
+								fields[call_to_code_column], 
+								fields[call_from_isterminal_column].trim().toUpperCase().equals("TRUE"), 
+								fields[call_to_isterminal_column].trim().toUpperCase().equals("TRUE")
+							);
+						if(ref.isThisValid()){
+							if(!ref_list.contains(ref)){
+								ref_list.add(ref);
+							}
+						}
+						else{
+							error_log.add("CRG file, invalid data in line: " + line_number);
+						}
+					}
+					else{
+						error_log.add("CRG file, not enough fields in line: " + line_number);
+					}
+					
+					line_number++;
+				}
+			}else{
+				error_log.add("CRG file, sanity check failed.");
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(main_window.getContentPane(), "Error uploading file: " + file_name, "File does not exist.", JOptionPane.WARNING_MESSAGE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(!error_log.isEmpty()){
+				output.output_log_to_txt_file(error_log, file_name, "Errors on CRG file", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		return ref_list;
+	}
+	
+	private ElementType mapElementType(String type, String language){
+		switch(language){
+			case GAML_LANGUAGE:
+			GAML_Adapter gaml_adapter = new GAML_Adapter();
+			return gaml_adapter.mapGAMLTypeToJavaType(type);
+		}
+		
+		return null;
+	}
+	
+	private boolean crg_csv_sanity_check(String header){
+		String[] fields = header.split(comma);
+		return(fields.length == number_fields_crg_file
+				&& fields[call_from_column].trim().toLowerCase().equals(call_from_name) 
+				&& fields[call_to_column].trim().toLowerCase().equals(call_to_name)
+				&& fields[call_from_type_column].trim().toLowerCase().equals(call_from_type_name) 
+				&& fields[call_to_type_column].trim().toLowerCase().equals(call_to_type_name)
+				&& fields[call_from_mod_column].trim().toLowerCase().equals(call_from_mod_name) 
+				&& fields[call_to_mod_column].trim().toLowerCase().equals(call_to_mod_name)
+				&& fields[call_from_code_column].trim().toLowerCase().equals(call_from_code_name)
+				&& fields[call_to_code_column].trim().toLowerCase().equals(call_to_code_name)
+				&& fields[call_from_isterminal_column].trim().toLowerCase().equals(call_from_isterminal_name) 
+				&& fields[call_to_isterminal_column].trim().toLowerCase().equals(call_to_isterminal_name)
+			);
 	}
 	
 }
