@@ -730,7 +730,7 @@ public class BttFMain extends JFrame {
 				int latest_feature_order = partition.get_latest_feature_in_task();
 
 				//CASE#0 if omega is in bounds then e can only be fprivate of it, not public
-				//CASE#1 a declaration can be fpublic of any feature in bounds
+				//CASE#A a declaration can be fpublic of any feature in bounds
 				for(Feature f : feature_options){
 					if(f.getOrder() == latest_feature_order){
 						button_options.add(new OptionButton(f.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,f)));
@@ -740,7 +740,7 @@ public class BttFMain extends JFrame {
 					}
 				}
 				
-				//CASE#2 If none of the declarations in RefTo(e) has been assigned,
+				//CASE#B1 If none of the declarations in RefTo(e) has been assigned,
 				// e can be fprivate of any feature in bounds
 				if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
 					for(Feature f : feature_options){
@@ -751,7 +751,7 @@ public class BttFMain extends JFrame {
 					}
 				}
 				
-				//CASE#3 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
+				//CASE#B2 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
 				//same feature, and it is in bounds, then e can be fprivate of it
 				if(assignedLayered != null && assignedLayered.containsAll(assignedRefTo)
 						&& layeredRefToFeatures != null && layeredRefToFeatures.size() > 0
@@ -769,8 +769,9 @@ public class BttFMain extends JFrame {
 					}
 				}
 				
-				//CASE#4 If only methods in RefTo(e) have been assigned, and the latest of their is in bounds,
-				// then e can be fprivate of it
+				//CASE#B3 If only methods in RefTo(e) have been assigned, and the latest of their features
+				// is in bounds for e, then e can be fprivate of the range of features in bounds that are larger
+				//or equal than it.
 				if(assignedNonLayered != null && assignedNonLayered.containsAll(assignedRefTo) 
 						&& nonLayeredRefToFeatures != null && nonLayeredRefToFeatures.size() > 0){
 					Feature latest_of_nonlay = null;
@@ -781,14 +782,18 @@ public class BttFMain extends JFrame {
 								.get();
 					}catch(NoSuchElementException ex){}
 					if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
-						OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,latest_of_nonlay));
-						if(!button_options.contains(op)){
-							button_options.add(op);
+						for(Feature f : feature_options ){
+							if(f.getOrder() >= latest_of_nonlay.getOrder()){
+								OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,latest_of_nonlay));
+								if(!button_options.contains(op)){
+									button_options.add(op);
+								}
+							}
 						}
 					}
 				}
 				
-				//CASE#5 There is a mixture of nonLay and lay declarations assigned. 
+				//CASE#B4 There is a mixture of nonLay and lay declarations assigned. 
 				// If all assigned lay decs share the same feature,
 				// and that feature is at or after the latest of nonLay assigned decs
 				// e can be fprivate of it
@@ -827,6 +832,8 @@ public class BttFMain extends JFrame {
 		
 		return explanations_text;
 	}
+	
+	
 	
 
 	/*

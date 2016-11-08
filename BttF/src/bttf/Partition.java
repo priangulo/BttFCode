@@ -433,6 +433,12 @@ public class Partition {
 		Feature latest_bound = null;
 		
 		ArrayList<Feature> refToElem = element.getLayeredRefToFeatures();
+		/*In addition, since e might be a hook, it could reference fprivate declarations in the present
+		or future, but not it the past. In other words, e must be introduced at or before the earliest
+		of the fprivate declarations that it references.*/
+		if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+			refToElem.addAll(element.getFprivateRefFromFeatures());
+		}
 		
 		if(refToElem != null 
 			&& refToElem.size() > 0 

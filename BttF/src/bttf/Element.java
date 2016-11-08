@@ -379,4 +379,21 @@ public class Element implements Comparable<Element>{
 		
 		return refToElem;
 	}
+	
+	public ArrayList<Element> getFprivateRefFrom(){
+		ArrayList<Element> privRefFrom = (ArrayList<Element>) getRefFromThis().stream()
+					.filter(r -> r.is_fPrivate && r.getFeature() != null)
+					.collect(Collectors.toList());
+		
+		return privRefFrom;
+	}
+	
+	public ArrayList<Feature> getFprivateRefFromFeatures(){
+		ArrayList<Feature> privRefFrom = (ArrayList<Feature>) getFprivateRefFrom().stream()
+				.map(e -> e.getFeature())
+				.collect(Collectors.toList());
+		
+		return privRefFrom;
+	}
+	
 }
