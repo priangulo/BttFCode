@@ -10,6 +10,7 @@ public class Feature {
 	private Boolean in_current_task;
 	private Feature parent_feature;
 	private boolean is_last_feature;
+	private boolean was_last_feature;
 	
 	public Feature(String feature_name, int order, Boolean in_current_task, Feature parent_feature, boolean is_last_feature) {
 		this.feature_name = feature_name;
@@ -17,6 +18,7 @@ public class Feature {
 		this.in_current_task = in_current_task;
 		this.parent_feature = parent_feature;
 		this.is_last_feature = is_last_feature;
+		this.was_last_feature = is_last_feature;
 	}
 	
 	void resetFeature(){
@@ -57,6 +59,16 @@ public class Feature {
 	public boolean getIs_last_feature(){
 		return is_last_feature;
 	}
+	public void setIs_last_feature(boolean is_last_feature){
+		this.is_last_feature = is_last_feature;
+	}
+	public boolean getWas_last_feature() {
+		return was_last_feature;
+	}
+	public void setWas_last_feature(boolean was_last_feature) {
+		this.was_last_feature = was_last_feature;
+	}
+
 	public void addElement(Element element, boolean is_fPrivate, boolean is_fPublic, boolean is_hook){
 		element.setFeature(this);
 		element.setIs_fPrivate(is_fPrivate);
@@ -104,7 +116,7 @@ public class Feature {
 	
 	@Override
 	public String toString() {
-		return "Feature [feature_name=" + feature_name + ", order=" + order + "]\n";
+		return "Feature [feature_name=" + feature_name + ", order=" + order + " islast=" + is_last_feature + "]\n";
 	}
 	@Override
 	public boolean equals(Object object) {

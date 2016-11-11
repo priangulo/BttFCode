@@ -1,6 +1,7 @@
 package bttf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class Partition {
 	private PartitionInferencingHandler partitionInferencing; 
 	private PartitionCycleHandler cycleHandler; 
 	final String private_modifier = "PRIVATE";
+	private ArrayList<String> allFeatures = new ArrayList<String>();
 	
 	public Partition(ArrayList<Reference> references_list, String project_name) {
 		this.references_list = references_list;
@@ -62,11 +64,12 @@ public class Partition {
 	/*
 	 * Public method that calculates the final feature model
 	 * */
-	public void set_featureModel(ArrayList<String> partition_names, String task, boolean recursive, Feature parent_feature, boolean is_fwpi, boolean cycle_stuff_on){
+	public void set_featureModel(ArrayList<String> fm_lines, ArrayList<String> partition_names, String task, boolean recursive, Feature parent_feature, boolean is_fwpi, boolean cycle_stuff_on){
 		this.is_fwpi = is_fwpi;
 		this.cycle_stuff_on = cycle_stuff_on;
 		this.partitionInferencing = new PartitionInferencingHandler(cycle_stuff_on, cycle_list, this.is_fwpi);
 		this.current_task = task;
+		this.allFeatures = get_allfeaturesnames(fm_lines);
 		
 		if(recursive && parent_feature != null){
 			this.feature_model = this.feature_model.replace(
@@ -80,6 +83,39 @@ public class Partition {
 		create_features(partition_names, recursive, parent_feature);
 		
 		System.out.println("Nodes: " + elements_list.size() + " Edges: " + references_list.size());
+	}
+	
+	
+	private ArrayList<String> get_allfeaturesnames(ArrayList<String> fm_lines){
+		ArrayList<String> allFeatures = new ArrayList<String>();
+		if(fm_lines != null){
+			for(String line : fm_lines){
+				String parent = line.substring(0, line.indexOf(":")).trim();
+				String content = line.substring(line.indexOf(":")+2);
+				String[] features = content.split(" ");
+				
+				if (allFeatures.contains(parent)){
+					int newIndex = allFeatures.indexOf(parent) + 1;
+					for(String f : features){
+						if(newIndex >= allFeatures.size()){
+							allFeatures.add(f);
+						}
+						else{
+							allFeatures.add(newIndex, f);
+						}
+						newIndex++;
+					}
+				}
+				else{
+					allFeatures.add(parent);
+					for(String f : features){
+						allFeatures.add(f);
+					}
+				}
+			}
+		}
+		System.out.println(allFeatures.toString());
+		return allFeatures;
 	}
 	
 	
@@ -206,20 +242,40 @@ public class Partition {
 			feature_list = new ArrayList<Feature>();
 		}
 		
-		int count = 0;
+		//is last when is the last of the last, the actual last
+		String last_feature_name = (allFeatures != null && allFeatures.size() > 0) 
+				? allFeatures.get(allFeatures.size()-1).toUpperCase().trim()
+						: "";
+		
 		for(String part : partition_names){
+			
+			boolean is_last = part.toUpperCase().equals(last_feature_name);
+			
 			//is_last? if the feature has no parent and it is the last in this list
 			//or, its parent is the last, and it is also the last in this list (the last child of the last feature)
-			boolean is_last = (parent_feature == null && count == partition_names.size()-1) 
-					|| (parent_feature != null  && parent_feature.getIs_last_feature() && count == partition_names.size()-1);
+			//boolean is_last = (parent_feature == null && count == partition_names.size()-1) 
+			//		|| (parent_feature != null  && parent_feature.getIs_last_feature() && count == partition_names.size()-1);
+			
 			Feature feature = new Feature(part, i, true, parent_feature, is_last);
 			feature_list.add(feature);
 			i++;
-			count++;
 		}
 		
-		//System.out.println(feature_list.toString());
+		if(!last_feature_name.isEmpty()){
+			ArrayList<Feature> wereLast = (ArrayList<Feature>) feature_list.stream()
+					.filter(
+						f -> f.getIs_last_feature() 
+						&& !f.getFeature_name().equals(last_feature_name)
+					).collect(Collectors.toList());
+			if(wereLast != null && wereLast.size() > 0){
+				for(Feature f : wereLast){
+					f.setIs_last_feature(false);
+					f.setWas_last_feature(true);
+				}
+			}
+		}
 		
+		System.out.println(feature_list.toString());
 	}
 	
 	/*

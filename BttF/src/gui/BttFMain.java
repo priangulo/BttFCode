@@ -65,8 +65,9 @@ public class BttFMain extends JFrame {
 	private Font buttonFont_bold = new Font("Tahoma", Font.BOLD, 11);
 	
 	private final String SKIP_TEXT = "Skip";
-	private final String BASE_TASK_REGEX = "\\w+ : (Base|BASE) (\\w+(( \\+ )|( ?)))+";
-	private final String RECURSIVE_TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
+	private final String TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
+	//private final String BASE_TASK_REGEX = "\\w+ : (Base|BASE) (\\w+(( \\+ )|( ?)))+";
+	//private final String RECURSIVE_TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
 	private final String ERROR_TASK_FORMAT = "Error: Wrong task text format.";
 	private final String ERROR_INVALID_FEATURES = "Invalid Features. Read the instructions";
 	private final String PRIV_ENDFIX = "-priv";
@@ -172,7 +173,7 @@ public class BttFMain extends JFrame {
 		//no FW+Pi, then it is SPL, ask for feature model file
 		else{
 			//ask for upload file
-			answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload Feature Model?", "Feature Model.", JOptionPane.YES_NO_OPTION);
+			answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload a Feature Model?", "Feature Model.", JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.YES_OPTION){
 				boolean correct = false;
 				String fm_file = getFileFromFileDialog(BFFT_EXTENSION,"");
@@ -321,7 +322,8 @@ public class BttFMain extends JFrame {
 	}
 	
 	private boolean check_task_regex(String task, boolean recursive){
-		if(recursive){
+		return task.matches(TASK_REGEX);
+		/*if(recursive){
 			if(task.matches(RECURSIVE_TASK_REGEX)){
 				return true;
 			}
@@ -331,7 +333,7 @@ public class BttFMain extends JFrame {
 				return true;
 			}
 		}
-		return false;
+		return false;*/
 	}
 	
 	/*
@@ -410,6 +412,20 @@ public class BttFMain extends JFrame {
 		display_next_element();
 		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Partitions"));
 	}
+	
+	private ArrayList<String> getJListElements(JList jlist){
+		ArrayList<String> allElements = new ArrayList<String>();
+		
+		if(jlist.getModel() != null && jlist.getModel().getSize() > 0){
+			for(int i = 0; i < jlist.getModel().getSize(); i++){
+				allElements.add(jlist.getModel().getElementAt(i).toString());
+			}
+		}
+		
+		return allElements;
+	}
+	
+	
 	private void load_partitionpanel(String task, boolean recursive, String file_name){
 		clean_current_action();
 		lb_task.setText(task);
@@ -419,7 +435,7 @@ public class BttFMain extends JFrame {
 			parent_feature = partition.get_feature_by_name(get_task_parent_name(task));
 		}
 		
-		partition.set_featureModel(partition_names, task, recursive, parent_feature, is_fwpi, cycle_stuff_on);
+		partition.set_featureModel(getJListElements(ls_tasksList), partition_names, task, recursive, parent_feature, is_fwpi, cycle_stuff_on);
 		
 		if(cycle_stuff_on && partition.getCycle_list() != null && partition.getCycle_list().size() > 0){
 			CycleElements cycle_elem_frame = new CycleElements(this, partition.getCycle_list());
@@ -711,8 +727,18 @@ public class BttFMain extends JFrame {
 			
 			//System.out.println("Feature options: \n" + feature_options.toString());
 			
+			/*
+			 * is a recursive task
+			 * and the declaration has a modifier
+			 * and the declaration DOES NOT belong a fake latest feature
+			 */
 			//SCENARIO#RECURSIVE
-			if(recursive_partition && (current_element.isIs_fPrivate() || current_element.isIs_fPublic())){
+			if(recursive_partition 
+				&& (current_element.isIs_fPrivate() || current_element.isIs_fPublic())
+				&& (current_element.getFeature() == null 
+					|| (current_element.getFeature() != null && !current_element.getFeature().getWas_last_feature()) 
+					)
+				){
 				ArrayList<OptionButton> button_options = new ArrayList<OptionButton>();
 				for(Feature f : feature_options){
 					button_options.add(new OptionButton(f.getFeature_name(), current_element.isIs_fPrivate(), current_element.isIs_fPublic(), partition.is_same_than_container_feature(current_element,f)));
