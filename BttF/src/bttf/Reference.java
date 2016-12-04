@@ -114,7 +114,8 @@ public class Reference {
 	}
 	
 	public String toString_v2() {
-		return call_from + "#" + call_to + "\r\n";
+		//return call_from + "#" + call_to + "\r\n";
+		return call_from.replace(",", ";") + "," + call_to.replace(",", ";") + "\r\n";
 	}
 	
 	public boolean isThisValid(){

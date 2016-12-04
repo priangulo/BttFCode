@@ -10,3 +10,4 @@ Export-Package: adapter,
 Require-Bundle: Annotation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.swt.widgets

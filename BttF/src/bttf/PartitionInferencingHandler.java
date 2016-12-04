@@ -50,9 +50,9 @@ public class PartitionInferencingHandler {
 			propagate_fprivate(element, feature_to_assign, factInf, parent_feature);
 		}
 		
-		if(already_hook == false){
+		//if(already_hook == false){
 			hookHandler.late_check_for_hooks(element, factInf, parent_feature);
-		}
+		//}
 		
 		hookHandler.recheck_hook(element, factInf);
 		propagate_childs_with_no_calls(element, feature_to_assign, factInf, parent_feature);
@@ -76,14 +76,25 @@ public class PartitionInferencingHandler {
 		for(Element elem : private_element.getRefToThis().stream()
 				.filter(e -> e.getFeature() == parent_feature && e.isIs_hook() == false)
 				.collect(Collectors.toList())){
-			if(private_element.getElement_type().equals(ElementType.ELEM_TYPE_FIELD) && elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+			//if(private_element.getElement_type().equals(ElementType.ELEM_TYPE_FIELD) && elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
 				//do not propagate fprivate of fields to methods, they may be hooks
-			}
-			else{
+			//}
+			//do not propagate fprivate of fields to methods, they may be hooks
+			//if(!elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD))
+			//{
 				factInf.addInference(elem.getIdentifier() + " calls fprivate " + private_element.getIdentifier() + 
 						" THEN it also belongs to " + feature_to_assign.getFeature_name(), elem, feature_to_assign);
-				add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature);
-			}
+				if(feature_to_assign.getIs_last_feature()){
+					add_element_to_feature(factInf, feature_to_assign, elem, true, false, parent_feature);
+				}
+				else{
+					add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature);
+				}
+				
+			//}
+			
+			
+			
 			
 		}
 	}
@@ -128,10 +139,17 @@ public class PartitionInferencingHandler {
 	void propagate_childs_of_fprivate_containers(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		for(Element child : element.getRefToThis()){
 			if(child.getParentName().equals(element.getIdentifier()) && child.getFeature() == parent_feature){
-				factInf.addInference(child.getIdentifier() + " is a child of " + element.getIdentifier() + 
-						" THEN it also is fprivate of " + feature_to_assign.getFeature_name(), child, feature_to_assign);
-				add_element_to_feature(factInf, feature_to_assign, child, true, false, parent_feature);
-				propagate_childs_of_fprivate_containers(child, feature_to_assign, factInf, parent_feature);
+				if(child.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && child.isIs_hook()){
+					factInf.addInference("Hook " + child.getIdentifier() + " is a child of " + element.getIdentifier() + 
+							" THEN it also belongs to " + feature_to_assign.getFeature_name(), child, feature_to_assign);
+					add_element_to_feature(factInf, feature_to_assign, child, false, true, parent_feature);
+				}
+				else{
+					factInf.addInference(child.getIdentifier() + " is a child of " + element.getIdentifier() + 
+							" THEN it also is fprivate of " + feature_to_assign.getFeature_name(), child, feature_to_assign);
+					add_element_to_feature(factInf, feature_to_assign, child, true, false, parent_feature);
+					propagate_childs_of_fprivate_containers(child, feature_to_assign, factInf, parent_feature);
+				}
 			}
 		}
 	}

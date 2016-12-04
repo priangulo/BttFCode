@@ -28,6 +28,7 @@ public class Partition {
 	private PartitionCycleHandler cycleHandler; 
 	final String private_modifier = "PRIVATE";
 	private ArrayList<String> allFeatures = new ArrayList<String>();
+	public ArrayList<String> featuremodel_alllines;
 	
 	public Partition(ArrayList<Reference> references_list, String project_name) {
 		this.references_list = references_list;
@@ -69,6 +70,7 @@ public class Partition {
 		this.cycle_stuff_on = cycle_stuff_on;
 		this.partitionInferencing = new PartitionInferencingHandler(cycle_stuff_on, cycle_list, this.is_fwpi);
 		this.current_task = task;
+		this.featuremodel_alllines = fm_lines;
 		this.allFeatures = get_allfeaturesnames(fm_lines);
 		
 		if(recursive && parent_feature != null){
@@ -615,6 +617,24 @@ public class Partition {
 									add_element_to_feature_gui(new_feature, element, file_elem.isIs_fPrivate(), new_feature.getParent_feature());
 									//new_feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
 								}
+								//it is a method, it may be a hook
+								else if(file_elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+									try{
+										ArrayList<Feature> options = get_element_feature_bounds(element, null);
+										if(options.contains(file_elem.getFeature())){
+											Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
+											add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+										}
+										//asked feature is outside bounds
+										else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+												+ ", valid features are: " 
+												+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+												+"."));
+										}
+									}catch (InvalidFeatureBounds ex){
+										invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
+									}
+								}
 								//if it is asked to be assigned to something different notify error
 								else{
 									invalid_facts.add(
@@ -748,6 +768,20 @@ public class Partition {
 			}
 		}
 		return false;
+	}
+	
+	public Fact get_fact_with_text(String fact_text){
+		if(factsAndInferences != null && factsAndInferences.size() > 0){
+			try{
+				return factsAndInferences.stream()
+					.filter(f -> f.getFact().equals(fact_text))
+					.collect(Collectors.toList())
+					.get(0);
+			}catch(IndexOutOfBoundsException ex){
+				return null;
+			}
+		}
+		return null;
 	}
 }
 

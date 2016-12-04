@@ -13,9 +13,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,6 +28,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,6 +42,8 @@ import javax.swing.LayoutStyle;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.MatteBorder;
+
+import org.eclipse.swt.widgets.DirectoryDialog;
 
 import adapter.AnnotationElementAdapter;
 import annotation.AnnotationElement;
@@ -74,7 +79,10 @@ public class BttFMain extends JFrame {
 	private final String PUB_ENDFIX = "-pub";
 	private final String FWPI_ACTION = "PROGRAM : FRAMEWORK PLUGIN";
 	private final String CSV_EXTENSION = ".csv"; 
-	private final String BFFT_EXTENSION = ".bttf";
+	private final String BTTF_EXTENSION = ".bttf";
+	
+	private String csv_file = null;
+	private String fm_file = null;
 	
 	private DefaultListModel<String> tasks_listmodel = new DefaultListModel<String>();
 	private ArrayList<String> partition_names;
@@ -86,7 +94,7 @@ public class BttFMain extends JFrame {
 	private ArrayList<Fact> factsInferences = new ArrayList<Fact>();
 	private boolean cycle_same_feature;
 	private boolean is_fwpi = false;
-	private OutputFile outputFile = new OutputFile(this);
+	private OutputFile outputFile;
 	private InputFile inputFile;
 	private DBAccess dbaccess;
 	private Feature parent_feature = null;
@@ -107,7 +115,6 @@ public class BttFMain extends JFrame {
 	
 	public BttFMain(boolean standalone) {
 		this.standalone = standalone;
-		inputFile = new InputFile(this, null);
 		initComponents();
 		this.setTitle("Back to the Future - Standalone");
 		
@@ -115,6 +122,8 @@ public class BttFMain extends JFrame {
 		String file_name = (getFileFromFileDialog(CSV_EXTENSION, "CRG required. "));
 		if(file_name != null){
 			this.project_name = getProjectNameFromFileName(file_name);
+			this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
+			this.inputFile = new InputFile(this, null, this.project_name);
 			//get references from file
 			ArrayList<Reference> ref_list = inputFile.get_crg_from_csv(file_name, inputFile.GAML_LANGUAGE);
 			if(ref_list != null && !ref_list.isEmpty()){
@@ -132,6 +141,7 @@ public class BttFMain extends JFrame {
 	public BttFMain(String project_path, String project_name) {
 		this.project_path = project_path;
 		this.project_name = project_name;
+		this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
 		initComponents();
 		pb = ProgressBar.StartProgressBar(this);   
 	}
@@ -144,7 +154,7 @@ public class BttFMain extends JFrame {
 		if(error){
 			ArrayList<String> error_log = new ArrayList<String>();
 			error_log.add(progress_text);
-			outputFile.output_log_to_txt_file(error_log, outputFile.file_path + "//" + project_name + "_Error_AST", "Error getting CRG from ASTs", JOptionPane.ERROR_MESSAGE);
+			outputFile.output_log_to_txt_file(error_log, "Error_AST", "Error getting CRG from ASTs", JOptionPane.ERROR_MESSAGE);
 			pb.dispose();
 			this.dispose();
 		}else{
@@ -156,12 +166,9 @@ public class BttFMain extends JFrame {
 	public void start_partitioning(Partition partition){
 		bt_uploadcvs.setEnabled(false);
 		this.partition = partition;
-		inputFile = new InputFile(this, this.partition);
+		this.project_name = partition.get_project_name();
+		inputFile = new InputFile(this, this.partition, this.project_name);
 		dbaccess = new DBAccess(this);
-		
-		if(!standalone){
-			outputFile.save_reference_list(this.partition.get_references_list(), this.project_name);
-		}
 		
 		//ask for Framework-Plugin refactoring
 		int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to partition into Framework and Plugin?", "Partition type.", JOptionPane.YES_NO_OPTION);
@@ -172,29 +179,41 @@ public class BttFMain extends JFrame {
 		}
 		//no FW+Pi, then it is SPL, ask for feature model file
 		else{
-			//ask for upload file
-			answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload a Feature Model?", "Feature Model.", JOptionPane.YES_NO_OPTION);
-			if(answer == JOptionPane.YES_OPTION){
-				boolean correct = false;
-				String fm_file = getFileFromFileDialog(BFFT_EXTENSION,"");
-				if(fm_file != null){
-					ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
-					if(tasks != null){
-						boolean recursive = false;
-						for(String task : tasks){
-							correct = validate_and_add_task(task, recursive);
-							recursive = true;
-						}
-						if(tasks.size() == 1 && correct){
-							int end_index = fm_file.lastIndexOf(BFFT_EXTENSION);
-							String csv_file_name = fm_file.substring(0, end_index) + CSV_EXTENSION;
-							correct = validate_and_process_task(tasks.get(0), 0, csv_file_name);
-						}
+			JFileChooser fc = new JFileChooser(System.getProperty("user.home") + "\\Desktop");
+			fc.setDialogTitle("Select BttF's start folder...");
+			fc.setVisible(true);
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fc.showOpenDialog(this);
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+			    File dir = fc.getSelectedFile();
+			    for (final File fileEntry : dir.listFiles()) {
+			        if (!fileEntry.isDirectory()) {
+			            if(csv_file == null && fileEntry.getName().endsWith(CSV_EXTENSION)){
+			            	csv_file = fileEntry.getAbsolutePath();
+			            }
+			            if(fm_file == null && fileEntry.getName().endsWith(BTTF_EXTENSION)){
+			            	fm_file = fileEntry.getAbsolutePath();
+			            }
+			        }
+			    }
+			}
+			
+			boolean correct = false;
+			if(fm_file != null){
+				ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
+				if(tasks != null){
+					boolean recursive = false;
+					for(String task : tasks){
+						correct = validate_and_add_task(task, recursive);
+						recursive = true;
+					}
+					if(tasks.size() > 0 && correct && csv_file != null){
+						correct = validate_and_process_task(tasks.get(0), 0, csv_file);
 					}
 				}
-				if(!correct){
-					JOptionPane.showMessageDialog(this.getContentPane(), "Error uploading partition task.", "Error", JOptionPane.ERROR_MESSAGE);
-				}
+			}
+			if(!correct){
+				JOptionPane.showMessageDialog(this.getContentPane(), "Invalid folder contents.", "No files to upload.", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		
@@ -282,7 +301,7 @@ public class BttFMain extends JFrame {
 				if(check_task_regex(task, true)){
 					if(check_feature_subpartition(task, task_no, true)){
 						recursive_partition = true;
-						load_partitionpanel(task, true, null);
+						load_partitionpanel(task, true, file_name);
 						return true;
 					}
 					else{JOptionPane.showMessageDialog(this.getContentPane(), ERROR_INVALID_FEATURES, "Error", JOptionPane.ERROR_MESSAGE);}
@@ -343,8 +362,8 @@ public class BttFMain extends JFrame {
 	 */
 	private boolean check_feature_subpartition(String task, int task_no, boolean process){
 		//Boolean correct = true;
-		String new_task_parent = get_task_parent_name(task);
-		String[] new_task_partitions = get_task_partitions(task);
+		String new_task_parent = get_task_parent_name(task.toUpperCase());
+		String[] new_task_partitions = get_task_partitions(task.toUpperCase());
 		
 		//1 - Check parent feature is not a parent element in existing tasks, a feature can be subpartitioned only once
 		for(int i = 0; i < tasks_listmodel.size(); i++){
@@ -464,7 +483,7 @@ public class BttFMain extends JFrame {
 		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Partitions"));
 		bt_uploadcvs.setEnabled(true);
 	}
-	
+		
 	private String getFileFromFileDialog(String extension, String message){
 		FileDialog fd = new FileDialog(this, message + "Choose a " + extension + " file", FileDialog.LOAD);
 		fd.setDirectory(System.getProperty("user.home") + "\\Desktop");
@@ -547,10 +566,41 @@ public class BttFMain extends JFrame {
 	}
 	
 	/*
+	 * Sorts the list of facts
+	 */
+	private void bt_sortMouseClicked(MouseEvent e){
+		factsInferences = partition.get_facts();
+		Collections.sort(factsInferences, new Comparator<Fact>() {
+		    @Override
+		    public int compare(Fact f1, Fact f2) {
+		    	if(f1 != null && f2 != null && f1.getElement() != null && f2.getElement() != null){
+		    		return f1.getElement().getIdentifier().compareTo(f2.getElement().getIdentifier());
+		    	}
+		    	return 0;
+		    }
+		});
+		
+		List<String> facts_list = factsInferences.stream().map(f -> f.getFact()).collect(Collectors.toList());
+		ls_facts.setListData((String[]) facts_list.toArray(new String[0]));
+		ls_inferences.setListData(new String[0]);
+	}
+	
+	/*
 	 * Opens the more info window for an element
 	 */
-	private void bt_moreInfoMouseClicked(MouseEvent e){
-		if(current_element != null){
+	private void bt_moreInfoMouseClicked(MouseEvent e, String fact_text){
+		if(fact_text != null){
+			Fact fact = partition.get_fact_with_text(fact_text);
+			System.out.println(fact.toString());
+			if(fact != null && fact.getElement() != null){
+				DeclarationMoreInfo more_info_fram = new DeclarationMoreInfo(fact.getElement());
+				more_info_fram.setVisible(true);
+			}
+			else{
+				JOptionPane.showMessageDialog(this.getContentPane(), "Declaration in fact not found.", "No declaration found.", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		else if(current_element != null){
 			DeclarationMoreInfo more_info_fram = new DeclarationMoreInfo(current_element);
 			more_info_fram.setVisible(true);
 		}
@@ -660,8 +710,9 @@ public class BttFMain extends JFrame {
 		ArrayList<Element> elements_to_classify = partition.get_next_elems_to_classify(this.parent_feature);
 		
 		int count_pendingelems = partition.get_elements().stream().filter(e -> e.getFeature() == parent_feature).collect(Collectors.toList()).size();
-		int count_facts = partition.get_facts().size();
-		int count_inferences = partition.get_elements().size() - count_pendingelems - count_facts; 
+		//int count_facts = partition.get_facts().size();
+		long count_facts = partition.get_facts().stream().map(f -> f.getElement()).distinct().count();
+		long count_inferences = partition.get_elements().size() - count_pendingelems - count_facts; 
 		lb_countelements.setText("#Declarations: " + partition.get_elements().size() + "  #Pending: " + count_pendingelems + "  #Facts: " + count_facts + "  #Inferences: " + count_inferences);
 		
 		//no more elements to classify
@@ -766,92 +817,99 @@ public class BttFMain extends JFrame {
 					}
 				}
 				
-				//CASE#B1 If none of the declarations in RefTo(e) has been assigned,
-				// e can be fprivate of any feature in bounds
-				if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
-					for(Feature f : feature_options){
-						OptionButton op = new OptionButton(f.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,f));
-						if(!button_options.contains(op)){
-							button_options.add(op);
+				//fprivate possibilities calculation only for non-hooks
+				//if a method has been already identified as hook but its actual feature is pending
+				//only offer fpublic opions, a hook cannot be fprivate
+				if(!current_element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) ||
+						(current_element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && !current_element.isIs_hook())
+					){
+				
+					//CASE#B1 If none of the declarations in RefTo(e) has been assigned,
+					// e can be fprivate of any feature in bounds
+					if( assignedRefTo == null || ( assignedRefTo != null && assignedRefTo.size() == 0) ){
+						for(Feature f : feature_options){
+							OptionButton op = new OptionButton(f.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,f));
+							if(!button_options.contains(op)){
+								button_options.add(op);
+							}
 						}
 					}
-				}
-				
-				//CASE#B2 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
-				//same feature, and it is in bounds, then e can be fprivate of it
-				if(assignedLayered != null && assignedLayered.containsAll(assignedRefTo)
-						&& layeredRefToFeatures != null && layeredRefToFeatures.size() > 0
-						&& layeredRefToFeatures.stream()
+					
+					//CASE#B2 If only layered decs in RefTo(e) have been assigned, and all of them are assigned to the
+					//same feature, and it is in bounds, then e can be fprivate of it
+					if(assignedLayered != null && assignedLayered.containsAll(assignedRefTo)
+							&& layeredRefToFeatures != null && layeredRefToFeatures.size() > 0
+							&& layeredRefToFeatures.stream()
+									.filter(f -> f != null && f != this.parent_feature)
+									.distinct().collect(Collectors.toList()).size() == 1){
+						Feature shared = layeredRefToFeatures.stream()
 								.filter(f -> f != null && f != this.parent_feature)
-								.distinct().collect(Collectors.toList()).size() == 1){
-					Feature shared = layeredRefToFeatures.stream()
-							.filter(f -> f != null && f != this.parent_feature)
-							.distinct().collect(Collectors.toList()).get(0);
-					if(shared != null && feature_options.contains(shared)){
-						OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
-						if(!button_options.contains(op)){
-							button_options.add(op);
+								.distinct().collect(Collectors.toList()).get(0);
+						if(shared != null && feature_options.contains(shared)){
+							OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
+							if(!button_options.contains(op)){
+								button_options.add(op);
+							}
 						}
 					}
-				}
-				
-				//CASE#B3 If only methods in RefTo(e) have been assigned, and the latest of their features
-				// is in bounds for e, then e can be fprivate of the range of features in bounds that are larger
-				//or equal than it.
-				if(assignedNonLayered != null && assignedNonLayered.containsAll(assignedRefTo) 
-						&& nonLayeredRefToFeatures != null && nonLayeredRefToFeatures.size() > 0){
-					Feature latest_of_nonlay = null;
-					try{
-						latest_of_nonlay = nonLayeredRefToFeatures.stream()
-								.filter(f -> f != null && f != this.parent_feature)
-								.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-								.get();
-					}catch(NoSuchElementException ex){}
-					if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
-						for(Feature f : feature_options ){
-							if(f.getOrder() >= latest_of_nonlay.getOrder()){
-								OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,latest_of_nonlay));
-								if(!button_options.contains(op)){
-									button_options.add(op);
+					
+					//CASE#B3 If only methods in RefTo(e) have been assigned, and the latest of their features
+					// is in bounds for e, then e can be fprivate of the range of features in bounds that are larger
+					//or equal than it.
+					if(assignedNonLayered != null && assignedNonLayered.containsAll(assignedRefTo) 
+							&& nonLayeredRefToFeatures != null && nonLayeredRefToFeatures.size() > 0){
+						Feature latest_of_nonlay = null;
+						try{
+							latest_of_nonlay = nonLayeredRefToFeatures.stream()
+									.filter(f -> f != null && f != this.parent_feature)
+									.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+									.get();
+						}catch(NoSuchElementException ex){}
+						if(latest_of_nonlay != null && feature_options.contains(latest_of_nonlay)){
+							for(Feature f : feature_options ){
+								if(f.getOrder() >= latest_of_nonlay.getOrder()){
+									OptionButton op = new OptionButton(latest_of_nonlay.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,latest_of_nonlay));
+									if(!button_options.contains(op)){
+										button_options.add(op);
+									}
 								}
 							}
 						}
 					}
-				}
-				
-				//CASE#B4 There is a mixture of nonLay and lay declarations assigned. 
-				// If all assigned lay decs share the same feature,
-				// and that feature is at or after the latest of nonLay assigned decs
-				// e can be fprivate of it
-				if( assignedLayered != null && assignedLayered.size() > 0 
-						&& assignedNonLayered != null && assignedNonLayered.size() > 0
-						&& layeredRefToFeatures.stream()
-							.filter(f -> f != null && f != this.parent_feature)
-							.distinct().collect(Collectors.toList()).size() == 1
-						){
-					Feature shared = layeredRefToFeatures.stream()
-							.filter(f -> f != null && f != this.parent_feature)
-							.distinct().collect(Collectors.toList()).get(0);
-					Feature latest_of_nonlay = null;
-					try{
-						latest_of_nonlay = nonLayeredRefToFeatures.stream()
+					
+					//CASE#B4 There is a mixture of nonLay and lay declarations assigned. 
+					// If all assigned lay decs share the same feature,
+					// and that feature is at or after the latest of nonLay assigned decs
+					// e can be fprivate of it
+					if( assignedLayered != null && assignedLayered.size() > 0 
+							&& assignedNonLayered != null && assignedNonLayered.size() > 0
+							&& layeredRefToFeatures.stream()
 								.filter(f -> f != null && f != this.parent_feature)
-								.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-								.get();
-					}catch(NoSuchElementException ex){}
-					if(shared != null && latest_of_nonlay != null && shared.getOrder() >= latest_of_nonlay.getOrder() && feature_options.contains(shared)){
-						OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
-						if(!button_options.contains(op)){
-							button_options.add(op);
+								.distinct().collect(Collectors.toList()).size() == 1
+							){
+						Feature shared = layeredRefToFeatures.stream()
+								.filter(f -> f != null && f != this.parent_feature)
+								.distinct().collect(Collectors.toList()).get(0);
+						Feature latest_of_nonlay = null;
+						try{
+							latest_of_nonlay = nonLayeredRefToFeatures.stream()
+									.filter(f -> f != null && f != this.parent_feature)
+									.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+									.get();
+						}catch(NoSuchElementException ex){}
+						if(shared != null && latest_of_nonlay != null && shared.getOrder() >= latest_of_nonlay.getOrder() && feature_options.contains(shared)){
+							OptionButton op = new OptionButton(shared.getFeature_name(), true, false, partition.is_same_than_container_feature(current_element,shared));
+							if(!button_options.contains(op)){
+								button_options.add(op);
+							}
 						}
 					}
 				}
-				
 				refresh_buttons(button_options, true);
 			}
 		}
 		catch(InvalidFeatureBounds ex){
-			JOptionPane.showMessageDialog(getContentPane(), "Contradiction discovered in feature bounds for this declaration:\n" + ex.getMessage(), "Contradiction in feature bounds.", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(), "A contradiction was found in feature bounds for this declaration:\n" + ex.getMessage(), "Contradiction in feature bounds.", JOptionPane.WARNING_MESSAGE);
 		}
 		
 		
@@ -973,6 +1031,7 @@ public class BttFMain extends JFrame {
 		lb_countelements = new JLabel();
 		panel6 = new JPanel();
 		lb_element = new JLabel();
+		bt_sort = new JButton(); 
 		bt_moreinfo = new JButton();
 		scrollPane2 = new JScrollPane();
 		ta_element = new JTextArea();
@@ -1034,9 +1093,8 @@ public class BttFMain extends JFrame {
 				//---- ta_instructions ----
 				ta_instructions.setText(
 						"\nInstructions for first/base task:"
-						+ "\n\t* The expected format is P : Base A B C"
-						+ "\n\t* First feature should be named Base"
-						+ "\n\t* Order the rest of the features as you would do if they were layers"
+						+ "\n\t* The expected format is P : A B C"
+						+ "\n\t* Order the features as you would do if they were layers"
 						+ "\n\n"
 						+ "\nInstructions for recursive tasks:"
 						+ "\n\t* The program has to be fully partitioned"
@@ -1149,7 +1207,7 @@ public class BttFMain extends JFrame {
 							lb_element.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 							lb_element.setMinimumSize(new Dimension(200, 14));
 							panel6.add(lb_element);
-
+							
 							//---- bt_moreinfo ----
 							bt_moreinfo.setText("More information");
 							panel6.add(bt_moreinfo);
@@ -1180,7 +1238,11 @@ public class BttFMain extends JFrame {
 							lb_facts.setPreferredSize(new Dimension(40, 14));
 							lb_facts.setOpaque(true);
 							panel3.add(lb_facts);
-
+							
+							//---- bt_sort ----
+							bt_sort.setText("Sort");
+							panel3.add(bt_sort);
+							
 							//---- bt_deleteFact ----
 							bt_deleteFact.setText("Delete Fact");
 							panel3.add(bt_deleteFact);
@@ -1365,6 +1427,14 @@ public class BttFMain extends JFrame {
 			}
 		});
 		
+		ls_facts.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        if (evt.getClickCount() == 2) {
+		        	bt_moreInfoMouseClicked(null, ls_facts.getSelectedValue());
+		        }
+		    }
+		});
+		
 		bt_deleteFact.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -1373,10 +1443,18 @@ public class BttFMain extends JFrame {
 			}
 		});
 		
+		bt_sort.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_sortMouseClicked(e);
+				
+			}
+		});
+		
 		bt_moreinfo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				bt_moreInfoMouseClicked(e);
+				bt_moreInfoMouseClicked(e, null);
 				
 			}
 		});
@@ -1440,6 +1518,7 @@ public class BttFMain extends JFrame {
 	private JLabel lb_countelements;
 	private JPanel panel6;
 	private JLabel lb_element;
+	private JButton bt_sort;
 	private JButton bt_moreinfo;
 	private JScrollPane scrollPane2;
 	private JTextArea ta_element;

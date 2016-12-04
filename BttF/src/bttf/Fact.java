@@ -107,6 +107,10 @@ public class Fact {
 	public void setFact(String fact) {
 		this.fact = fact;
 	}
+	@Override
+	public String toString() {
+		return "Fact [fact=" + fact + ", element=" + element + ", feature=" + feature + "]\n";
+	}
 	
 	
 }

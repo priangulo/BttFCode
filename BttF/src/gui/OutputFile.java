@@ -1,13 +1,14 @@
 package gui;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -23,50 +24,91 @@ public class OutputFile {
 	private JFrame main_window;
 	private Partition partition;
 	private BufferedWriter writer = null;
-	static String file_path = System.getProperty("user.home") + "/Desktop/";
+	static String file_path;
+	private String program_name;
+	private boolean references_saved = false;
 	
-	public OutputFile(JFrame main_window) {
+	
+	private static OutputFile instance = null;
+	
+	public static OutputFile OutputFileInstance(JFrame main_window, String program_name, Partition partition) {
+		if(instance == null) {
+			instance = new OutputFile(main_window, program_name, partition);
+		}
+		else if(instance.partition == null){
+			instance.partition = partition;
+		}
+		
+		return instance;
+	}
+	
+	private OutputFile(JFrame main_window, String program_name, Partition partition) {
+		this.partition = partition;
 		this.main_window = main_window;
+		this.program_name = program_name;
+		SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd HH.mm");
+		String datetime = date_format.format(new Date());
+		
+		this.file_path = System.getProperty("user.home") + "/Desktop/BttF/" + program_name + "/" + datetime + "/";
 	}
 	
-	public void save_reference_list(ArrayList<Reference> references_list, String project_name){
-		try{
-			if(references_list != null && references_list.size() > 0){
-				String file_name = file_path + project_name + "_referencesList.txt";
-				writer = new BufferedWriter( new FileWriter(file_name,false));
-				writer.append("from#to\r\n");
-				for(Reference r : references_list){
-					//writer.append(r.toString());
-					writer.append(r.toString_v2());
-				}
-				writer.flush();
-				JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);
-			}
-			
-		}catch (IOException e){
-			JOptionPane.showMessageDialog(main_window.getContentPane(), "Error saving references file.", "Error", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
-		finally
-		{
-		    try
-		    {
-		        if ( writer != null)
-		        writer.close( );
-		    }
-		    catch ( IOException e)
-		    {
-		    	e.printStackTrace();
-		    }
-		}
+	
+	
+	private File create_new_file(String file_name){
+		File parent = new File(file_path);
+		parent.mkdirs();
+		parent.setWritable(true);
+		parent.setReadable(true);
+		
+		File file = new File(file_path + "//" + file_name);
+		file.setWritable(true);
+		file.setReadable(true);
+		return file;
 	}
 	
-	private void save_feature_model(String task, String fm_file_name){
-		if(task != null){
+	public void save_reference_list(){
+		if(!this.references_saved){
 			try{
-				//write feature model - partition task
-				writer = new BufferedWriter( new FileWriter(fm_file_name,false));
-				writer.append(partition.current_task);
+				if(this.partition.get_references_list() != null && this.partition.get_references_list().size() > 0){
+					String file_name = "ReferencesList.csv";
+					
+					writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
+					writer.append("from,to\r\n");
+					for(Reference r : this.partition.get_references_list()){
+						//writer.append(r.toString());
+						writer.append(r.toString_v2());
+					}
+					writer.flush();
+					this.references_saved = true;
+					JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}catch (IOException e){
+				JOptionPane.showMessageDialog(main_window.getContentPane(), "Error saving references file.", "Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+			finally
+			{
+			    try
+			    {
+			        if ( writer != null)
+			        writer.close( );
+			    }
+			    catch ( IOException e)
+			    {
+			    	e.printStackTrace();
+			    }
+			}
+		}
+	}
+	
+	private void save_feature_model(){
+		if(partition.featuremodel_alllines != null && partition.featuremodel_alllines.size() > 0){
+			try{
+				writer = new BufferedWriter( new FileWriter(create_new_file("FeatureModel.bttf"),false));
+				for(String line : partition.featuremodel_alllines){
+					writer.append(line);
+				}
 				writer.flush();
 			}catch (IOException e){
 				JOptionPane.showMessageDialog(main_window.getContentPane(), "Error creating file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -94,16 +136,16 @@ public class OutputFile {
 	
 	public void save_elements_file(Partition partition){
 		this.partition = partition;
+			
 		if(partition != null && partition.get_elements() != null && partition.get_elements().size() > 0){
-			String datetime = new Date().toString().replace(":", ".");
-			String file_name = file_path + "BttF - " + partition.get_project_name() + " - " + datetime;
-			String fm_file_name = file_name + ".bttf";
-			file_name = file_name + ".csv";
+			
+			String file_name = "FactsAndInferences.csv";
 			
 			try{
-				save_feature_model(partition.current_task, fm_file_name);
+				save_feature_model();
+				save_reference_list();
 				
-				writer = new BufferedWriter( new FileWriter(file_name,false));
+				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
 						+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences\r\n");
 				for(Element e : partition.get_elements()){
@@ -172,7 +214,7 @@ public class OutputFile {
 	
 	public void save_results_file(Partition partition, boolean html){
 		this.partition = partition;
-		String file_name = file_path + "BttF - " + partition.get_project_name() + " - results";
+		String file_name = "BttF-" + partition.get_project_name() + "-results";
 		if(html){
 			output_to_html_file(file_name + ".html");
 		}
@@ -185,7 +227,7 @@ public class OutputFile {
 		file_name = file_name + ".txt";
 		try
 		{
-			writer = new BufferedWriter( new FileWriter(file_name,false));
+			writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 			for(String item : log){
 				writer.write("\r\n" + item);
 			}
@@ -193,6 +235,8 @@ public class OutputFile {
 		    writer.close();
 		    
 		    JOptionPane.showMessageDialog(main_window.getContentPane(), message + ".\nError log saved on " + file_name, "File saved.", messageType);
+		    
+		    save_reference_list();
 		}
 		catch ( IOException e)
 		{
@@ -216,7 +260,7 @@ public class OutputFile {
 	private void output_to_txt_file(String file_name){
 		try
 		{
-			writer = new BufferedWriter( new FileWriter(file_name,false));
+			writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 		    writer.write("\r\nProgram: " + partition.get_project_name());
 		    writer.write("\r\nFeature Model:  " + partition.get_feature_model());
 		    writer.write("\r\n");
@@ -256,7 +300,7 @@ public class OutputFile {
 	private void output_to_html_file(String file_name){
 		try
 		{
-			writer = new BufferedWriter( new FileWriter(file_name,false));
+			writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 		    writer.write(html_template_head() + html_print_data(partition) + html_template_foot());
 		    writer.flush();
 		    writer.close();

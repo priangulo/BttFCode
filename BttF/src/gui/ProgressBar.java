@@ -94,7 +94,7 @@ public class ProgressBar extends JFrame
         if (textFieldVisible) {
         	DefaultCaret caret = (DefaultCaret) pb.taskOutput.getCaret();
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-            pb.add(new JScrollPane(pb.taskOutput), BorderLayout.CENTER);
+            pb.add(new JScrollPane(pb.taskOutput, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER ), BorderLayout.CENTER);            
         } else {
             Dimension prefSize = pb.progressBar.getPreferredSize();
             System.out.println(prefSize.width);

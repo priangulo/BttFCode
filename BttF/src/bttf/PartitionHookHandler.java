@@ -40,9 +40,8 @@ public class PartitionHookHandler {
 				factInf.addInference(elem.getIdentifier() + " is hook because calls element(s) classified in future features", elem, elem.getFeature() );
 
 				/*this line was commented on 07/22/2016, this is no longer necessary
-				 * because fprivate does not propagate from fields to methods anymore -> PartitionInferencingHandler.propagate_fprivate
-				 *remove_feature_hook_of_privates(elem, factInf, parent_feature); 
-				 */
+				 * because fprivate does not propagate from fields to methods anymore -> PartitionInferencingHandler.propagate_fprivate */
+				 remove_feature_hook_of_privates(elem, factInf, parent_feature); 
 			}
 		}
 	}

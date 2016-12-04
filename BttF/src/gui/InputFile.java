@@ -28,6 +28,7 @@ public class InputFile {
 	private Partition partition;
 	private JFrame main_window;
 	private OutputFile output;
+	private String project_name;
 	
 	private final String comma = ",";
 	
@@ -67,10 +68,11 @@ public class InputFile {
 
 	
 	
-	public InputFile(JFrame main_window, Partition partition) {
+	public InputFile(JFrame main_window, Partition partition, String project_name) {
 		this.partition = partition;
 		this.main_window = main_window;
-		this.output = new OutputFile(main_window);
+		this.project_name = project_name;
+		this.output = OutputFile.OutputFileInstance(main_window, this.project_name, this.partition);
 	}
 	
 	public void set_partition(Partition partition){
@@ -262,8 +264,9 @@ public class InputFile {
 					String error = "You said: " + invfact.getElement_identifier() + " " + invfact.getFact() + ", " + invfact.getExplanation();
 					error_log.add(error);
 					System.out.println(error);
-				}			
-				output.output_log_to_txt_file(error_log, file_name + "_ErrorLog", "There were invalid facts", JOptionPane.WARNING_MESSAGE);
+				}		
+				
+				output.output_log_to_txt_file(error_log, "Errors_ReadingCSV", "There were invalid facts", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -325,6 +328,9 @@ public class InputFile {
 		ArrayList<Reference> ref_list = new ArrayList<Reference>();
 		ArrayList<String> error_log = new ArrayList<String>();
 		
+		String path = file_name.substring(0,file_name.lastIndexOf('/')+1);
+		String only_file_name = file_name.substring(file_name.lastIndexOf('/')+1);
+		
 		try {
 			reader = new BufferedReader(new FileReader(file_name));
 			//send first line (header) for check
@@ -379,7 +385,7 @@ public class InputFile {
 				}
 			}
 			if(!error_log.isEmpty()){
-				output.output_log_to_txt_file(error_log, file_name, "Errors on CRG file", JOptionPane.WARNING_MESSAGE);
+				output.output_log_to_txt_file(error_log, "Errors_CRG", "Errors on CRG file", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		return ref_list;
