@@ -1,7 +1,9 @@
 package gui;
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -38,6 +40,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.LayoutStyle;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
@@ -447,8 +450,10 @@ public class BttFMain extends JFrame {
 	
 	private void load_partitionpanel(String task, boolean recursive, String file_name){
 		clean_current_action();
-		lb_task.setText(task);
+		ta_task.setText(task);
 		partition_names = create_partition_buttons(task);
+		System.out.println(panel4.getSize().toString());
+		System.out.println(ta_task.getSize().toString());
 		
 		if(recursive){
 			parent_feature = partition.get_feature_by_name(get_task_parent_name(task));
@@ -502,7 +507,7 @@ public class BttFMain extends JFrame {
 	 */
 	private void bt_deleteActionMouseClicked(MouseEvent e){
 		if(!ls_tasksList.isSelectionEmpty()){
-			if(lb_task.getText().equals(ls_tasksList.getSelectedValue())){
+			if(ta_task.getText().equals(ls_tasksList.getSelectedValue())){
 				clean_current_action();
 			}
 			tasks_listmodel.remove(ls_tasksList.getSelectedIndex());
@@ -649,7 +654,7 @@ public class BttFMain extends JFrame {
 	 * Resets partitions tab 
 	 */
 	private void clean_current_action(){
-		lb_task.setText("");
+		ta_task.setText("");
 		bt_partitions_list = new ArrayList<JButton>();
 		bg_partitions = new ButtonGroup();
 		pn_partitionButtons.removeAll();
@@ -677,7 +682,22 @@ public class BttFMain extends JFrame {
 		}
 		//create skip button
 		create_partition_button("bt_skip", SKIP_TEXT, SKIP_TEXT, false);
-				
+		
+		for(Component c : pn_partitionButtons.getComponents()){
+			/*if(!pn_partitionButtons.contains(c.getLocationOnScreen())){
+				Dimension newdim = new Dimension(pn_partitionButtons.getPreferredSize().width, pn_partitionButtons.getPreferredSize().height + 35);
+				pn_partitionButtons.setPreferredSize(newdim);
+				scrollPane5.revalidate();
+			}*/
+			
+			if(!c.isShowing()){
+				Dimension newdim = new Dimension(pn_partitionButtons.getPreferredSize().width, pn_partitionButtons.getPreferredSize().height + 15);
+				pn_partitionButtons.setPreferredSize(newdim);
+				pn_partitionButtons.revalidate();
+				scrollPane5.revalidate();
+			}
+		}
+		
 		return no_duplicate_parts;
 	}	
 	
@@ -687,7 +707,7 @@ public class BttFMain extends JFrame {
 	private void create_partition_button(String name, String text, String partition_name, Boolean fprivate){
 		JButton button = new JButton();
 		button.setFont(buttonFont);
-		button.setPreferredSize(new Dimension(140, 35));
+		button.setPreferredSize(new Dimension(180, 35));
 		button.setName(name);
 		button.setText(text);				
 		button.addMouseListener(new MouseAdapter() {
@@ -699,6 +719,7 @@ public class BttFMain extends JFrame {
 		bt_partitions_list.add(button);
 		bg_partitions.add(button);
 		pn_partitionButtons.add(button);
+
 	}
 	
 	/*
@@ -1024,9 +1045,10 @@ public class BttFMain extends JFrame {
 		pn_partitions = new JPanel();
 		panel2 = new JPanel();
 		panel5 = new JPanel();
-		panel4 = new JPanel();
+		panel4 = new JScrollPane();
+		paneltasklabel = new JPanel();
 		lb_currentAction = new JLabel();
-		lb_task = new JLabel();
+		ta_task = new JTextPane();
 		panel_countelements = new JPanel();
 		lb_countelements = new JLabel();
 		panel6 = new JPanel();
@@ -1047,6 +1069,7 @@ public class BttFMain extends JFrame {
 		hSpacer1 = new JPanel(null);
 		panel1 = new JPanel();
 		panel8 = new JPanel();
+		scrollPane5 = new JScrollPane();
 		lb_partition = new JLabel();
 		pn_partitionButtons = new JPanel();
 		pn_explanations = new JPanel();
@@ -1169,18 +1192,30 @@ public class BttFMain extends JFrame {
 						panel5.setMinimumSize(new Dimension(145, 22));
 						panel5.setLayout(new BoxLayout(panel5, BoxLayout.Y_AXIS));
 
-						//======== panel4 ========
+						//======== paneltasklabel ========
 						{
-							panel4.setPreferredSize(new Dimension(109, 18));
-							panel4.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+							paneltasklabel.setLayout(new FlowLayout(FlowLayout.LEFT));
+							
 							//---- lb_currentAction ----
+							lb_currentAction.setAlignmentX(LEFT_ALIGNMENT);
 							lb_currentAction.setText("Current Task:");
-							panel4.add(lb_currentAction);
-
+							paneltasklabel.add(lb_currentAction);
+						}
+						panel5.add(paneltasklabel);
+						
+						//======== panel4 ========
+						{							
 							//---- lb_action ----
-							lb_task.setText(" ");
-							panel4.add(lb_task);
+							ta_task.setText(" ");
+							ta_task.setFont(new Font("Tahoma", Font.BOLD, 11));
+							ta_task.setEditable(false);
+							ta_task.setMinimumSize(new Dimension(150, 5));
+							ta_task.setPreferredSize(new Dimension(150, 10));
+							ta_task.setLayout(new BoxLayout(ta_task, BoxLayout.X_AXIS));
+							
+							panel4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+							panel4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							panel4.setViewportView(ta_task);
 						}
 						panel5.add(panel4);
 						
@@ -1199,13 +1234,13 @@ public class BttFMain extends JFrame {
 
 						//======== panel6 ========
 						{
-							panel6.setPreferredSize(new Dimension(105, 20));
-							panel6.setLayout(new FlowLayout(FlowLayout.LEFT));
+							panel6.setPreferredSize(new Dimension(105, 35));
+							panel6.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 5));
 
 							//---- lb_element ----
 							lb_element.setText("Declaration to Classify:     ");
 							lb_element.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-							lb_element.setMinimumSize(new Dimension(200, 14));
+							lb_element.setPreferredSize(new Dimension(200, 35));
 							panel6.add(lb_element);
 							
 							//---- bt_moreinfo ----
@@ -1216,7 +1251,7 @@ public class BttFMain extends JFrame {
 
 						//======== scrollPane2 ========
 						{
-							scrollPane2.setPreferredSize(new Dimension(600, 100));
+							scrollPane2.setPreferredSize(new Dimension(550, 100));
 
 							//---- ta_element ----
 							ta_element.setEditable(false);
@@ -1227,15 +1262,15 @@ public class BttFMain extends JFrame {
 
 						//======== panel3 ========
 						{
-							panel3.setMinimumSize(new Dimension(120, 23));
-							panel3.setPreferredSize(new Dimension(170, 20));
+							panel3.setMinimumSize(new Dimension(120, 30));
+							panel3.setPreferredSize(new Dimension(170, 35));
 							panel3.setOpaque(false);
-							panel3.setLayout(new FlowLayout(FlowLayout.LEFT));
+							panel3.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 5));
 
 							//---- lb_facts ----
 							lb_facts.setText("Facts:  ");
-							lb_facts.setMinimumSize(new Dimension(105, 14));
-							lb_facts.setPreferredSize(new Dimension(40, 14));
+							lb_facts.setMinimumSize(new Dimension(105, 30));
+							lb_facts.setPreferredSize(new Dimension(40, 35));
 							lb_facts.setOpaque(true);
 							panel3.add(lb_facts);
 							
@@ -1259,7 +1294,7 @@ public class BttFMain extends JFrame {
 
 						//======== panel7 ========
 						{
-							panel7.setPreferredSize(new Dimension(66, 20));
+							panel7.setPreferredSize(new Dimension(63, 35));
 							panel7.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 							//---- lb_inferences ----
@@ -1299,16 +1334,25 @@ public class BttFMain extends JFrame {
 					}
 					panel1.add(panel8);
 
-					//======== pn_partitionButtons ========
+					
+					//======== scrollPane5 ========
 					{
-						pn_partitionButtons.setPreferredSize(new Dimension(500, 400));
-						pn_partitionButtons.setOpaque(false);
-						pn_partitionButtons.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-						pn_partitionButtons.setMinimumSize(new Dimension(500, 450));
-						pn_partitionButtons.setMaximumSize(new Dimension(500, 32767));
-						pn_partitionButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+						//======== pn_partitionButtons ========
+						{
+							pn_partitionButtons.setPreferredSize(new Dimension(400, 450));
+							pn_partitionButtons.setMinimumSize(new Dimension(300, 300));
+							pn_partitionButtons.setMaximumSize(new Dimension(450, 1500));
+							
+							pn_partitionButtons.setOpaque(false);
+							pn_partitionButtons.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+							pn_partitionButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+						}
+												
+						scrollPane5.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+						scrollPane5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						scrollPane5.setViewportView(pn_partitionButtons);
 					}
-					panel1.add(pn_partitionButtons);
+					panel1.add(scrollPane5);
 					
 					//======== pn_explanations ========
 					{
@@ -1511,9 +1555,10 @@ public class BttFMain extends JFrame {
 	private JPanel pn_partitions;
 	private JPanel panel2;
 	private JPanel panel5;
-	private JPanel panel4;
+	private JScrollPane panel4;
+	private JPanel paneltasklabel;
 	private JLabel lb_currentAction;
-	private JLabel lb_task;
+	private JTextPane ta_task;
 	private JPanel panel_countelements;
 	private JLabel lb_countelements;
 	private JPanel panel6;
@@ -1534,6 +1579,7 @@ public class BttFMain extends JFrame {
 	private JPanel hSpacer1;
 	private JPanel panel1;
 	private JPanel panel8;
+	private JScrollPane scrollPane5;
 	private JLabel lb_partition;
 	private JPanel pn_partitionButtons;
 	private JPanel pn_explanations;
