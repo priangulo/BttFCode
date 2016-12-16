@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import adapter.FactInferenceAdapter;
 import errors.InvalidFeatureBounds;
 import gui.InputFile;
 import gui.InvalidFileFact;
@@ -720,6 +721,18 @@ public class Partition {
 		//return factsAndInferences;
 	}
 	
+	public ArrayList<FactInference> get_flatFacts(){
+		ArrayList<FactInference> facts = FactInferenceAdapter.getFlatFacts(this.factsAndInferences);
+		if(facts != null && !facts.isEmpty()){
+			return (ArrayList<FactInference>) facts
+					.stream()
+					.filter(fact -> fact.getFeature() != null && fact.getFeature().getIn_current_task() == true)
+					.collect(Collectors.toList());
+		}
+		
+		return facts;
+	}
+	
 	/*
 	 * Get list of all elements
 	 */
@@ -770,7 +783,7 @@ public class Partition {
 		return false;
 	}
 	
-	public Fact get_fact_with_text(String fact_text){
+	/*public Fact get_fact_with_text(String fact_text){
 		if(factsAndInferences != null && factsAndInferences.size() > 0){
 			try{
 				return factsAndInferences.stream()
@@ -782,7 +795,7 @@ public class Partition {
 			}
 		}
 		return null;
-	}
+	}*/
 }
 
 

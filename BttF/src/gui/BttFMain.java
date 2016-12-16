@@ -45,6 +45,8 @@ import javax.swing.LayoutStyle;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.eclipse.swt.widgets.DirectoryDialog;
 
@@ -54,6 +56,7 @@ import bttf.DBStorage;
 import bttf.Element;
 import bttf.ElementType;
 import bttf.Fact;
+import bttf.FactInference;
 import bttf.Feature;
 import bttf.Partition;
 import bttf.Reference;
@@ -84,6 +87,8 @@ public class BttFMain extends JFrame {
 	private final String CSV_EXTENSION = ".csv"; 
 	private final String BTTF_EXTENSION = ".bttf";
 	
+	private String start_path = System.getProperty("user.home") + "\\Desktop"; 
+	
 	private String csv_file = null;
 	private String fm_file = null;
 	
@@ -94,7 +99,7 @@ public class BttFMain extends JFrame {
 	private ArrayList<Element> elements_skiped = new ArrayList<Element>();
 	private Partition partition;
 	private Element current_element;
-	private ArrayList<Fact> factsInferences = new ArrayList<Fact>();
+	private ArrayList<FactInference> factsInferences = new ArrayList<FactInference>();
 	private boolean cycle_same_feature;
 	private boolean is_fwpi = false;
 	private OutputFile outputFile;
@@ -127,6 +132,7 @@ public class BttFMain extends JFrame {
 			this.project_name = getProjectNameFromFileName(file_name);
 			this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
 			this.inputFile = new InputFile(this, null, this.project_name);
+			this.set_StartPathDir();
 			//get references from file
 			ArrayList<Reference> ref_list = inputFile.get_crg_from_csv(file_name, inputFile.GAML_LANGUAGE);
 			if(ref_list != null && !ref_list.isEmpty()){
@@ -145,6 +151,7 @@ public class BttFMain extends JFrame {
 		this.project_path = project_path;
 		this.project_name = project_name;
 		this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
+		this.set_StartPathDir();
 		initComponents();
 		pb = ProgressBar.StartProgressBar(this);   
 	}
@@ -166,6 +173,20 @@ public class BttFMain extends JFrame {
 		}
 	}
 	
+	private void set_StartPathDir(){
+		String temp_start_path = this.start_path + "\\BttF";
+		File start_path_dir = new File(this.start_path);
+		if(start_path_dir.exists() && start_path_dir.isDirectory()){
+			this.start_path = temp_start_path;
+			
+			temp_start_path = this.start_path + "\\" + this.project_name;
+			start_path_dir = new File(this.start_path);
+			if(start_path_dir.exists() && start_path_dir.isDirectory()){
+				this.start_path = temp_start_path;
+			}
+		}
+	}
+	
 	public void start_partitioning(Partition partition){
 		bt_uploadcvs.setEnabled(false);
 		this.partition = partition;
@@ -182,8 +203,8 @@ public class BttFMain extends JFrame {
 		}
 		//no FW+Pi, then it is SPL, ask for feature model file
 		else{
-			JFileChooser fc = new JFileChooser(System.getProperty("user.home") + "\\Desktop");
-			fc.setDialogTitle("Select BttF's start folder...");
+			JFileChooser fc = new JFileChooser(this.start_path);
+			fc.setDialogTitle("Select BttF's state folder...");
 			fc.setVisible(true);
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fc.showOpenDialog(this);
@@ -201,22 +222,27 @@ public class BttFMain extends JFrame {
 			    }
 			}
 			
-			boolean correct = false;
-			if(fm_file != null){
-				ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
-				if(tasks != null){
-					boolean recursive = false;
-					for(String task : tasks){
-						correct = validate_and_add_task(task, recursive);
-						recursive = true;
-					}
-					if(tasks.size() > 0 && correct && csv_file != null){
-						correct = validate_and_process_task(tasks.get(0), 0, csv_file);
+			if(fm_file != null && csv_file != null ){
+				boolean correct = false;
+				if(fm_file != null){
+					ArrayList<String> tasks = inputFile.get_featuremodel_from_bttffile(fm_file);
+					if(tasks != null){
+						boolean recursive = false;
+						for(String task : tasks){
+							correct = validate_and_add_task(task, recursive);
+							recursive = true;
+						}
+						if(tasks.size() > 0 && correct && csv_file != null){
+							correct = validate_and_process_task(tasks.get(0), 0, csv_file);
+						}
 					}
 				}
+				if(!correct){
+					JOptionPane.showMessageDialog(this.getContentPane(), "Invalid feature model contents.", "Invalid feature model.", JOptionPane.WARNING_MESSAGE);
+				}
 			}
-			if(!correct){
-				JOptionPane.showMessageDialog(this.getContentPane(), "Invalid folder contents.", "No files to upload.", JOptionPane.WARNING_MESSAGE);
+			else{
+				JOptionPane.showMessageDialog(this.getContentPane(), "Required files not found.", "No files to upload.", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		
@@ -491,7 +517,7 @@ public class BttFMain extends JFrame {
 		
 	private String getFileFromFileDialog(String extension, String message){
 		FileDialog fd = new FileDialog(this, message + "Choose a " + extension + " file", FileDialog.LOAD);
-		fd.setDirectory(System.getProperty("user.home") + "\\Desktop");
+		fd.setDirectory(this.start_path);
 		fd.setFile("*" + extension);
 		fd.setVisible(true);
 		String file_name = fd.getDirectory() + "\\" + fd.getFile();
@@ -541,7 +567,7 @@ public class BttFMain extends JFrame {
 	/*
 	 * Click on a fact displays its inferences 
 	 */
-	private void ls_factsMouseClicked(MouseEvent e){
+	/*private void ls_factsMouseClicked(MouseEvent e){
 		ls_inferences.setListData(new String[0]);
 		String fact = ls_facts.getSelectedValue();
 		if (fact != null && !fact.isEmpty()){
@@ -553,31 +579,55 @@ public class BttFMain extends JFrame {
 				ls_inferences.setListData((String[]) factinf.getInferences_text().toArray(new String[0]));
 			}
 		}
+	}*/
+	
+	/*
+	 * Enable delete fact button only when it is a fact
+	 */
+	private void ls_factsValueChanged(ListSelectionEvent e){
+		String fact = ls_facts.getSelectedValue();
+		if (fact != null && !fact.isEmpty()){
+			FactInference fi = getFactInfwithText(fact);
+			if(fi.isFact()){
+				bt_deleteFact.setEnabled(true);
+			}
+			else{
+				bt_deleteFact.setEnabled(false);
+			}
+		}
 	}
 	
 	/*
 	 * Deletes a fact and consequent facts
 	 */
 	private void bt_deleteFactMouseClicked(MouseEvent e){
-		String fact = ls_facts.getSelectedValue();
-		if (fact != null && !fact.isEmpty()){
-			int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Deleting a fact will also delete consequent facts, do you want to continue?", "Are you sure?", JOptionPane.YES_NO_OPTION);
-			if(answer == JOptionPane.YES_OPTION){
-				partition.delete_fact(fact);
-				refresh_facts();
-				display_next_element();
+		if(bt_deleteFact.isEnabled()){
+			String fact = ls_facts.getSelectedValue();
+			
+			if (fact != null && !fact.isEmpty()){
+				FactInference fi = getFactInfwithText(fact);
+				if(fi.isFact()){
+					int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Deleting a fact will also delete consequent facts, do you want to continue?", "Are you sure?", JOptionPane.YES_NO_OPTION);
+					if(answer == JOptionPane.YES_OPTION){
+						partition.delete_fact(fact);
+						refresh_facts();
+						display_next_element();
+					}
+				}
 			}
 		}
 	}
 	
+	
 	/*
 	 * Sorts the list of facts
 	 */
+	
 	private void bt_sortMouseClicked(MouseEvent e){
-		factsInferences = partition.get_facts();
-		Collections.sort(factsInferences, new Comparator<Fact>() {
+		factsInferences = partition.get_flatFacts();
+		Collections.sort(factsInferences, new Comparator<FactInference>() {
 		    @Override
-		    public int compare(Fact f1, Fact f2) {
+		    public int compare(FactInference f1, FactInference f2) {
 		    	if(f1 != null && f2 != null && f1.getElement() != null && f2.getElement() != null){
 		    		return f1.getElement().getIdentifier().compareTo(f2.getElement().getIdentifier());
 		    	}
@@ -585,9 +635,9 @@ public class BttFMain extends JFrame {
 		    }
 		});
 		
-		List<String> facts_list = factsInferences.stream().map(f -> f.getFact()).collect(Collectors.toList());
+		List<String> facts_list = factsInferences.stream().map(f -> f.getText()).collect(Collectors.toList());
 		ls_facts.setListData((String[]) facts_list.toArray(new String[0]));
-		ls_inferences.setListData(new String[0]);
+		//ls_inferences.setListData(new String[0]);
 	}
 	
 	/*
@@ -595,7 +645,7 @@ public class BttFMain extends JFrame {
 	 */
 	private void bt_moreInfoMouseClicked(MouseEvent e, String fact_text){
 		if(fact_text != null){
-			Fact fact = partition.get_fact_with_text(fact_text);
+			FactInference fact = getFactInfwithText(fact_text);
 			System.out.println(fact.toString());
 			if(fact != null && fact.getElement() != null){
 				DeclarationMoreInfo more_info_fram = new DeclarationMoreInfo(fact.getElement());
@@ -610,6 +660,22 @@ public class BttFMain extends JFrame {
 			more_info_fram.setVisible(true);
 		}
 	}
+	
+	
+	private FactInference getFactInfwithText(String fact_text){
+		if(factsInferences != null && factsInferences.size() > 0){
+			try{
+				return factsInferences.stream()
+					.filter(f -> f.getText().equals(fact_text))
+					.collect(Collectors.toList())
+					.get(0);
+			}catch(IndexOutOfBoundsException ex){
+				return null;
+			}
+		}
+		return null;
+	}
+	
 	
 	/*
 	 * Saves current state in DB
@@ -938,18 +1004,15 @@ public class BttFMain extends JFrame {
 		return explanations_text;
 	}
 	
-	
-	
-
 	/*
 	 * updates the list of facts on screen 
 	 */
 	private void refresh_facts(){
-		factsInferences = partition.get_facts();
-		List<String> facts_list = factsInferences.stream().map(f -> f.getFact()).collect(Collectors.toList());
+		factsInferences = partition.get_flatFacts();
+		List<String> facts_list = factsInferences.stream().map(f -> f.getText()).collect(Collectors.toList());
 		Collections.reverse(facts_list);
 		ls_facts.setListData((String[]) facts_list.toArray(new String[0]));
-		ls_inferences.setListData(new String[0]);
+		//ls_inferences.setListData(new String[0]);
 	}
 	
 	private void refresh_buttons(ArrayList<OptionButton> options, Boolean show_skip){
@@ -1062,10 +1125,10 @@ public class BttFMain extends JFrame {
 		bt_deleteFact = new JButton();
 		scrollPane3 = new JScrollPane();
 		ls_facts = new JList();
-		panel7 = new JPanel();
-		lb_inferences = new JLabel();
-		scrollPane4 = new JScrollPane();
-		ls_inferences = new JList();
+		//panel7 = new JPanel();
+		//lb_inferences = new JLabel();
+		//scrollPane4 = new JScrollPane();
+		//ls_inferences = new JList();
 		hSpacer1 = new JPanel(null);
 		panel1 = new JPanel();
 		panel8 = new JPanel();
@@ -1238,7 +1301,7 @@ public class BttFMain extends JFrame {
 							panel6.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 5));
 
 							//---- lb_element ----
-							lb_element.setText("Declaration to Classify:     ");
+							lb_element.setText("Declaration to Assign:     ");
 							lb_element.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 							lb_element.setPreferredSize(new Dimension(200, 35));
 							panel6.add(lb_element);
@@ -1268,9 +1331,9 @@ public class BttFMain extends JFrame {
 							panel3.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 5));
 
 							//---- lb_facts ----
-							lb_facts.setText("Facts:  ");
+							lb_facts.setText("Assignments log:  ");
 							lb_facts.setMinimumSize(new Dimension(105, 30));
-							lb_facts.setPreferredSize(new Dimension(40, 35));
+							lb_facts.setPreferredSize(new Dimension(105, 35));
 							lb_facts.setOpaque(true);
 							panel3.add(lb_facts);
 							
@@ -1287,11 +1350,12 @@ public class BttFMain extends JFrame {
 						//======== scrollPane3 ========
 						{
 							scrollPane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-							scrollPane3.setPreferredSize(new Dimension(600, 170));
+							scrollPane3.setPreferredSize(new Dimension(600, 340));
 							scrollPane3.setViewportView(ls_facts);
 						}
 						panel5.add(scrollPane3);
-
+						
+						/*
 						//======== panel7 ========
 						{
 							panel7.setPreferredSize(new Dimension(63, 35));
@@ -1302,7 +1366,8 @@ public class BttFMain extends JFrame {
 							panel7.add(lb_inferences);
 						}
 						panel5.add(panel7);
-
+						
+						
 						//======== scrollPane4 ========
 						{
 							scrollPane4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -1310,6 +1375,7 @@ public class BttFMain extends JFrame {
 							scrollPane4.setViewportView(ls_inferences);
 						}
 						panel5.add(scrollPane4);
+						*/
 					}
 					panel2.add(panel5);
 				}
@@ -1375,11 +1441,11 @@ public class BttFMain extends JFrame {
 						panel9.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 30));
 						
 						//---- bt_uploadcvs ----
-						bt_uploadcvs.setText("Re-upload file");
+						bt_uploadcvs.setText("Upload State");
 						panel9.add(bt_uploadcvs);
 						
 						//---- bt_saveincvs ----
-						bt_saveincvs.setText("Save file");
+						bt_saveincvs.setText("Save State");
 						panel9.add(bt_saveincvs);
 						
 						//---- bt_annotate ----
@@ -1463,11 +1529,19 @@ public class BttFMain extends JFrame {
 			}
 		});
 
-		ls_facts.addMouseListener(new MouseAdapter() {
+		/*ls_facts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				ls_factsMouseClicked(e);
 				
+			}
+		});*/
+		
+		ls_facts.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ls_factsValueChanged(e);
 			}
 		});
 		
@@ -1572,10 +1646,10 @@ public class BttFMain extends JFrame {
 	private JButton bt_deleteFact;
 	private JScrollPane scrollPane3;
 	private JList<String> ls_facts;
-	private JPanel panel7;
-	private JLabel lb_inferences;
-	private JScrollPane scrollPane4;
-	private JList<String> ls_inferences;
+	//private JPanel panel7;
+	//private JLabel lb_inferences;
+	//private JScrollPane scrollPane4;
+	//private JList<String> ls_inferences;
 	private JPanel hSpacer1;
 	private JPanel panel1;
 	private JPanel panel8;

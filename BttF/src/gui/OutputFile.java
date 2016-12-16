@@ -66,7 +66,7 @@ public class OutputFile {
 		return file;
 	}
 	
-	public void save_reference_list(){
+	public void save_reference_list(boolean showSaveMsg){
 		if(!this.references_saved){
 			try{
 				if(this.partition.get_references_list() != null && this.partition.get_references_list().size() > 0){
@@ -80,7 +80,9 @@ public class OutputFile {
 					}
 					writer.flush();
 					this.references_saved = true;
-					JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);
+					if(showSaveMsg){
+						JOptionPane.showMessageDialog(main_window.getContentPane(), "List of references in CRG saved in \n"+ file_name, "CRG references saved.", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 				
 			}catch (IOException e){
@@ -102,14 +104,18 @@ public class OutputFile {
 		}
 	}
 	
-	private void save_feature_model(){
+	private void save_feature_model(boolean showSaveMsg){
 		if(partition.featuremodel_alllines != null && partition.featuremodel_alllines.size() > 0){
 			try{
-				writer = new BufferedWriter( new FileWriter(create_new_file("FeatureModel.bttf"),false));
+				String file_name = "FeatureModel.bttf";
+				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				for(String line : partition.featuremodel_alllines){
 					writer.append(line);
 				}
 				writer.flush();
+				if(showSaveMsg){
+					JOptionPane.showMessageDialog(main_window.getContentPane(), "Feature Model saved in \n"+ file_name, "Feature Model saved.", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}catch (IOException e){
 				JOptionPane.showMessageDialog(main_window.getContentPane(), "Error creating file.", "Error", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -142,8 +148,8 @@ public class OutputFile {
 			String file_name = "FactsAndInferences.csv";
 			
 			try{
-				save_feature_model();
-				save_reference_list();
+				save_feature_model(false);
+				save_reference_list(false);
 				
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
@@ -189,6 +195,7 @@ public class OutputFile {
 					);
 				}
 			    writer.flush();
+			    JOptionPane.showMessageDialog(main_window.getContentPane(), "State saved on " + this.file_path , "State saved.", JOptionPane.INFORMATION_MESSAGE);
 			}catch (IOException e){
 				JOptionPane.showMessageDialog(main_window.getContentPane(), "Error creating file.", "Error", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -198,8 +205,7 @@ public class OutputFile {
 			    try
 			    {
 			        if ( writer != null)
-			        writer.close( );
-			        JOptionPane.showMessageDialog(main_window.getContentPane(), "List of elements saved on " + file_name , "File saved.", JOptionPane.INFORMATION_MESSAGE);
+			        writer.close();
 			    }
 			    catch ( IOException e)
 			    {
@@ -236,7 +242,7 @@ public class OutputFile {
 		    
 		    JOptionPane.showMessageDialog(main_window.getContentPane(), message + ".\nError log saved on " + file_name, "File saved.", messageType);
 		    
-		    save_reference_list();
+		    save_reference_list(true);
 		}
 		catch ( IOException e)
 		{

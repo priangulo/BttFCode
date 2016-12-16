@@ -11,15 +11,15 @@ public class Inference {
 	public String getInference() {
 		return inference;
 	}
-	public void setInference(String inference) {
+	/*public void setInference(String inference) {
 		this.inference = inference;
-	}
+	}*/
 	public Element getElement() {
 		return element;
 	}
-	public void setElement(Element element) {
+	/*public void setElement(Element element) {
 		this.element = element;
-	}
+	}*/
 
 	public Inference(String inference, Element element, Boolean element_isfprivate, Boolean element_isfpublic,
 			Boolean element_ishook, Feature feature) {

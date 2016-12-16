@@ -31,8 +31,14 @@ public class JavaReaderHelper{
 	public final Pattern PATTERN_STRINGS = Pattern.compile("((?<!\\\\)\\\"(.*?)\\\"(?<!\\\\\\\"))");
 	public final Pattern PATTERN_CLASSES = Pattern.compile("(abstract\\s)*(public|private)*\\s*(abstract)*\\s*((class|interface|enum)|@interface)\\s+(\\w+)\\s*((extends\\s+\\w+)|(implements\\s+\\w+( ,\\w+)*))*\\s*\\{");
 	public final Pattern PATTERN_PACKAGES = Pattern.compile("package\\s+([a-zA_Z_]*[\\.\\w]*);");
-	public final Pattern PATTERN_METHODS = Pattern.compile("((public|private|protected|static|final|native|synchronized|abstract|transient)+\\s)+\\s*[\\w\\d\\,\\<\\>\\[\\]\\s]+(\\w+)+\\s*\\([\\w\\d\\,\\<\\>\\[\\]\\s]*\\)\\s*(\\{?|[^;])");
-	public final Pattern PATTERN_CONSTRUCTORS = Pattern.compile("((public|private|protected|static|final|native|synchronized|abstract|transient)+\\s)+\\s*(\\w+)+\\s*\\([^\\)]*\\)*\\s*(\\{?|[^;])");
+	//public final Pattern PATTERN_METHODS = Pattern.compile("((public|private|protected|static|final|native|synchronized|abstract|transient)*\\s)+\\s*[\\w\\d\\,\\<\\>\\[\\]\\s]+(\\w+)+\\s*\\([\\w\\d\\,\\<\\>\\[\\]\\s]*\\)\\s*(\\{?|[^;])");
+	//public final Pattern PATTERN_CONSTRUCTORS = Pattern.compile("((public|private|protected|static|final|native|synchronized|abstract|transient)*\\s)+\\s*(\\w+)+\\s*\\([^\\)]*\\)*\\s*(\\{?|[^;])");
+	
+	public final Pattern PATTERN_METHODS = Pattern.compile("((public|private|protected|static|final|native|synchronized|abstract|transient|)*\\s)+(\\w+)\\s+[\\w\\d\\,\\<\\>\\[\\]\\s]+(\\w+)+\\s*\\([\\w\\d\\,\\<\\>\\[\\]\\s]*\\)\\s*(\\{?|[^;])");
+	//((public|private|protected|static|final|native|synchronized|abstract|transient|)*\s)+(\w+)\s+[\w\d\,\<\>\[\]\s]+(\w+)+\s*\([\w\d\,\<\>\[\]\s]*\)\s*(\{?|[^;])
+	public final Pattern PATTERN_CONSTRUCTORS = Pattern.compile("^((public|private|protected|static|final|native|synchronized|abstract|transient)*\\s)*\\s*(\\w+)+\\s*\\([^\\)]*\\)*\\s*(\\{?|[^;])", Pattern.MULTILINE);
+	//^((public|private|protected|static|final|native|synchronized|abstract|transient)*\s)*\s*(\w+)+\s*\([^\)]*\)*\s*(\{?|[^;])
+		
 	public final Pattern PATTERN_CLASS_INITIALIZERS = Pattern.compile("(static)*\\s*\\{");
 	public final Pattern PATTERN_MULTIVAL_ENUMVAL = Pattern.compile("(\\w)+[\\(]");
 	
@@ -46,13 +52,18 @@ public class JavaReaderHelper{
 	 * finds a word surrounded by spaces
 	 */
 	private Indexes util_findWord(String source, int word_end){
-		while(source.charAt(word_end) == ' '){
+		while(source.charAt(word_end) == ' ' || source.charAt(word_end) == ','){
 			word_end--;
 		}
 		int word_start = word_end;
-		while(source.charAt(word_start) != ' '){
+		while(source.charAt(word_start) != ' ' && source.charAt(word_start) != ','){
 			word_start--;
 		}
+		
+		if(source.charAt(word_start) == ',' && word_start < word_end){
+			word_start++;
+		}
+		
 		return new Indexes(word_start, word_end);
 	}
 	

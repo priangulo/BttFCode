@@ -8,6 +8,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.38-bin.jar"/>
-	<classpathentry exported="true" kind="lib" path="conf" sourcepath="conf"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

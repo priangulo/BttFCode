@@ -317,6 +317,11 @@ public class JavaAnnotationHelper {
 	public boolean checkElementsExist(ArrayList<AnnotationElement> a_elems, ArrayList<TextElement> t_elems){
 		StringBuilder missing_elems = new StringBuilder();
 		ArrayList<String> names_in_telems = (ArrayList<String>) t_elems.stream().map(e -> e.full_identifier).collect(Collectors.toList());
+		
+		System.out.println("TEXT ELEMENTS NAMES: ");
+		System.out.println(names_in_telems.toString());
+		System.out.println("********************************\n");
+		
 		for(AnnotationElement a_elem : a_elems){
 			if(!names_in_telems.contains(a_elem.full_identifier)){
 				System.out.println("This identifier does not exist: " + a_elem.full_identifier);

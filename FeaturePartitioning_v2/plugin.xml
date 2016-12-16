@@ -9,7 +9,7 @@
             visible="true"
             id="FeaturePartitioning.actionSet">
          <menu
-               label="Feature Partition &amp;Menu"
+               label="Feature Partition"
                id="sampleMenu">
             <separator
                   name="sampleGroup">
