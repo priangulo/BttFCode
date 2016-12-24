@@ -172,7 +172,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									}
 									
 									//add references for type binding
-									get_typebinding_references(node.resolveBinding(), references, from);
+									get_typebinding_references(node.resolveBinding(), references, from, true);
 									
 									count_classes++;
 									progress_text.append(from.name);
@@ -186,7 +186,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								public boolean visit(EnumDeclaration node) {
 									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()));
 									//add references for type binding
-									get_typebinding_references(node.resolveBinding(), references, from);
+									get_typebinding_references(node.resolveBinding(), references, from, true);
 									
 									count_classes++;
 									progress_text.append(from.name);
@@ -199,6 +199,10 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 */
 								public boolean visit(MethodDeclaration node) {
 									CodeElement from = new CodeElement(node.resolveBinding(), node, node.toString(), packages);
+									
+									/*if(from.name.toLowerCase().contains("basepre.checkforerrors")){
+										System.out.println("found");
+									}*/
 									
 									//reference to declaring class
 									get_methodbinding_references(node.resolveBinding(), references, from);
@@ -246,7 +250,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									//look the elements inside the method and get corresponding references
 									node.accept(new ASTVisitor() {
 										public boolean visit(SimpleName var_node) {
-											visit_SimpleName(var_node, references, from);
+											visit_SimpleName(var_node, references, from, false);
 											return true;
 										}
 									});
@@ -291,7 +295,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									//look the elements inside the initializer and get corresponding references
 									node.getBody().accept(new ASTVisitor() {
 										public boolean visit(SimpleName var_node) {
-											visit_SimpleName(var_node, references, from);
+											visit_SimpleName(var_node, references, from, false);
 											return true;
 										}
 									});
@@ -326,11 +330,11 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									CodeElement from = new CodeElement(inner_vardec.resolveBinding(), node.toString(), packages);
 									
 									//get references to type, superclass and interfaces
-									get_typebinding_references(node.getType().resolveBinding(), references, from);
+									get_typebinding_references(node.getType().resolveBinding(), references, from, true);
 
 									node.getType().accept(new ASTVisitor(){
 										public boolean visit(SimpleName var_node) {
-											visit_SimpleName(var_node, references, from);
+											visit_SimpleName(var_node, references, from, false);
 											return true;
 										}
 									});
@@ -345,7 +349,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 										
 										if(inner_vardec.resolveBinding() != null && inner_vardec.resolveBinding().getType() != null){
 											//get references to type, superclass and interfaces
-											get_typebinding_references(inner_vardec.resolveBinding().getType(), references, inner_from);
+											get_typebinding_references(inner_vardec.resolveBinding().getType(), references, inner_from, true);
 										}
 											
 									}									
@@ -405,7 +409,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 		return sb.toString();
 	}
 	
-	void visit_SimpleName(SimpleName node, ArrayList<Reference> references, CodeElement elem){
+	void visit_SimpleName(SimpleName node, ArrayList<Reference> references, CodeElement elem, boolean go_deeper_class){
 		IBinding binding = node.resolveBinding();
 		if (binding != null) {  
 			if (binding.getKind() == IBinding.VARIABLE){
@@ -415,7 +419,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 				get_methodbinding_references((IMethodBinding)binding, references, elem);
 			}
 			else if (binding.getKind() == IBinding.TYPE){
-				get_typebinding_references((ITypeBinding)binding, references, elem);
+				get_typebinding_references((ITypeBinding)binding, references, elem, go_deeper_class);
 			}
 		}
 	}
@@ -449,7 +453,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 	
-	private void get_typebinding_references(ITypeBinding typeBinding, ArrayList<Reference> references, CodeElement from){
+	private void get_typebinding_references(ITypeBinding typeBinding, ArrayList<Reference> references, CodeElement from, boolean go_deeper){
 		if(typeBinding != null){
 			//reference to package
 			add_reference(references, from, new CodeElement(typeBinding.getPackage(), packages));
@@ -469,27 +473,29 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 				add_reference(references, from, new CodeElement(typeBinding.getBound(), packages, isClassTerminal(typeBinding.getBound())));
 			}
 			
-			//reference to superclass
-			if (typeBinding.getSuperclass() != null && typeBinding.getSuperclass().getQualifiedName() != null)
-			{
-				CodeElement superclass = new CodeElement(typeBinding.getSuperclass(), packages, isClassTerminal(typeBinding.getSuperclass()));
-				add_reference(references, from, superclass);
-				
-				//reference to implemented/overrided methods in this class
-				if(typeBinding.getSuperclass().getDeclaredMethods()!= null){
-					IMethodBinding[] methods = typeBinding.getDeclaredMethods();
-					for(IMethodBinding method : methods){
-						if(!method.isDefaultConstructor()){
-							MethodDeclaration frommethod_dec = findMethodDeclaration(method);
-							if(frommethod_dec != null){
-								CodeElement from_method = new CodeElement(method, findMethodDeclaration(method), packages); 
-								for(IMethodBinding superclass_method : typeBinding.getSuperclass().getDeclaredMethods()){
-									MethodDeclaration supermethod_dec = findMethodDeclaration(superclass_method);
-									if(supermethod_dec != null){
-										CodeElement to_method = new CodeElement(superclass_method, supermethod_dec, packages);
-										if( method.overrides(superclass_method) || method.isSubsignature(superclass_method) ){
-											add_reference(references, from_method, to_method);
-											add_reference(references, from_method, superclass);
+			if(go_deeper){
+				//reference to superclass
+				if (typeBinding.getSuperclass() != null && typeBinding.getSuperclass().getQualifiedName() != null)
+				{
+					CodeElement superclass = new CodeElement(typeBinding.getSuperclass(), packages, isClassTerminal(typeBinding.getSuperclass()));
+					add_reference(references, from, superclass);
+					
+					//reference to implemented/overrided methods in this class
+					if(typeBinding.getSuperclass().getDeclaredMethods()!= null){
+						IMethodBinding[] methods = typeBinding.getDeclaredMethods();
+						for(IMethodBinding method : methods){
+							if(!method.isDefaultConstructor()){
+								MethodDeclaration frommethod_dec = findMethodDeclaration(method);
+								if(frommethod_dec != null){
+									CodeElement from_method = new CodeElement(method, findMethodDeclaration(method), packages); 
+									for(IMethodBinding superclass_method : typeBinding.getSuperclass().getDeclaredMethods()){
+										MethodDeclaration supermethod_dec = findMethodDeclaration(superclass_method);
+										if(supermethod_dec != null){
+											CodeElement to_method = new CodeElement(superclass_method, supermethod_dec, packages);
+											if( method.overrides(superclass_method) || method.isSubsignature(superclass_method) ){
+												add_reference(references, from_method, to_method);
+												add_reference(references, from_method, superclass);
+											}
 										}
 									}
 								}
@@ -497,26 +503,26 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 						}
 					}
 				}
-			}
-			
-			//references to interfaces
-			ITypeBinding[] interfaces = typeBinding.getInterfaces();
-			if (interfaces != null && interfaces.length > 0){
-				for (ITypeBinding inter : interfaces){
-					if(inter != null){
-						CodeElement to = new CodeElement(inter, packages, isClassTerminal(inter));
-						if(to != null){
-							add_reference(references, from, to);
+				
+				//references to interfaces
+				ITypeBinding[] interfaces = typeBinding.getInterfaces();
+				if (interfaces != null && interfaces.length > 0){
+					for (ITypeBinding inter : interfaces){
+						if(inter != null){
+							CodeElement to = new CodeElement(inter, packages, isClassTerminal(inter));
+							if(to != null){
+								add_reference(references, from, to);
+							}
 						}
 					}
 				}
-			}
-			
-			//references to annotations
-			if (typeBinding.getTypeAnnotations() != null){
-				for(IAnnotationBinding annotation : typeBinding.getTypeAnnotations()){
-					if(annotation.getAnnotationType() != null && annotation.getAnnotationType().getQualifiedName() != null){
-						add_reference(references, from, new CodeElement(annotation.getAnnotationType(), packages, isClassTerminal(annotation.getAnnotationType())));
+				
+				//references to annotations
+				if (typeBinding.getTypeAnnotations() != null){
+					for(IAnnotationBinding annotation : typeBinding.getTypeAnnotations()){
+						if(annotation.getAnnotationType() != null && annotation.getAnnotationType().getQualifiedName() != null){
+							add_reference(references, from, new CodeElement(annotation.getAnnotationType(), packages, isClassTerminal(annotation.getAnnotationType())));
+						}
 					}
 				}
 			}

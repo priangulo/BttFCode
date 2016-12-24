@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -26,6 +28,7 @@ public class DeclarationMoreInfo extends JFrame {
 
 	private void fillComponents(){
 		ta_code.setText(current_element.getCode());
+		//System.out.print(current_element.getCode());
 		
 		ls_calledfrom.setListData(
 				current_element.getRefToThis()
@@ -40,6 +43,8 @@ public class DeclarationMoreInfo extends JFrame {
 				.map(e -> e.simpleDisplayElement())
 				.collect(Collectors.toList()).toArray(new String[0])
 		);
+		
+		ta_comment.setText(current_element.getUser_comment());
 	}
 	
 	private void initComponents() {
@@ -52,7 +57,12 @@ public class DeclarationMoreInfo extends JFrame {
 		lb_callsto = new JLabel();
 		scrollPane3 = new JScrollPane();
 		ls_callsto = new JList<String>();
-
+		lb_comment = new JLabel();
+		scrollPane4 = new JScrollPane();
+		ta_comment = new JTextArea();
+		panel1 = new JPanel();
+		bt_savecomment = new JButton();
+		
 		//======== fr_moreinfoContentPane ========
 		{
 			setTitle("More information about Declaration");
@@ -67,6 +77,7 @@ public class DeclarationMoreInfo extends JFrame {
 			//======== scrollPane1 ========
 			{
 				ta_code.setFont(new Font("Courier", Font.PLAIN, 12));
+				ta_code.setEditable(false);
 				scrollPane1.setPreferredSize(new Dimension(600, 200));
 				scrollPane1.setViewportView(ta_code);
 			}
@@ -94,11 +105,86 @@ public class DeclarationMoreInfo extends JFrame {
 				scrollPane3.setViewportView(ls_callsto);
 			}
 			fr_moreinfoContentPane.add(scrollPane3);
-			setSize(625, 540);
+			
+			//---- lb_comment ----
+			lb_comment.setText("User comments: ");
+			fr_moreinfoContentPane.add(lb_comment);
+			//======== scrollPane4 ========
+			{
+				ta_comment.setFont(new Font("Tahoma", Font.PLAIN, 12));
+				ta_comment.setEditable(true);
+				scrollPane4.setPreferredSize(new Dimension(600, 100));
+				scrollPane4.setViewportView(ta_comment);
+			}
+			fr_moreinfoContentPane.add(scrollPane4);
+			
+			//======== panel1 ========
+			{
+				panel1.setLayout(new BoxLayout(panel1, BoxLayout.LINE_AXIS));
+				panel1.setPreferredSize(new Dimension(600, 30));
+				panel1.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+
+				bt_savecomment.setPreferredSize(new Dimension(160, 20));
+				bt_savecomment.setText("Save comment");
+				panel1.add(bt_savecomment);
+				fr_moreinfoContentPane.add(panel1);
+			}
+			
+			setSize(625, 680);
 			setLocationRelativeTo(getOwner());	
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
+		
+		bt_savecomment.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				bt_saveCommentClicked(e);
+			}
+		});
+		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        if(diff_text(current_element.getUser_comment(), ta_comment.getText())){
+		        	bt_saveCommentClicked(null);
+		        }
+		        windowEvent.getWindow().dispose();
+		    }
+		});
 	}
+	
+	
+	
+	private void bt_saveCommentClicked(MouseEvent e){
+		current_element.setUser_comment(fix_format(ta_comment.getText()));
+		JOptionPane.showMessageDialog(this.getContentPane(), "User comment saved.", "Comment saved.", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	
+	private String fix_format(String text){
+		return text.replaceAll("\\r\\n|\\r|\\n", " ").replaceAll(",", ";").trim();
+	}
+	
+	private boolean diff_text(String text1, String text2){
+		if(text1 == null && text2 == null){
+			return false;
+		}
+		if(text1 != null && !text1.isEmpty() && text2 == null){
+			return true;
+		}
+		if(text1 == null && text2 != null && !text2.isEmpty() ){
+			return true;
+		}
+		if(text1 != null && text2 != null){
+			if(!fix_format(text1).equals(fix_format(text2))){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	private JLabel lb_code;
 	private JScrollPane scrollPane1;
 	private JTextArea ta_code;
@@ -108,5 +194,10 @@ public class DeclarationMoreInfo extends JFrame {
 	private JLabel lb_callsto;
 	private JScrollPane scrollPane3;
 	private JList<String> ls_callsto;
+	private JLabel lb_comment;
+	private JScrollPane scrollPane4;
+	private JTextArea ta_comment;
+	private JPanel panel1;
+	private JButton bt_savecomment;
 }
 

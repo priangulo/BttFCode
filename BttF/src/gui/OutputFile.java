@@ -24,10 +24,11 @@ public class OutputFile {
 	private JFrame main_window;
 	private Partition partition;
 	private BufferedWriter writer = null;
+	static String file_path_base;
 	static String file_path;
 	private String program_name;
 	private boolean references_saved = false;
-	
+	private SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd HH.mm");
 	
 	private static OutputFile instance = null;
 	
@@ -46,10 +47,10 @@ public class OutputFile {
 		this.partition = partition;
 		this.main_window = main_window;
 		this.program_name = program_name;
-		SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd HH.mm");
-		String datetime = date_format.format(new Date());
 		
-		this.file_path = System.getProperty("user.home") + "/Desktop/BttF/" + program_name + "/" + datetime + "/";
+		String datetime = date_format.format(new Date());
+		this.file_path_base = System.getProperty("user.home") + "/Desktop/BttF/" + program_name;
+		this.file_path = file_path_base + "/" + datetime + "/";
 	}
 	
 	
@@ -142,18 +143,21 @@ public class OutputFile {
 	
 	public void save_elements_file(Partition partition){
 		this.partition = partition;
-			
+		String datetime = date_format.format(new Date());
+		this.file_path = file_path_base + "/" + datetime + "/";
+		
 		if(partition != null && partition.get_elements() != null && partition.get_elements().size() > 0){
 			
 			String file_name = "FactsAndInferences.csv";
 			
 			try{
+				this.references_saved = false;
 				save_feature_model(false);
 				save_reference_list(false);
 				
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
-						+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences\r\n");
+					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -190,7 +194,9 @@ public class OutputFile {
 						+ parent_features.toString() +","
 						+ ((e.isIs_terminal()) ? "TRUE" : "FALSE") +","
 						+ (e.isIs_hook() ? "TRUE" : "FALSE") +","
-						+ inferences.toString().replace(",", ";")
+						+ inferences.toString().replace(",", ";")  +","
+						+ (e.getUser_comment() == null ? "" :  e.getUser_comment()) +","
+						+ e.getModifier()
 						+ "\r\n"
 					);
 				}

@@ -564,116 +564,131 @@ public class Partition {
 		}
 		
 		for(Element file_elem : file_elements){
-			Feature feature_file_elem = file_elem.getFeature();
+			Element element = get_element_from_string(file_elem.getIdentifier());
+			//the element exists
+			if(element != null){
+				element.setUser_comment(file_elem.getUser_comment());
 			
-			//only take those elements that its feature is in task
-			if(feature_file_elem.getIn_current_task()){
-				Element element = get_element_from_string(file_elem.getIdentifier());
-				//the element exists
-				if(element != null){
-					//get feature
-					setFileElemFeature(file_elem, element, invalid_facts);
-					if(file_elem.getFeature() != null){
-						//it is a fresh element, no feature assigned (happy path!)
-						if (element.getFeature() == null){
-							try{
-								ArrayList<Feature> options = get_element_feature_bounds(element, null);
-								if(options.contains(file_elem.getFeature())){
-									Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
-									add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
-								}
-								//asked feature is outside bounds
-								else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
-										+ ", valid features are: " 
-										+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
-										+"."));
-								}
-							}
-							catch (InvalidFeatureBounds ex){
-								invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
-							}
-							
-						}
-						//feature already assigned
-						else{
-							//element assigned to same feature that is being asked
-							//propagate fprivate if it is fprivate
-							if(element.getFeature().equals(file_elem.getFeature())){
-								if( file_elem.isIs_fPrivate() == true && element.isIs_fPrivate() != file_elem.isIs_fPrivate()){
-									element.setIs_fPrivate(true);
-									add_element_to_feature_gui(element.getFeature(), element, element.isIs_fPrivate(), element.getFeature().getParent_feature());
-								}
-							}
-							//element not assigned to same feature that is being asked
-							else{
-								//it is ok to reassign as long as they belong to the same hierarchy, specifically:
-								// a)element is currently assigned to a parent and it's being asked to move to child
-								// b)element is currently assigned to a child and it's being asked to move to parent
-								if(file_elem.getFeature().isChildOf(element.getFeature())
-										|| element.getFeature().isChildOf(file_elem.getFeature())){
-									Feature new_feature = file_elem.getFeature();
-									/*Feature old_feature = element.getFeature();
-									old_feature.removeElement(element);
-									*/
-									add_element_to_feature_gui(new_feature, element, file_elem.isIs_fPrivate(), new_feature.getParent_feature());
-									//new_feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
-								}
-								//it is a method, it may be a hook
-								else if(file_elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
-									try{
-										ArrayList<Feature> options = get_element_feature_bounds(element, null);
-										if(options.contains(file_elem.getFeature())){
-											Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
-											add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
-										}
-										//asked feature is outside bounds
-										else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
-												+ ", valid features are: " 
-												+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
-												+"."));
-										}
-									}catch (InvalidFeatureBounds ex){
-										invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
+				Feature feature_file_elem = file_elem.getFeature();
+				//only take those elements that its feature is in task
+				if(feature_file_elem != null){
+					if(feature_file_elem.getIn_current_task()){
+						//get feature
+						setFileElemFeature(file_elem, element, invalid_facts);
+						if(file_elem.getFeature() != null){
+							//it is a fresh element, no feature assigned (happy path!)
+							if (element.getFeature() == null){
+								try{
+									ArrayList<Feature> options = get_element_feature_bounds(element, null);
+									if(options.contains(file_elem.getFeature())){
+										Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
+										add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+									}
+									//asked feature is outside bounds
+									else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+											+ ", valid features are: " 
+											+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+											+"."));
 									}
 								}
-								//if it is asked to be assigned to something different notify error
+								catch (InvalidFeatureBounds ex){
+									invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
+								}
+								
+							}
+							//feature already assigned
+							else{
+								//element assigned to same feature that is being asked
+								//propagate fprivate if it is fprivate
+								if(element.getFeature().equals(file_elem.getFeature())){
+									if( file_elem.isIs_fPrivate() == true && element.isIs_fPrivate() != file_elem.isIs_fPrivate()){
+										element.setIs_fPrivate(true);
+										add_element_to_feature_gui(element.getFeature(), element, element.isIs_fPrivate(), element.getFeature().getParent_feature());
+									}
+								}
+								//element not assigned to same feature that is being asked
 								else{
-									invalid_facts.add(
-											new InvalidFileFact(file_elem.getIdentifier(), 
-													file_elem.get_assignment_text(), 
-													InvalidFileFact.FEATURE_ASSIGNED + " " + element.getFeature().getFeature_name() +"."
-												)
-										);
+									//it is ok to reassign as long as they belong to the same hierarchy, specifically:
+									// a)element is currently assigned to a parent and it's being asked to move to child
+									// b)element is currently assigned to a child and it's being asked to move to parent
+									if(file_elem.getFeature().isChildOf(element.getFeature())
+											|| element.getFeature().isChildOf(file_elem.getFeature())){
+										Feature new_feature = file_elem.getFeature();
+										/*Feature old_feature = element.getFeature();
+										old_feature.removeElement(element);
+										*/
+										add_element_to_feature_gui(new_feature, element, file_elem.isIs_fPrivate(), new_feature.getParent_feature());
+										//new_feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
+									}
+									//it is a method, it may be a hook
+									else if(file_elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+										try{
+											ArrayList<Feature> options = get_element_feature_bounds(element, null);
+											if(options.contains(file_elem.getFeature())){
+												Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
+												add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+											}
+											//asked feature is outside bounds
+											else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+													+ ", valid features are: " 
+													+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+													+"."));
+											}
+										}catch (InvalidFeatureBounds ex){
+											invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
+										}
+									}
+									//if it is asked to be assigned to something different notify error
+									else{
+										invalid_facts.add(
+												new InvalidFileFact(file_elem.getIdentifier(), 
+														file_elem.get_assignment_text(), 
+														InvalidFileFact.FEATURE_ASSIGNED + " " + element.getFeature().getFeature_name() +"."
+													)
+											);
+									}
 								}
 							}
 						}
 					}
+					//requested feature is not in game, notify in console for debugging purpose
+					else{
+						System.out.println("File element with feature not in task: " + file_elem.simpleDisplayElement());
+					}
 				}
-				//element doesn't exist
-				else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.ELEMENT_DOESNT_EXIST));}
 			}
-			//requested feature is not in game, notify in console for debugging purpose
-			else{
-				System.out.println("File element with feature not in task: " + file_elem.simpleDisplayElement());
-			}
+			//element doesn't exist
+			else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.ELEMENT_DOESNT_EXIST));}
+			
 		}
 		return invalid_facts;
 	}
 	
 	private void setFileElemFeature(Element file_elem, Element element, ArrayList<InvalidFileFact> invalid_facts){
-		Feature feature_file_elem = file_elem.getFeature();
-		if(feature_file_elem.getFeature_name().equals(InputFile.container_feature_name)){
-			String parent_elem_name = element.getParentName();
-			if(parent_elem_name != null){
-				Element parent_elem = get_element_from_string(parent_elem_name);
-				if(parent_elem != null){
-					if(parent_elem.getFeature() != null && parent_elem.getFeature().getIn_current_task()){
-						file_elem.setFeature(parent_elem.getFeature());
+		if(file_elem.getFeature()!= null){
+			Feature feature_file_elem = file_elem.getFeature();
+			
+			if(feature_file_elem.getFeature_name().equals(InputFile.container_feature_name)){
+				String parent_elem_name = element.getParentName();
+				if(parent_elem_name != null){
+					Element parent_elem = get_element_from_string(parent_elem_name);
+					if(parent_elem != null){
+						if(parent_elem.getFeature() != null && parent_elem.getFeature().getIn_current_task()){
+							file_elem.setFeature(parent_elem.getFeature());
+						}else{
+							invalid_facts.add(
+									new InvalidFileFact(file_elem.getIdentifier(), 
+											file_elem.get_assignment_text(), 
+											InvalidFileFact.CONTAINER_UNASSIGNED
+										)
+								);
+							file_elem.setFeature(null);
+						}
 					}else{
 						invalid_facts.add(
 								new InvalidFileFact(file_elem.getIdentifier(), 
 										file_elem.get_assignment_text(), 
-										InvalidFileFact.CONTAINER_UNASSIGNED
+										InvalidFileFact.NO_CONTAINER
 									)
 							);
 						file_elem.setFeature(null);
@@ -687,18 +702,10 @@ public class Partition {
 						);
 					file_elem.setFeature(null);
 				}
-			}else{
-				invalid_facts.add(
-						new InvalidFileFact(file_elem.getIdentifier(), 
-								file_elem.get_assignment_text(), 
-								InvalidFileFact.NO_CONTAINER
-							)
-					);
-				file_elem.setFeature(null);
 			}
-		}
-		else{
-			file_elem.setFeature(feature_file_elem);
+			else{
+				file_elem.setFeature(feature_file_elem);
+			}
 		}
 	}
 	

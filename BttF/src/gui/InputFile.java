@@ -42,6 +42,7 @@ public class InputFile {
 	private final int inferred_column = 8;
 	private final int parentfeatures_column = 9;
 	private final int isterminal_column = 10;
+	private final int usercomment_column = 13;
 	private final Feature container_feature = new Feature(container_feature_name, -1, true, null, false);
 	
 	private final int call_from_column = 0;
@@ -134,8 +135,8 @@ public class InputFile {
 							&& !fields[identifier_column].trim().isEmpty()
 							&& fields[type_column] != null
 							&& !fields[type_column].trim().isEmpty()
-							&& fields[feature_column] != null 
-							&& !fields[feature_column].trim().isEmpty()
+							//&& fields[feature_column] != null 
+							//&& !fields[feature_column].trim().isEmpty()
 					){
 						String identifier = fields[identifier_column].trim().replace(";", ",");
 						String type = fields[type_column].trim().toUpperCase();
@@ -145,7 +146,7 @@ public class InputFile {
 						String assignment_text = identifier + " assigned to " + feature_name;
 						Boolean is_inferred = !fields[inferred_column].trim().isEmpty() && fields[inferred_column].toUpperCase().trim().equals("TRUE");
 						Boolean is_terminal = !fields[isterminal_column].trim().isEmpty() && fields[isterminal_column].toUpperCase().trim().equals("TRUE");
-						
+								
 						ElementType element_type = null;
 						Feature feature = null;
 						Boolean ignore_inferred = false;
@@ -196,7 +197,12 @@ public class InputFile {
 						
 						//GET ELEMENT TYPE
 						element_type = get_type(type);
-						if(element_type != null && feature != null && ((ignore_inferred && !is_inferred) || !ignore_inferred)){
+						if( element_type != null 
+								&& ( 
+									(feature != null && ((ignore_inferred && !is_inferred) || !ignore_inferred) )
+									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
+								)
+							){
 							Element file_elem = new Element(identifier, element_type, null, null, is_terminal);
 							file_elem.setFeature(feature);
 							
@@ -212,6 +218,10 @@ public class InputFile {
 								file_elem.setIs_fPublic(true);
 							}
 							
+							if( fields.length >= usercomment_column){
+								file_elem.setUser_comment(fields[usercomment_column]);
+							}
+							
 							file_elements.add(file_elem);
 						}
 						else{
@@ -220,7 +230,7 @@ public class InputFile {
 								invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.ELEMENTTYPE_DOESNT_EXIST));
 							}
 							//feature doesn't exist
-							if(feature == null){
+							if(feature == null && feature_name != null && !feature_name.isEmpty()){
 								invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.FEATURE_DOESNT_EXIST));
 							}
 							//supposed to be ignored, this is not an invalid fact, is for debugging purposes

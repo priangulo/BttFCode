@@ -21,6 +21,7 @@ public class Element implements Comparable<Element>{
 	private String package_name;
 	private String class_name;
 	private String member_name;
+	private String user_comment;
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal) {
 		this.identifier = identifier;
@@ -308,6 +309,14 @@ public class Element implements Comparable<Element>{
 		return assignment;
 	}
 	
+	public String getUser_comment() {
+		return user_comment;
+	}
+
+	public void setUser_comment(String user_comment) {
+		this.user_comment = user_comment;
+	}
+
 	@Override
 	public String toString() {
 		return "Element [identifier=" + identifier + ", element_type=" + element_type + ", is_hook=" + is_hook

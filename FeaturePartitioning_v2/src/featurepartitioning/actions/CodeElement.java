@@ -55,7 +55,7 @@ public class CodeElement {
 	CodeElement(IPackageBinding package_binding, Set<String> packages){
 		if(package_binding != null){
 			this.name = (package_binding.isUnnamed()) ? "default" : package_binding.getName();
-			this.modifier = get_modifier(package_binding.getModifiers());
+			this.modifier = get_modifier(package_binding.getModifiers(), ElementType.ELEM_TYPE_PACKAGE);
 			this.type = ElementType.ELEM_TYPE_PACKAGE;
 			this.declaring_class = null;
 			this.code = PartitioningConstants.PACKAGE_CODE_STRING;
@@ -79,7 +79,12 @@ public class CodeElement {
 	CodeElement(ITypeBinding type_binding, String code, Set<String> packages, boolean is_terminal){
 		if(type_binding != null){
 			setClassAttributes(type_binding, packages, is_terminal);
-			this.code = code;
+			if(this.code == null
+					|| (this.code != null && code != null && code.length() > this.code.length())
+				){
+				this.code = code;
+			}
+			
 		}
 		else{this.is_null = true; }
 	}
@@ -92,7 +97,7 @@ public class CodeElement {
 			else{
 				this.name = type_binding.getQualifiedName();
 			}
-			this.modifier = get_modifier(type_binding.getModifiers());
+			this.modifier = get_modifier(type_binding.getModifiers(), ElementType.ELEM_TYPE_CLASS);
 			this.type = ElementType.ELEM_TYPE_CLASS;
 			this.declaring_class = null;
 			this.code = type_binding.toString();
@@ -130,9 +135,14 @@ public class CodeElement {
 		if(method_binding != null && method_binding.getDeclaringClass() != null && !node.resolveBinding().getDeclaringClass().isAnonymous()) {
 			this.declaring_class = method_binding.getDeclaringClass().getQualifiedName();
 			this.name = declaring_class + "." + method_binding.getName() + getMethodParams(node);
-			this.modifier = get_modifier(method_binding.getModifiers());
+			this.modifier = get_modifier(method_binding.getModifiers(), ElementType.ELEM_TYPE_METHOD);
 			this.type = ElementType.ELEM_TYPE_METHOD;
-			this.code = method_binding.toString();
+			if(node != null && node.toString() != null){
+				this.code = node.toString();
+			}
+			else{
+				method_binding.toString();
+			}
 			
 			if(checkName(this.name, false, true, packages)){
 				this.is_primitive_or_proprietary = false;
@@ -193,8 +203,8 @@ public class CodeElement {
 		if(variable_binding != null && variable_binding.getName() != null && variable_binding.getDeclaringClass() != null && variable_binding.getVariableDeclaration() != null){
 			this.declaring_class = variable_binding.getDeclaringClass().getQualifiedName();
 			this.name = declaring_class + "." + variable_binding.getName();
-			this.modifier = get_modifier(variable_binding.getVariableDeclaration().getModifiers());
 			this.type = ElementType.ELEM_TYPE_FIELD;
+			this.modifier = get_modifier(variable_binding.getVariableDeclaration().getModifiers(), ElementType.ELEM_TYPE_FIELD);
 			this.code = variable_binding.getVariableDeclaration().toString();
 			
 			if(checkName(this.name, false, false, packages)){
@@ -206,9 +216,12 @@ public class CodeElement {
 		}
 	}
 	
-	private String get_modifier(int flags_mod){
+	private String get_modifier(int flags_mod, ElementType type){
 		if(Modifier.isPrivate(flags_mod)) return PartitioningConstants.PRIVATE_MOD;
 		else if(Modifier.isPublic(flags_mod)) return PartitioningConstants.PUBLIC_MOD;
+		else if(Modifier.isProtected(flags_mod)) return PartitioningConstants.PROTECTED_MOD;
+		else if(Modifier.isDefault(flags_mod)) return PartitioningConstants.PACKPRIV_MOD;
+		else if(!type.equals(ElementType.ELEM_TYPE_PACKAGE)) return PartitioningConstants.PACKPRIV_MOD;
 		else return "";
 	}
 	
