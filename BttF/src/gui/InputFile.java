@@ -114,7 +114,7 @@ public class InputFile {
 	}
 
 	public void get_elements_from_csv_file(String file_name, ArrayList<String> features, Boolean reload){
-		int latest_feature_order = partition.get_latest_feature_in_task();
+		int latest_feature_order = partition.partitionHelper.get_latest_feature_in_task();
 		boolean sanity_check = true;
 		BufferedReader reader = null;
 		String line = "";
@@ -156,7 +156,7 @@ public class InputFile {
 							feature = container_feature;
 						}
 						else{
-							feature = partition.get_feature_by_name(feature_name);
+							feature = partition.partitionHelper.get_feature_by_name(feature_name);
 						}
 						
 						//feature is in task, everything is cool
@@ -170,7 +170,7 @@ public class InputFile {
 							Boolean found_active_parent = false;
 							for(int i=0; i<parent_features.length; i++){
 								if(parent_features[i] != null && !parent_features[i].trim().isEmpty()){
-									parent_feature = partition.get_feature_by_name(parent_features[i].trim());
+									parent_feature = partition.partitionHelper.get_feature_by_name(parent_features[i].trim());
 									if(parent_feature != null && parent_feature.getIn_current_task()){
 										found_active_parent = true;
 										break;
@@ -187,8 +187,8 @@ public class InputFile {
 						if(feature == null){
 							for(int i=0; i<parent_features.length; i++){
 								if(parent_features[i] != null && !parent_features[i].trim().isEmpty()){
-									if(partition.get_feature_by_name(parent_features[i].trim()) != null){
-										feature = partition.get_feature_by_name(parent_features[i].trim());
+									if(partition.partitionHelper.get_feature_by_name(parent_features[i].trim()) != null){
+										feature = partition.partitionHelper.get_feature_by_name(parent_features[i].trim());
 										break;
 									}
 								}
@@ -218,7 +218,7 @@ public class InputFile {
 								file_elem.setIs_fPublic(true);
 							}
 							
-							if( fields.length >= usercomment_column){
+							if( fields.length > usercomment_column){
 								file_elem.setUser_comment(fields[usercomment_column]);
 							}
 							

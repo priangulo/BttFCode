@@ -20,6 +20,23 @@ public class PartitionHookHandler {
 	}
 	
 	/*
+	boolean check_could_be_hook(Feature feature_to_assign, Element element, Feature parent_feature){
+		//is a method
+		//and it is assigned and fprivate and likely assigned fprivate by referencing a fprivate declaration
+		//but references other declarations that haven't been classified
+		if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)
+				&& element.getFeature() != parent_feature
+				&& element.isIs_fPrivate()
+				&& element.getRefFromThis().stream().filter(e -> e.isIs_fPrivate()).collect(Collectors.toList()).size() > 0
+				&& element.getRefFromThis().stream().filter(e -> e.getFeature() == null).collect(Collectors.toList()).size() > 0
+				)
+		{
+			return true;
+		}
+		return false;
+	}*/
+	
+	/*
 	 * Classify hook methods that were assigned a label before all its parents got assigned
 	 * Like what happens when a hook gets assigned because it calls something that is fprivate 
 	 */
@@ -32,17 +49,26 @@ public class PartitionHookHandler {
 		
 		for( Element elem : possible_hooks){
 			boolean is_hook = false;
+			//boolean is_possible_hook = false;
 			is_hook = check_is_hook(elem.getFeature(), elem);
+			//is_possible_hook = check_could_be_hook(elem.getFeature(), elem, parent_feature);
+			
 			if (is_hook){
 				elem.setIs_hook(true);
 				elem.setIs_fPrivate(false);
 				elem.setIs_fPublic(true);
-				factInf.addInference(elem.getIdentifier() + " is hook because calls element(s) classified in future features", elem, elem.getFeature() );
-
-				/*this line was commented on 07/22/2016, this is no longer necessary
-				 * because fprivate does not propagate from fields to methods anymore -> PartitionInferencingHandler.propagate_fprivate */
-				 remove_feature_hook_of_privates(elem, factInf, parent_feature); 
+				factInf.addInference(elem.getIdentifier() + ", BttF says it's hook because calls element(s) classified in future features", elem, elem.getFeature() );
+				remove_feature_hook_of_privates(elem, factInf, parent_feature);
 			}
+			
+			/*if(is_possible_hook){
+				Feature feature = elem.getFeature();
+				feature.removeElement(elem); //removes element from feature, and resets the element
+				elem.setIs_fPrivate(false);
+				elem.setIs_fPublic(false);
+				factInf.addInference(elem.getIdentifier() + ", BttF says it calls fprivate elements and it may be a hook, information about its feature to be determined.", elem, null);
+				
+			}*/
 		}
 	}
 	
@@ -55,7 +81,7 @@ public class PartitionHookHandler {
 		for( Element elem : current_hooks){
 			if(!check_is_hook(elem.getFeature(), elem)){
 				elem.setIs_hook(false);
-				factInf.addInference(elem.getIdentifier() + " is no longer hook called element(s) got reclassified", elem, elem.getFeature());
+				factInf.addInference(elem.getIdentifier() + ", BttF says it's no longer a hook, called element(s) got reclassified", elem, elem.getFeature());
 			}
 		}
 	}
@@ -74,7 +100,7 @@ public class PartitionHookHandler {
 			elem.setIs_hook(true); //reassign that it is hook (this is a fact)
 			elem.setIs_fPrivate(false);
 			elem.setIs_fPublic(true);
-			factInf.addInference("Hook " + elem.getIdentifier() + " calls fprivate elements information about its feature to be determined.", elem, null);
+			factInf.addInference("Hook " + elem.getIdentifier() + ", BttF says it calls fprivate elements, its feature needs to be determined.", elem, null);
 		}
 	}
 }

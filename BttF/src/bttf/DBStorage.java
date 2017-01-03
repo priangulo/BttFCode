@@ -355,14 +355,14 @@ public class DBStorage {
 							//3. retrieve elements, and add attributes
 							rs = sql_select(get_element_list, new ArrayList<DBValue>(Arrays.asList(id_featuremodel)));
 							while(rs.next()){
-								Element elem = partition.get_element_from_string(rs.getString("identifier"));
+								Element elem = partition.partitionHelper.get_element_from_string(rs.getString("identifier"));
 								if(elem != null){
 									String feature_name = rs.getString("feature_name");
 									Boolean is_fprivate = rs.getBoolean("is_fprivate");
 									Boolean is_fpublic = rs.getBoolean("is_fpublic");
 									Boolean is_hook = rs.getBoolean("is_hook");
 									if(feature_name != null){
-										Feature feature = partition.get_feature_by_name(feature_name);
+										Feature feature = partition.partitionHelper.get_feature_by_name(feature_name);
 										if(feature != null){
 											feature.addElement(elem, is_fprivate, is_fpublic, is_hook);
 										}else{ return false; } //error: inconsistent features
@@ -380,17 +380,17 @@ public class DBStorage {
 								DBValue id_fact = new DBValue(rs.getInt("id_fact"));
 								Fact fact = new Fact();
 								fact.setFact(rs.getString("fact"),
-										partition.get_element_from_string(rs.getString("identifier")), 
+										partition.partitionHelper.get_element_from_string(rs.getString("identifier")), 
 										rs.getBoolean("elem_fact_isfprivate"),
 										false,
 										false,
-										partition.get_feature_by_name(rs.getString("feature_name")));
+										partition.partitionHelper.get_feature_by_name(rs.getString("feature_name")));
 								//4.1 retrieve inferences
 								ResultSet rs_inferences = sql_select(get_inference_list, new ArrayList<DBValue>(Arrays.asList(id_fact)));
 								while(rs_inferences.next()){
 									String inference_text = rs_inferences.getString("inference");
 									String identifier = rs_inferences.getString("identifier");
-									fact.addInference(inference_text, partition.get_element_from_string(identifier), partition.get_element_from_string(identifier).getFeature());
+									fact.addInference(inference_text, partition.partitionHelper.get_element_from_string(identifier), partition.partitionHelper.get_element_from_string(identifier).getFeature());
 								}
 								partition.get_facts().add(fact);
 							}

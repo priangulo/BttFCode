@@ -2,6 +2,8 @@ package bttf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -22,11 +24,13 @@ public class Partition {
 	private ArrayList<Element> elements_list = new ArrayList<Element>();
 	private ArrayList<Cycle> cycle_list = new ArrayList<Cycle>();
 	private ArrayList<Feature> feature_list = new ArrayList<Feature>();
-	private ArrayList<Fact> factsAndInferences = new ArrayList<Fact>();
+	ArrayList<Fact> factsAndInferences = new ArrayList<Fact>();
 	private ArrayList<Fact> factsAndInferences_retracted = new ArrayList<Fact>();
 	private ArrayList<Element> elements_from_file = new ArrayList<Element>();
 	private PartitionInferencingHandler partitionInferencing; 
 	private PartitionCycleHandler cycleHandler; 
+	public FeatureBoundsCalculation boundsCalc;
+	public PartitionHelper partitionHelper;
 	final String private_modifier = "PRIVATE";
 	private ArrayList<String> allFeatures = new ArrayList<String>();
 	public ArrayList<String> featuremodel_alllines;
@@ -35,6 +39,11 @@ public class Partition {
 		this.references_list = references_list;
 		this.project_name = project_name;
 		get_list_of_elements();
+		
+		this.cycleHandler = new PartitionCycleHandler();
+		this.partitionHelper = new PartitionHelper(this);
+		this.boundsCalc = new FeatureBoundsCalculation(this);
+		
 		get_toposort();
 		
 		if(cycle_stuff_on){
@@ -48,13 +57,13 @@ public class Partition {
 		}
 		
 		
-		this.cycleHandler = new PartitionCycleHandler();
+		
 	}
 
 	private void reset_partition(){
 		this.factsAndInferences = new ArrayList<Fact>();
 		this.factsAndInferences_retracted = new ArrayList<Fact>();
-		for(Feature f : get_features_in_task()){
+		for(Feature f : this.partitionHelper.get_features_in_task()){
 			for(Element e : f.getFeature_elements()){
 				e.resetElement();
 			}
@@ -63,6 +72,10 @@ public class Partition {
 		
 	}
 	
+	public ArrayList<Element> getElements_list() {
+		return elements_list;
+	}
+
 	/*
 	 * Public method that calculates the final feature model
 	 * */
@@ -140,17 +153,7 @@ public class Partition {
 		return cycle_list;
 	}
 	
-	/*
-	 * Gets the Element instance using its identifier
-	 * */
-	public Element get_element_from_string(String elem_identifier){
-		for(Element elem : elements_list){
-			if(elem.getIdentifier().equals(elem_identifier)){
-				return elem;
-			}
-		}
-		return null;
-	}
+	
 
 	/*
 	 * From the references list gets the individual elements
@@ -176,11 +179,11 @@ public class Partition {
 		for(Element elem : elements_list){
 			for(Reference ref : references_list){
 				if(ref.getCall_from().equals(elem.getIdentifier())){
-					Element to = get_element_from_string(ref.getCall_to());
+					Element to = this.partitionHelper.get_element_from_string(ref.getCall_to());
 					elem.addCallTo(to);
 				}
 				if(ref.getCall_to().equals(elem.getIdentifier())){
-					Element from = get_element_from_string(ref.getCall_from());
+					Element from = this.partitionHelper.get_element_from_string(ref.getCall_from());
 					elem.addCallFrom(from);
 				}
 			}
@@ -281,29 +284,11 @@ public class Partition {
 		System.out.println(feature_list.toString());
 	}
 	
-	/*
-	 * Search feature using name 
-	 */
-	public Feature get_feature_by_name(String name){
-		//return (feature_list.stream().filter(f -> f.getFeature_name().equals(name)).collect(Collectors.toList())).get(0);
-		List<Feature> feature_list_by_name = feature_list.stream().filter(f -> f.getFeature_name().equals(name)).collect(Collectors.toList());
-		if(!feature_list_by_name.isEmpty()){
-			return feature_list_by_name.get(0);
-		}
-		return null;
-	}
-	
 	
 	public ArrayList<Feature> get_all_features(){
 		return feature_list;
 	}
 	
-	public ArrayList<Feature> get_features_in_task(){
-		return (ArrayList<Feature>) feature_list
-				.stream()
-				.filter(f -> f.getIn_current_task() == true)
-				.collect(Collectors.toList());
-	}
 	
 	/*
 	 * gets not classified elements, that their predecessors have been already classified
@@ -335,6 +320,21 @@ public class Partition {
 		//refresh after recalling past facts
 		elements_to_classify = get_elems_to_classify(parent_feature);
 		
+		Collections.sort(elements_to_classify, new Comparator<Element>() {
+		    @Override
+		    public int compare(Element e1, Element e2) {
+		    	if(e1 != null && e2 != null){
+		    		return e1.getIdentifier().compareTo(e2.getIdentifier());
+		    		
+		    		/*int compareGran = e1.getElement_type().compareTo(e2.getElement_type());
+		    		if(compareGran == 0){
+		    			return e1.getIdentifier().compareTo(e2.getIdentifier());
+		    		}
+		    		return compareGran;*/
+		    	}
+		    	return 0;
+		    }
+		});
 		//System.out.println("elements to classify: " + elements_to_classify.toString());
 		return elements_to_classify;
 	}
@@ -389,21 +389,24 @@ public class Partition {
 	 */
 	private boolean assign_elements_with_bounds_in_same_feature(Element element, Feature parent_feature){
 		try{
-			ArrayList<Feature> options = (ArrayList<Feature>) get_element_feature_bounds(element, parent_feature)
-					.stream()
-					.filter(f -> f.getIn_current_task() == true)
-					.collect(Collectors.toList());
-			
-			if(options.size() == 1){
-				Feature feature = options.get(0);
-				if(feature.getOrder() == get_latest_feature_in_task()){
-					element.setIs_fPrivate(true);
-					element.setIs_fPublic(false);
+			FeatureBoundsWExp bounds = boundsCalc.get_element_feature_bounds(element, parent_feature);
+			if (bounds != null && bounds.getFeatureRange() != null){
+				ArrayList<Feature> options = (ArrayList<Feature>) bounds.getFeatureRange()
+						.stream()
+						.filter(f -> f.getIn_current_task() == true)
+						.collect(Collectors.toList());
+				
+				if(options.size() == 1){
+					Feature feature = options.get(0);
+					if(feature.getOrder() == partitionHelper.get_latest_feature_in_task()){
+						element.setIs_fPrivate(true);
+						element.setIs_fPublic(false);
+					}
+					feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
+					//Add inference to last fact
+					factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because of its bounds.", element, feature);
+					return true;
 				}
-				feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
-				//Add inference to last fact
-				factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because of its bounds.", element, feature);
-				return true;
 			}
 		}
 		catch(InvalidFeatureBounds ex){
@@ -412,114 +415,6 @@ public class Partition {
 		return false;
 	}
 	
-	/*
-	 * get the features an element could belong to
-	 */
-	public ArrayList<Feature> get_element_feature_bounds(Element element, Feature parent_feature){
-		//default value all features
-		ArrayList<Feature> feature_options = get_features_in_task();
-		
-		Feature earliest_bound = get_earliest_bound(element, feature_options, parent_feature);
-		Feature latest_bound = get_latest_bound(element, feature_options, parent_feature);
-		
-		if(earliest_bound != null && latest_bound != null){
-			if(earliest_bound.getOrder() > latest_bound.getOrder()){
-				throw new InvalidFeatureBounds(earliest_bound.getFeature_name() + " > " + latest_bound.getFeature_name());
-			}
-			
-			feature_options = (ArrayList<Feature>) feature_list.stream()
-					.filter(f -> f.getOrder() >= earliest_bound.getOrder() && f.getOrder() <= latest_bound.getOrder())
-					.collect(Collectors.toList());
-		}
-		
-		feature_options = (ArrayList<Feature>) feature_options
-			.stream()
-			.distinct()
-			.filter(f -> f.getIn_current_task() == true)
-			.collect(Collectors.toList());
-		
-		return feature_options;
-	}
-	
-	/*
-	 * obtain earliest_bound eb(e)
-	 * eb(m) = F(parent(m)), otherwise alpha
-	 * eb(d) = latest{F(r) : r in RefFrom(e)}, otherwise alpha
-	 */
-	public Feature get_earliest_bound(Element element, ArrayList<Feature> feature_options, Feature parent_feature){
-		Feature earliest_bound = null;
-		
-		//features in refFromElem
-		ArrayList<Feature> refFromElem = (ArrayList<Feature>) element.getRefFromThis().stream()
-				.map(e -> e.getFeature())
-				.collect(Collectors.toList());
-		
-		//if element is a method:   eb(m) = F(parent(m)), otherwise alpha
-		if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
-			if(element.getParentName() != null && !element.getParentName().isEmpty()){
-				Element parent = get_element_from_string(element.getParentName());
-				if(parent != null && parent.getFeature() != null && parent.getFeature().getIn_current_task()){
-					earliest_bound = parent.getFeature();
-				}
-			}
-		}
-		//else:   eb(d) = latest{F(r) : r in RefFrom(e)}, otherwise alpha
-		else if(!element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) 
-				&& refFromElem != null && refFromElem.size() > 0
-				&& refFromElem.stream().filter(f -> f != parent_feature).collect(Collectors.toList()).size()>0){
-			earliest_bound = refFromElem
-				.stream()
-				.filter(f -> f != parent_feature)
-				.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-				.get();		
-		}
-		else{
-			earliest_bound = feature_options.stream()
-				.filter(f -> f != parent_feature)
-				.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-				.get();
-		}
-		
-		return earliest_bound;
-		
-	}
-	
-	/*
-	 * obtain latest_bound lb(e)
-	 * lb(e) = earliest{F(r) :  r in RefTo(e)}, otherwise omega
-	 */
-	public Feature get_latest_bound(Element element, ArrayList<Feature> feature_options, Feature parent_feature){
-		Feature latest_bound = null;
-		
-		ArrayList<Feature> refToElem = element.getLayeredRefToFeatures();
-		/*In addition, since e might be a hook, it could reference fprivate declarations in the present
-		or future, but not it the past. In other words, e must be introduced at or before the earliest
-		of the fprivate declarations that it references.*/
-		if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
-			refToElem.addAll(element.getFprivateRefFromFeatures());
-		}
-		
-		if(refToElem != null 
-			&& refToElem.size() > 0 
-			&& refToElem.stream()
-				.filter(f -> f != parent_feature)
-				.collect(Collectors.toList()).size()>0){
-			
-			latest_bound = refToElem
-					.stream()
-					.filter(f -> f != parent_feature)
-					.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-					.get();
-		}
-		else{
-			latest_bound = feature_options.stream()
-					.filter(f -> f != parent_feature)
-					.max((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-					.get();
-		}
-		
-		return latest_bound;
-	}
 	
 	/*
 	 * Remove fact and consequent facts
@@ -564,7 +459,7 @@ public class Partition {
 		}
 		
 		for(Element file_elem : file_elements){
-			Element element = get_element_from_string(file_elem.getIdentifier());
+			Element element = this.partitionHelper.get_element_from_string(file_elem.getIdentifier());
 			//the element exists
 			if(element != null){
 				element.setUser_comment(file_elem.getUser_comment());
@@ -579,16 +474,24 @@ public class Partition {
 							//it is a fresh element, no feature assigned (happy path!)
 							if (element.getFeature() == null){
 								try{
-									ArrayList<Feature> options = get_element_feature_bounds(element, null);
-									if(options.contains(file_elem.getFeature())){
-										Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
-										add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
-									}
-									//asked feature is outside bounds
-									else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
-											+ ", valid features are: " 
-											+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
-											+"."));
+									FeatureBoundsWExp bounds = boundsCalc.get_element_feature_bounds(element, null);
+									if (bounds != null && bounds.getFeatureRange() != null){
+										ArrayList<Feature> options = (ArrayList<Feature>) bounds.getFeatureRange();
+										if(options.contains(file_elem.getFeature())){
+											Feature feature = this.partitionHelper.get_feature_by_name(file_elem.getFeature().getFeature_name());
+											add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+										}
+										//asked feature is outside bounds
+										else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+												+ ", valid features are: " 
+												+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+												+"."
+												+" Feature bounds explanation: " + bounds.getEb_explanation()
+												+". " 
+												+bounds.getLb_explanation()
+												+". " )
+											);
+										}
 									}
 								}
 								catch (InvalidFeatureBounds ex){
@@ -623,16 +526,24 @@ public class Partition {
 									//it is a method, it may be a hook
 									else if(file_elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
 										try{
-											ArrayList<Feature> options = get_element_feature_bounds(element, null);
-											if(options.contains(file_elem.getFeature())){
-												Feature feature = get_feature_by_name(file_elem.getFeature().getFeature_name());
-												add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
-											}
-											//asked feature is outside bounds
-											else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
-													+ ", valid features are: " 
-													+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
-													+"."));
+											FeatureBoundsWExp bounds = boundsCalc.get_element_feature_bounds(element, null);
+											if (bounds != null && bounds.getFeatureRange() != null){
+												ArrayList<Feature> options = (ArrayList<Feature>) bounds.getFeatureRange();
+												if(options.contains(file_elem.getFeature())){
+													Feature feature = this.partitionHelper.get_feature_by_name(file_elem.getFeature().getFeature_name());
+													add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
+												}
+												//asked feature is outside bounds
+												else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+														+ ", valid features are: " 
+														+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
+														+"."
+														+" Feature bounds explanation: " + bounds.getEb_explanation()
+														+". " 
+														+bounds.getLb_explanation()
+														+". " )
+													);
+												}
 											}
 										}catch (InvalidFeatureBounds ex){
 											invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.INVALID_BOUNDS + " " + ex.getMessage()));
@@ -671,7 +582,7 @@ public class Partition {
 			if(feature_file_elem.getFeature_name().equals(InputFile.container_feature_name)){
 				String parent_elem_name = element.getParentName();
 				if(parent_elem_name != null){
-					Element parent_elem = get_element_from_string(parent_elem_name);
+					Element parent_elem = this.partitionHelper.get_element_from_string(parent_elem_name);
 					if(parent_elem != null){
 						if(parent_elem.getFeature() != null && parent_elem.getFeature().getIn_current_task()){
 							file_elem.setFeature(parent_elem.getFeature());
@@ -728,17 +639,7 @@ public class Partition {
 		//return factsAndInferences;
 	}
 	
-	public ArrayList<FactInference> get_flatFacts(){
-		ArrayList<FactInference> facts = FactInferenceAdapter.getFlatFacts(this.factsAndInferences);
-		if(facts != null && !facts.isEmpty()){
-			return (ArrayList<FactInference>) facts
-					.stream()
-					.filter(fact -> fact.getFeature() != null && fact.getFeature().getIn_current_task() == true)
-					.collect(Collectors.toList());
-		}
-		
-		return facts;
-	}
+	
 	
 	/*
 	 * Get list of all elements
@@ -768,27 +669,7 @@ public class Partition {
 		return feature_model;
 	}
 	
-	public int get_latest_feature_in_task(){
-		List<Feature> last_feature = get_features_in_task().stream()
-				.filter(f -> f.getIs_last_feature()).collect(Collectors.toList());
-		
-		if(last_feature.size() > 0){
-			return last_feature.get(0).getOrder();
-		}
-		else{
-			return -1;
-		}
-	}
-	
-	public boolean is_same_than_container_feature(Element element, Feature feature){
-		if(element.getParentName() != null){
-			Element parent = get_element_from_string(element.getParentName());
-			if(parent != null && parent.getFeature() != null && parent.getFeature().equals(feature)){
-				return true;
-			}
-		}
-		return false;
-	}
+
 	
 	/*public Fact get_fact_with_text(String fact_text){
 		if(factsAndInferences != null && factsAndInferences.size() > 0){
