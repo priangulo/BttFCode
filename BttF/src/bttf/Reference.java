@@ -11,6 +11,8 @@ public class Reference {
 	private String call_to_code;
 	private boolean call_from_isterminal;
 	private boolean call_to_isterminal;
+	private String call_from_signature;
+	private String call_to_signature;
 	
 	public String getCall_from() {
 		return call_from;
@@ -91,10 +93,26 @@ public class Reference {
 	public void setCall_to_isterminal(boolean call_to_isterminal) {
 		this.call_to_isterminal = call_to_isterminal;
 	}
+	
+	public String getCall_from_signature() {
+		return call_from_signature;
+	}
+
+	public void setCall_from_signature(String call_from_signature) {
+		this.call_from_signature = call_from_signature;
+	}
+
+	public String getCall_to_signature() {
+		return call_to_signature;
+	}
+
+	public void setCall_to_signature(String call_to_signature) {
+		this.call_to_signature = call_to_signature;
+	}
 
 	public Reference(String call_from, String call_to, ElementType call_from_type, ElementType call_to_type,
 			String call_from_mod, String call_to_mod, String call_from_code, String call_to_code,
-			boolean call_from_isterminal, boolean call_to_isterminal) {
+			boolean call_from_isterminal, boolean call_to_isterminal, String call_from_signature, String call_to_signature) {
 		super();
 		this.call_from = call_from;
 		this.call_to = call_to;
@@ -106,6 +124,8 @@ public class Reference {
 		this.call_to_code = call_to_code;
 		this.call_from_isterminal = call_from_isterminal;
 		this.call_to_isterminal = call_to_isterminal;
+		this.call_from_signature = call_from_signature;
+		this.call_to_signature = call_to_signature;
 	}
 
 	public Reference(String call_from, String call_to){

@@ -203,7 +203,7 @@ public class InputFile {
 									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
 								)
 							){
-							Element file_elem = new Element(identifier, element_type, null, null, is_terminal);
+							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null);
 							file_elem.setFeature(feature);
 							
 							if( ( fields.length > modifier_column
@@ -286,8 +286,11 @@ public class InputFile {
 	        @Override
 	        public int compare(Element e1, Element e2)
 	        {
-	        	return Integer.valueOf(e1.getElement_type().get_element_granularity()).compareTo(e2.getElement_type().get_element_granularity());
-	            
+	        	int compareGran = Integer.valueOf(e1.getElement_type().get_element_granularity()).compareTo(e2.getElement_type().get_element_granularity());
+	        	if(compareGran == 0){
+	    			return e1.getIdentifier().compareTo(e2.getIdentifier());
+	    		}
+	        	return compareGran;
 	        }
 	    });
 	}
@@ -359,7 +362,9 @@ public class InputFile {
 								fields[call_from_code_column], 
 								fields[call_to_code_column], 
 								fields[call_from_isterminal_column].trim().toUpperCase().equals("TRUE"), 
-								fields[call_to_isterminal_column].trim().toUpperCase().equals("TRUE")
+								fields[call_to_isterminal_column].trim().toUpperCase().equals("TRUE"),
+								"", //from signature
+								"" //to signature
 							);
 						if(ref.isThisValid()){
 							if(!ref_list.contains(ref)){

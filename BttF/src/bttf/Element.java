@@ -22,13 +22,15 @@ public class Element implements Comparable<Element>{
 	private String class_name;
 	private String member_name;
 	private String user_comment;
+	private String method_signature = "";
 	
-	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal) {
+	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, String method_signature) {
 		this.identifier = identifier;
 		this.element_type = element_type;
 		this.modifier = modifier;
 		this.code = code;
 		this.is_terminal = is_terminal;
+		this.method_signature = method_signature;
 		set_packageclassmember_names();
 	}	
 	
@@ -300,6 +302,10 @@ public class Element implements Comparable<Element>{
 		return this.member_name;
 	}
 	
+	public String getMethod_signature() {
+		return method_signature;
+	}
+
 	public String get_assignment_text(){
 		String assignment = "";
 		if(feature != null){

@@ -548,7 +548,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 	
 	private void add_reference(ArrayList<Reference> references, CodeElement from, CodeElement to){
 		if(from != null && to != null && from.is_null == false && to.is_null == false && from.is_primitive_or_proprietary == false && to.is_primitive_or_proprietary == false && !from.name.equals(to.name)){
-			Reference reference = new Reference(from.name, to.name, from.type, to.type, from.modifier, to.modifier, from.code, to.code, from.is_terminal, to.is_terminal);
+			Reference reference = new Reference(from.name, to.name, from.type, to.type, from.modifier, to.modifier, from.code, to.code, from.is_terminal, to.is_terminal, from.signature, to.signature);
 			if(!references.contains(reference)){ 
 				references.add(reference); 
 			}

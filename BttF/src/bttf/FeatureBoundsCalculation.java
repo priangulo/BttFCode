@@ -36,7 +36,9 @@ public class FeatureBoundsCalculation {
 			.filter(f -> f.getIn_current_task() == true)
 			.collect(Collectors.toList());
 		
-	
+		System.out.println("Feature in bounds for: " + element.getIdentifier());
+		System.out.println(feature_options.toString());
+		
 		return new FeatureBoundsWExp(feature_options, earliest_bound, latest_bound);
 	}
 	
@@ -78,7 +80,7 @@ public class FeatureBoundsCalculation {
 			ArrayList<Element> blame = get_bound_blame(element.getRefFromThis(), earliest_bound, parent_feature);
 			
 			if(blame.size() > 0){
-				explanation = "Earliest bound set by " + blame.size() + " declaration(s), one of them is: " + blame.get(0).getIdentifier();
+				explanation = "Earliest bound (" + earliest_bound.getFeature_name() +") set by " + blame.size() + " declaration(s), one of them is: " + blame.get(0).getIdentifier();
 			}
 		}
 		else{
@@ -133,12 +135,12 @@ public class FeatureBoundsCalculation {
 			if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && ( blame_refTo == null || (blame_refTo != null && blame_refTo.isEmpty()) ) ){
 				ArrayList<Element> blame_fpriv = get_bound_blame(element.getFprivateRefFrom(), latest_bound, parent_feature);
 				if(blame_fpriv.size() > 0){
-					explanation = "Latest bound set by refence(s) to " + blame_fpriv.size() + " fprivate declaration(s), one of them is: " + blame_fpriv.get(0).getIdentifier();
+					explanation = "Latest bound (" + latest_bound.getFeature_name() + ") set by refence(s) to " + blame_fpriv.size() + " fprivate declaration(s), one of them is: " + blame_fpriv.get(0).getIdentifier();
 				}
 				
 			}
 			else{
-				explanation = "Latest bound set by " + blame_refTo.size() + " declaration(s), one of them is: " + blame_refTo.get(0).getIdentifier();
+				explanation = "Latest bound (" + latest_bound.getFeature_name() + ") set by " + blame_refTo.size() + " declaration(s), one of them is: " + blame_refTo.get(0).getIdentifier();
 			}
 		}
 		else{

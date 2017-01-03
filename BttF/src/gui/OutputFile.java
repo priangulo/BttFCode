@@ -157,7 +157,7 @@ public class OutputFile {
 				
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
-					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier\r\n");
+					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,Method_Signature\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -196,7 +196,8 @@ public class OutputFile {
 						+ (e.isIs_hook() ? "TRUE" : "FALSE") +","
 						+ inferences.toString().replace(",", ";")  +","
 						+ (e.getUser_comment() == null ? "" :  e.getUser_comment()) +","
-						+ e.getModifier()
+						+ e.getModifier() +","
+						+ e.getMethod_signature().replace(",", ";")
 						+ "\r\n"
 					);
 				}

@@ -160,8 +160,8 @@ public class Partition {
 	 * */
 	private void get_list_of_elements(){
 		for(Reference ref : references_list){
-			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal());
-			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal());
+			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature());
+			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature());
 			if(!elements_list.contains(call_from)){
 				elements_list.add(call_from);
 			}
@@ -482,7 +482,8 @@ public class Partition {
 											add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
 										}
 										//asked feature is outside bounds
-										else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+										else{
+											invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
 												+ ", valid features are: " 
 												+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
 												+"."
@@ -534,7 +535,8 @@ public class Partition {
 													add_element_to_feature_gui(feature, element, file_elem.isIs_fPrivate(), feature.getParent_feature()); 
 												}
 												//asked feature is outside bounds
-												else{invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
+												else{
+													invalid_facts.add(new InvalidFileFact(file_elem.getIdentifier(), file_elem.get_assignment_text(), InvalidFileFact.FEATURE_INVALID 
 														+ ", valid features are: " 
 														+ options.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).toString()
 														+"."

@@ -28,6 +28,7 @@ public class CodeElement {
     }
     
 	String name;
+	String signature = "";
 	String modifier;
 	ElementType type;
 	String declaring_class;
@@ -137,6 +138,8 @@ public class CodeElement {
 			this.name = declaring_class + "." + method_binding.getName() + getMethodParams(node);
 			this.modifier = get_modifier(method_binding.getModifiers(), ElementType.ELEM_TYPE_METHOD);
 			this.type = ElementType.ELEM_TYPE_METHOD;
+			this.signature = method_binding.getName() + getMethodParamsTypes(method_binding);
+			
 			if(node != null && node.toString() != null){
 				this.code = node.toString();
 			}
@@ -183,6 +186,22 @@ public class CodeElement {
 		params.append(")");
 		return params.toString();
 	}
+	
+	private String getMethodParamsTypes(IMethodBinding methodBinding){
+		StringBuilder params = new StringBuilder("(");
+		if(methodBinding.getParameterTypes() != null && methodBinding.getParameterTypes().length > 0){
+			String comma = "";
+			for(ITypeBinding type : methodBinding.getParameterTypes()){
+				params.append(comma);
+				comma = ", ";
+				params.append(type.getName());
+			}
+			
+		}
+		params.append(")");
+		return params.toString();
+	}
+	
 	
 	CodeElement(IVariableBinding variable_binding, Set<String> packages){
 		if(variable_binding != null && variable_binding.getDeclaringClass() != null && variable_binding.getVariableDeclaration() != null){
