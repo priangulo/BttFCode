@@ -69,11 +69,12 @@ public class Feature {
 		this.was_last_feature = was_last_feature;
 	}
 
-	public void addElement(Element element, boolean is_fPrivate, boolean is_fPublic, boolean is_hook){
+	public void addElement(Element element, boolean is_fPrivate, boolean is_fPublic, boolean is_hook, boolean by_inference){
 		element.setFeature(this);
 		element.setIs_fPrivate(is_fPrivate);
 		element.setIs_fPublic(is_fPublic);
 		element.setIs_hook(is_hook);
+		element.setAssigned_by_inference(by_inference);
 		if(!feature_elements.contains(element)){
 			feature_elements.add(element);
 		}
@@ -83,6 +84,7 @@ public class Feature {
 		element.setIs_fPrivate(false);
 		element.setIs_fPublic(false);
 		element.setIs_hook(false);
+		element.setAssigned_by_inference(false);
 		if(feature_elements.contains(element)){
 			feature_elements.remove(element);
 		}

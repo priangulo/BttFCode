@@ -23,6 +23,9 @@ public class Element implements Comparable<Element>{
 	private String member_name;
 	private String user_comment;
 	private String method_signature = "";
+	private String earliest_bound = "";
+	private String latest_bound = "";
+	private boolean assigned_by_inference = false;
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, String method_signature) {
 		this.identifier = identifier;
@@ -306,6 +309,22 @@ public class Element implements Comparable<Element>{
 		return method_signature;
 	}
 
+	public String getEarliest_bound() {
+		return earliest_bound;
+	}
+
+	public void setEarliest_bound(String earliest_bound) {
+		this.earliest_bound = earliest_bound;
+	}
+
+	public String getLatest_bound() {
+		return latest_bound;
+	}
+
+	public void setLatest_bound(String latest_bound) {
+		this.latest_bound = latest_bound;
+	}
+
 	public String get_assignment_text(){
 		String assignment = "";
 		if(feature != null){
@@ -403,6 +422,7 @@ public class Element implements Comparable<Element>{
 		return privRefFrom;
 	}
 	
+	
 	public ArrayList<Feature> getFprivateRefFromFeatures(){
 		ArrayList<Feature> privRefFrom = (ArrayList<Feature>) getFprivateRefFrom().stream()
 				.map(e -> e.getFeature())
@@ -410,5 +430,14 @@ public class Element implements Comparable<Element>{
 		
 		return privRefFrom;
 	}
+
+	public boolean isAssigned_by_inference() {
+		return assigned_by_inference;
+	}
+
+	public void setAssigned_by_inference(boolean assigned_by_inference) {
+		this.assigned_by_inference = assigned_by_inference;
+	}
+	
 	
 }

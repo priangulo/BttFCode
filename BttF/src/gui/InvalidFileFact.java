@@ -2,7 +2,7 @@ package gui;
 
 public class InvalidFileFact {
 	public final static String ELEMENT_DOESNT_EXIST = "BttF says: Declaration's identifier doesn't exist.";
-	public final static String ELEMENTTYPE_DOESNT_EXIST = "BttF says: Element Type doesn't exist.";
+	public final static String ELEMENTTYPE_DOESNT_EXIST = "BttF says: Declaration Type doesn't exist.";
 	public final static String FEATURE_DOESNT_EXIST = "BttF says: Feature doesn't exist.";
 	public final static String FEATURE_ASSIGNED = "BttF insists it belongs to";
 	public final static String FEATURE_INVALID = "BttF says the selected feature is not valid";

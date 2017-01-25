@@ -1,5 +1,6 @@
 package bttf;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,18 +11,30 @@ public class PartitionInferencingHandler {
 	private boolean cycle_stuff_on;
 	private ArrayList<Cycle> cycle_list;
 	private boolean is_fwpi;
+	private Partition partition;
 	
-	public PartitionInferencingHandler(boolean cycle_stuff_on, ArrayList<Cycle> cycle_list, boolean is_fwpi){
+	public PartitionInferencingHandler(boolean cycle_stuff_on, ArrayList<Cycle> cycle_list, boolean is_fwpi, Partition partition){
 		this.cycle_stuff_on = cycle_stuff_on;
 		this.cycle_list = cycle_list;
 		this.is_fwpi = is_fwpi;
+		this.partition = partition;
 	}
 	
 	/*
 	 * adds an element to a feature
 	 * generates inferences
 	 */
-	void add_element_to_feature(Fact factInf, Feature feature_to_assign, Element element, boolean is_fprivate, boolean is_fpublic, Feature parent_feature){
+	void add_element_to_feature(Fact factInf, Feature feature_to_assign, Element element, boolean is_fprivate, boolean is_fpublic, Feature parent_feature, boolean by_inference){
+		FeatureBound eb = this.partition.boundsCalc.get_earliest_bound(element, partition.get_all_features(), parent_feature);
+		FeatureBound lb = this.partition.boundsCalc.get_latest_bound(element, partition.get_all_features(), parent_feature);
+		
+		if(eb != null && eb.getFeature() != null){
+			element.setEarliest_bound(eb.getFeature().getFeature_name());
+		}
+		if(lb != null && lb.getFeature() != null){
+			element.setLatest_bound(lb.getFeature().getFeature_name());
+		}
+		
 		boolean already_hook = element.isIs_hook();
 		boolean is_hook = hookHandler.check_is_hook(feature_to_assign, element);
 		
@@ -31,11 +44,11 @@ public class PartitionInferencingHandler {
 		}
 		
 		if(!already_hook && is_hook){
-			factInf.addInference(element.getIdentifier() + ", BttF says it's a hook because calls element(s) classified in future features", element, is_fprivate, is_fpublic, is_hook, feature_to_assign);
+			factInf.addInference(element.getIdentifier() + ", BttF says it's a hook because it references declaration(s) classified in future features", element, is_fprivate, is_fpublic, is_hook, feature_to_assign);
 		}
 		
 		if(already_hook && !is_hook){
-			factInf.addInference(element.getIdentifier() + ", BttF says it's no longer a hook, called element(s) got reclassified", element, is_fprivate, is_fpublic, is_hook, feature_to_assign);
+			factInf.addInference(element.getIdentifier() + ", BttF says it's no longer a hook, referenced declaration(s) got reclassified", element, is_fprivate, is_fpublic, is_hook, feature_to_assign);
 		}
 		
 		if(element.getFeature()!= null){
@@ -43,7 +56,7 @@ public class PartitionInferencingHandler {
 			orig_feature.removeElement(element);
 		}
 		
-		feature_to_assign.addElement(element, is_fprivate, is_fpublic, is_hook);
+		feature_to_assign.addElement(element, is_fprivate, is_fpublic, is_hook, by_inference);
 		
 		if(is_fprivate){
 			propagate_childs_of_fprivate_containers(element, feature_to_assign, factInf, parent_feature);
@@ -85,10 +98,10 @@ public class PartitionInferencingHandler {
 				factInf.addInference(elem.getIdentifier() + ", BttF says since it calls fprivate " + private_element.getIdentifier() + 
 						" THEN it also belongs to " + feature_to_assign.getFeature_name(), elem, feature_to_assign);
 				if(feature_to_assign.getIs_last_feature()){
-					add_element_to_feature(factInf, feature_to_assign, elem, true, false, parent_feature);
+					add_element_to_feature(factInf, feature_to_assign, elem, true, false, parent_feature, true);
 				}
 				else{
-					add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature);
+					add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature, true);
 				}
 				
 			//}
@@ -113,7 +126,7 @@ public class PartitionInferencingHandler {
 					&& elem.getFeature() == parent_feature){
 				factInf.addInference(elem.getIdentifier() + ", BttF says it's a child of " + element.getIdentifier() + 
 						" with no callers and only calls its parent THEN it also belongs to " + feature_to_assign.getFeature_name(), elem, feature_to_assign);
-				add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature);
+				add_element_to_feature(factInf, feature_to_assign, elem, false, false, parent_feature, true);
 			}
 		}
 	}
@@ -127,7 +140,7 @@ public class PartitionInferencingHandler {
 			if(child != element && check_only_call_relatives(child) && child.getFeature() == parent_feature){
 				factInf.addInference(child.getIdentifier() + ", BttF says it's a child of " + element.getIdentifier() + 
 						" that only calls relatives THEN it also belongs to " + feature_to_assign.getFeature_name(), child, feature_to_assign);
-				add_element_to_feature(factInf, feature_to_assign, child, false, false, parent_feature);
+				add_element_to_feature(factInf, feature_to_assign, child, false, false, parent_feature, true);
 				propagate_childs_of_fprivate_that_only_call_relatives(child, feature_to_assign, factInf, parent_feature);
 			}
 		}
@@ -142,12 +155,12 @@ public class PartitionInferencingHandler {
 				if(child.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && child.isIs_hook()){
 					factInf.addInference("Hook " + child.getIdentifier() + ", BttF says it's a child of " + element.getIdentifier() + 
 							" THEN it also belongs to " + feature_to_assign.getFeature_name(), child, feature_to_assign);
-					add_element_to_feature(factInf, feature_to_assign, child, false, true, parent_feature);
+					add_element_to_feature(factInf, feature_to_assign, child, false, true, parent_feature, true);
 				}
 				else{
 					factInf.addInference(child.getIdentifier() + ", BttF says it's a child of " + element.getIdentifier() + 
 							" THEN it also is fprivate of " + feature_to_assign.getFeature_name(), child, feature_to_assign);
-					add_element_to_feature(factInf, feature_to_assign, child, true, false, parent_feature);
+					add_element_to_feature(factInf, feature_to_assign, child, true, false, parent_feature, true);
 					propagate_childs_of_fprivate_containers(child, feature_to_assign, factInf, parent_feature);
 				}
 			}
@@ -192,7 +205,7 @@ public class PartitionInferencingHandler {
 				}
 				factInf.addInference(member.getIdentifier() + ", BttF says it's a member of non-terminal class " + element.getIdentifier() + 
 						" THEN it also has to belong to " + feature_to_assign.getFeature_name(), member, feature_to_assign);
-				feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook);
+				feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
 			}
 		}
 		

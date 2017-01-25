@@ -64,7 +64,7 @@ public class PartitionCycleHandler {
 							String feat_mod = " is " + (element.isIs_fPrivate() ? "fprivate" : "fpublic") + " of ";
 							factInf.addInference(e.getIdentifier() + " is in a cycle with " + element.getIdentifier() + 
 									" THEN it also " + feat_mod + feature.getFeature_name(), e, feature);
-							feature.addElement(e, element.isIs_fPrivate(), element.isIs_fPublic(), false);
+							feature.addElement(e, element.isIs_fPrivate(), element.isIs_fPublic(), false, true);
 						}
 					}
 				}

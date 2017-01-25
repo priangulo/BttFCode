@@ -364,7 +364,7 @@ public class DBStorage {
 									if(feature_name != null){
 										Feature feature = partition.partitionHelper.get_feature_by_name(feature_name);
 										if(feature != null){
-											feature.addElement(elem, is_fprivate, is_fpublic, is_hook);
+											feature.addElement(elem, is_fprivate, is_fpublic, is_hook, false);
 										}else{ return false; } //error: inconsistent features
 									}
 									else{

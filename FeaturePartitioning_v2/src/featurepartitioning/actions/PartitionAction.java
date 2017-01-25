@@ -8,9 +8,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -87,7 +89,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 	 * in the workbench UI.
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
-	public void run(IAction action) {		
+	public void run(IAction action) {	
 		IWorkspace iWorkspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot iWorkspaceRoot = iWorkspace.getRoot();
 		IProject[] iProjectList = iWorkspaceRoot.getProjects();
@@ -109,7 +111,6 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 				
 				iJavaProject = JavaCore.create(iProject);
 				final ArrayList<Reference> references = new ArrayList<Reference>();
-				
 				try {
 					IPackageFragment[] iPackageFragmentList = iJavaProject.getPackageFragments();
 					for(IPackageFragment iPackageFragment : iPackageFragmentList) {

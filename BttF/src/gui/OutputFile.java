@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import bttf.Element;
 import bttf.Fact;
 import bttf.Feature;
+import bttf.FeatureBound;
 import bttf.Inference;
 import bttf.Partition;
 import bttf.Reference;
@@ -54,6 +55,10 @@ public class OutputFile {
 	}
 	
 	
+	public void disposeInstance(){
+		this.instance = null;
+	}
+
 	
 	private File create_new_file(String file_name){
 		File parent = new File(file_path);
@@ -157,7 +162,8 @@ public class OutputFile {
 				
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
-					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,Method_Signature\r\n");
+					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,"
+					+ "Method_Signature,Earliest_bound,Latest_bound\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -172,12 +178,29 @@ public class OutputFile {
 						}
 					}
 					
+					Feature parent_feature = null;
 					StringBuilder parent_features = new StringBuilder();
 					if(e.getFeature() != null){
-						Feature parent_feature = e.getFeature().getParent_feature();
+						parent_feature = e.getFeature().getParent_feature();
 						while(parent_feature != null){
 							parent_features.append(parent_feature.getFeature_name() + " ");
 							parent_feature = parent_feature.getParent_feature();
+						}
+					}
+					
+					String temp_eb = "";
+					String temp_lb = "";
+					
+					if(e.getEarliest_bound().isEmpty()){
+						FeatureBound eb = this.partition.boundsCalc.get_earliest_bound(e, partition.get_all_features(), parent_feature);
+						if(eb != null && eb.getFeature() != null){
+							temp_eb = eb.getFeature().getFeature_name();
+						}
+					}
+					if(e.getLatest_bound().isEmpty()){
+						FeatureBound lb = this.partition.boundsCalc.get_latest_bound(e, partition.get_all_features(), parent_feature);
+						if(lb != null && lb.getFeature() != null){
+							temp_lb = lb.getFeature().getFeature_name();
 						}
 					}
 					
@@ -197,7 +220,9 @@ public class OutputFile {
 						+ inferences.toString().replace(",", ";")  +","
 						+ (e.getUser_comment() == null ? "" :  e.getUser_comment()) +","
 						+ e.getModifier() +","
-						+ e.getMethod_signature().replace(",", ";")
+						+ e.getMethod_signature().replace(",", ";") +","
+						+ (e.getEarliest_bound().isEmpty() ? temp_eb : e.getEarliest_bound()) +","
+						+ (e.getLatest_bound().isEmpty() ? temp_lb : e.getLatest_bound())
 						+ "\r\n"
 					);
 				}

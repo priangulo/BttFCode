@@ -77,7 +77,7 @@ public class BttFMain extends JFrame {
 	private Font buttonFont_bold = new Font("Tahoma", Font.BOLD, 11);
 	
 	private final String SKIP_TEXT = "Skip";
-	private final String TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
+	private final String TASK_REGEX = "\\w+ : [\\w ]+";
 	//private final String BASE_TASK_REGEX = "\\w+ : (Base|BASE) (\\w+(( \\+ )|( ?)))+";
 	//private final String RECURSIVE_TASK_REGEX = "\\w+ : (\\w+(( \\+ )|( ?)))+";
 	private final String ERROR_TASK_FORMAT = "Error: Wrong task text format.";
@@ -85,6 +85,7 @@ public class BttFMain extends JFrame {
 	private final String PRIV_ENDFIX = "-priv";
 	private final String PUB_ENDFIX = "-pub";
 	private final String FWPI_ACTION = "PROGRAM : FRAMEWORK PLUGIN";
+	private final String FACTSFILE = "FactsAndInferences.csv";
 	private final String CSV_EXTENSION = ".csv"; 
 	private final String BTTF_EXTENSION = ".bttf";
 	
@@ -156,11 +157,7 @@ public class BttFMain extends JFrame {
 		initComponents();
 		pb = ProgressBar.StartProgressBar(this);   
 	}
-	
-	public void close(){
-		this.dispose();
-	}
-	
+		
 	public void update_progress(int howFar, String progress_text, Boolean error){
 		if(error){
 			ArrayList<String> error_log = new ArrayList<String>();
@@ -213,7 +210,7 @@ public class BttFMain extends JFrame {
 			    File dir = fc.getSelectedFile();
 			    for (final File fileEntry : dir.listFiles()) {
 			        if (!fileEntry.isDirectory()) {
-			            if(csv_file == null && fileEntry.getName().endsWith(CSV_EXTENSION)){
+			            if(csv_file == null && fileEntry.getName().toLowerCase().equals(FACTSFILE.toLowerCase())){
 			            	csv_file = fileEntry.getAbsolutePath();
 			            }
 			            if(fm_file == null && fileEntry.getName().endsWith(BTTF_EXTENSION)){
@@ -277,7 +274,9 @@ public class BttFMain extends JFrame {
 		}
 		System.out.println("recursive: " + recursive);
 		
-		boolean correct = validate_and_add_task(tx_addTask.getText(), recursive);
+		String task = tx_addTask.getText().replace("\r\n", " ").replace("\r", " ").replace("\n", " ").trim();
+		System.out.println(task);
+		boolean correct = validate_and_add_task(task, recursive);
 		if(correct){
 			tx_addTask.setText("");
 		}
@@ -443,7 +442,7 @@ public class BttFMain extends JFrame {
 		
 		String file_name = (getFileFromFileDialog(CSV_EXTENSION, ""));
 		if(file_name != null){
-			inputFile.get_elements_from_csv_file(file_name, partition_names, true);
+			inputFile.get_elements_from_csv_file(file_name, partition_names, false);
 			//System.out.println(partition.get_elements_from_file().toString());
 		}
 		
@@ -468,8 +467,6 @@ public class BttFMain extends JFrame {
 		clean_current_action();
 		ta_task.setText(task);
 		partition_names = create_partition_buttons(task);
-		System.out.println(panel4.getSize().toString());
-		System.out.println(ta_task.getSize().toString());
 		
 		if(recursive){
 			parent_feature = partition.partitionHelper.get_feature_by_name(get_task_parent_name(task));
@@ -601,7 +598,7 @@ public class BttFMain extends JFrame {
 		    @Override
 		    public int compare(FactInference f1, FactInference f2) {
 		    	if(f1 != null && f2 != null && f1.getElement() != null && f2.getElement() != null){
-		    		return f1.getElement().getIdentifier().compareTo(f2.getElement().getIdentifier());
+		    		return f1.getElement().getIdentifier().compareToIgnoreCase(f2.getElement().getIdentifier());
 		    	}
 		    	return 0;
 		    }
@@ -618,7 +615,6 @@ public class BttFMain extends JFrame {
 	private void bt_moreInfoMouseClicked(MouseEvent e, String fact_text){
 		if(fact_text != null){
 			FactInference fact = getFactInfwithText(fact_text);
-			System.out.println(fact.toString());
 			if(fact != null && fact.getElement() != null){
 				DeclarationMoreInfo more_info_fram = new DeclarationMoreInfo(fact.getElement());
 				more_info_fram.setVisible(true);
@@ -1104,7 +1100,7 @@ public class BttFMain extends JFrame {
 			{				
 				//---- lb_addAction ----
 				lb_addAction.setText("Add task:");
-
+				
 				//---- bt_addAction ----
 				bt_addAction.setText("Add");
 
@@ -1535,6 +1531,13 @@ public class BttFMain extends JFrame {
 		        if(usedb){
 		        	dbaccess.closeConnection();
 		        }
+		        if(outputFile != null){
+					outputFile.disposeInstance();
+				}
+		        if(inputFile != null){
+		        	inputFile.disposeInstance();
+		        }
+		        
 		        windowEvent.getWindow().dispose();
 		    }
 		});

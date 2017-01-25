@@ -76,6 +76,13 @@ public class InputFile {
 		this.output = OutputFile.OutputFileInstance(main_window, this.project_name, this.partition);
 	}
 	
+	public void disposeInstance(){
+		if(this.output != null){
+			output.disposeInstance();
+		}
+		this.output = null;
+	}
+	
 	public void set_partition(Partition partition){
 		this.partition = partition;
 	}
@@ -130,6 +137,7 @@ public class InputFile {
 				String[] fields = line.split(comma);
 				sanity_check = sanity_check(fields);
 				if(sanity_check){
+					
 					if(fields.length > feature_column 
 							&& fields[identifier_column] != null
 							&& !fields[identifier_column].trim().isEmpty()
@@ -224,20 +232,20 @@ public class InputFile {
 							
 							file_elements.add(file_elem);
 						}
-						else{
-							//element type doesn't exist
-							if(element_type == null){
-								invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.ELEMENTTYPE_DOESNT_EXIST));
-							}
-							//feature doesn't exist
-							if(feature == null && feature_name != null && !feature_name.isEmpty()){
-								invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.FEATURE_DOESNT_EXIST));
-							}
-							//supposed to be ignored, this is not an invalid fact, is for debugging purposes
-							if(ignore_inferred && is_inferred){
-								System.out.println("Line#" + line_number + " supposed to be ignored: " + identifier + " - " + assignment_text);
-							}
+						
+						//element type doesn't exist
+						if(element_type == null){
+							invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.ELEMENTTYPE_DOESNT_EXIST));
 						}
+						//feature doesn't exist
+						if(feature == null && feature_name != null && !feature_name.isEmpty()){
+							invalid_facts.add(new InvalidFileFact(identifier, assignment_text, "Line#" + line_number + " " + InvalidFileFact.FEATURE_DOESNT_EXIST));
+						}
+						//supposed to be ignored, this is not an invalid fact, is for debugging purposes
+						if(ignore_inferred && is_inferred){
+							System.out.println("Line#" + line_number + " supposed to be ignored: " + identifier + " - " + assignment_text);
+						}
+						
 					}
 				}
 				//sanity_check is false

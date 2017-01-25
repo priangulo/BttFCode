@@ -82,7 +82,7 @@ public class Partition {
 	public void set_featureModel(ArrayList<String> fm_lines, ArrayList<String> partition_names, String task, boolean recursive, Feature parent_feature, boolean is_fwpi, boolean cycle_stuff_on){
 		this.is_fwpi = is_fwpi;
 		this.cycle_stuff_on = cycle_stuff_on;
-		this.partitionInferencing = new PartitionInferencingHandler(cycle_stuff_on, cycle_list, this.is_fwpi);
+		this.partitionInferencing = new PartitionInferencingHandler(cycle_stuff_on, cycle_list, this.is_fwpi, this);
 		this.current_task = task;
 		this.featuremodel_alllines = fm_lines;
 		this.allFeatures = get_allfeaturesnames(fm_lines);
@@ -374,7 +374,7 @@ public class Partition {
 	public void add_element_to_feature_gui(Feature feature, Element element, boolean is_fprivate, Feature parent_feature){
 		Fact factInf = new Fact();
 		
-		partitionInferencing.add_element_to_feature(factInf, feature, element, is_fprivate, !is_fprivate, parent_feature);
+		partitionInferencing.add_element_to_feature(factInf, feature, element, is_fprivate, !is_fprivate, parent_feature, false);
 		
 		String feat_mod = " is " + (element.isIs_fPrivate() ? "fprivate" : "fpublic") + (element.isIs_hook()? " and hook" : "" ) + " of ";
 		factInf.setFact(element.getIdentifier() + feat_mod + feature.getFeature_name(), element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook(), feature);
@@ -402,9 +402,9 @@ public class Partition {
 						element.setIs_fPrivate(true);
 						element.setIs_fPublic(false);
 					}
-					feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook());
+					feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook(), true);
 					//Add inference to last fact
-					factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because of its bounds.", element, feature);
+					factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because it's the only feature in bounds.", element, feature);
 					return true;
 				}
 			}

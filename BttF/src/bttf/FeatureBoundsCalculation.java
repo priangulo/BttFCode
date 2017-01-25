@@ -36,8 +36,8 @@ public class FeatureBoundsCalculation {
 			.filter(f -> f.getIn_current_task() == true)
 			.collect(Collectors.toList());
 		
-		System.out.println("Feature in bounds for: " + element.getIdentifier());
-		System.out.println(feature_options.toString());
+		//System.out.println("Feature in bounds for: " + element.getIdentifier());
+		//System.out.println(feature_options.toString());
 		
 		return new FeatureBoundsWExp(feature_options, earliest_bound, latest_bound);
 	}
@@ -83,13 +83,22 @@ public class FeatureBoundsCalculation {
 				explanation = "Earliest bound (" + earliest_bound.getFeature_name() +") set by " + blame.size() + " declaration(s), one of them is: " + blame.get(0).getIdentifier();
 			}
 		}
-		else{
+		/*else{
 			earliest_bound = feature_options.stream()
 				.filter(f -> f != parent_feature)
 				.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
 				.get();
 			
 			explanation = "Earliest bound is alpha";
+		}*/
+		
+		if(earliest_bound == null){
+			earliest_bound = feature_options.stream()
+					.filter(f -> f != parent_feature)
+					.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+					.get();
+				
+				explanation = "Earliest bound is alpha";
 		}
 		
 		return new FeatureBound(earliest_bound, explanation);

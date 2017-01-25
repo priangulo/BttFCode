@@ -87,20 +87,29 @@ public class PartitionHookHandler {
 	}
 	
 	/*
-	 * if the hook method calls fprivate 
+	 * if the hook method calls fprivate was assigned because it references something fprivate
 	 * then the programmer needs to specify its correct feature
 	 * because the current assignment was done for its relation with an fprivate element
 	 */
 	private void remove_feature_hook_of_privates(Element elem, Fact factInf, Feature parent_feature){
-		if(elem.isIs_hook() == true
+		if(elem.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) 
+				&& elem.isIs_hook() == true 
+				&& elem.isAssigned_by_inference() 
 				&& elem.getFeature() != parent_feature
-				&& elem.getRefFromThis().stream().filter(c -> c.isIs_fPrivate() == true).collect(Collectors.toList()).size() > 0){
-			Feature feature = elem.getFeature();
-			feature.removeElement(elem); //removes element from feature, and resets the element
-			elem.setIs_hook(true); //reassign that it is hook (this is a fact)
-			elem.setIs_fPrivate(false);
-			elem.setIs_fPublic(true);
-			factInf.addInference("Hook " + elem.getIdentifier() + ", BttF says it calls fprivate elements, its feature needs to be determined.", elem, null);
+			){
+			ArrayList<Feature> fprivateRefFrom = elem.getFprivateRefFromFeatures();
+			
+			if( fprivateRefFrom != null
+				&& fprivateRefFrom.size() > 0
+				&& fprivateRefFrom.contains(elem.getFeature())
+			){
+				Feature feature = elem.getFeature();
+				feature.removeElement(elem); //removes element from feature, and resets the element
+				elem.setIs_hook(true); //reassign that it is hook (this is a fact)
+				elem.setIs_fPrivate(false);
+				elem.setIs_fPublic(true);
+				factInf.addInference("Hook " + elem.getIdentifier() + ", BttF says it was assigned by inference (ref. to fprivate), its feature needs to be determined.", elem, null);
+			}
 		}
 	}
 }
