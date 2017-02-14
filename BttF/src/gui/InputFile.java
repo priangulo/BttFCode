@@ -211,7 +211,7 @@ public class InputFile {
 									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
 								)
 							){
-							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null);
+							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0);
 							file_elem.setFeature(feature);
 							
 							if( ( fields.length > modifier_column
@@ -372,7 +372,11 @@ public class InputFile {
 								fields[call_from_isterminal_column].trim().toUpperCase().equals("TRUE"), 
 								fields[call_to_isterminal_column].trim().toUpperCase().equals("TRUE"),
 								"", //from signature
-								"" //to signature
+								"", //to signature
+								"", //from annotation text
+								"", //to annotation text
+								0, //from LOC
+								0 //to LOC
 							);
 						if(ref.isThisValid()){
 							if(!ref_list.contains(ref)){

@@ -79,4 +79,24 @@ public class PartitionHelper {
 		}
 		return false;
 	}
+	
+	public void get_better_attribute(Element orig, Element neww){
+		if(orig != null && neww != null){
+			if( (orig.getCode() == null && neww.getCode() != null)
+					|| (orig.getCode() != null && neww.getCode() != null && orig.getCode().length() < neww.getCode().length()) 
+				){
+					orig.setCode(neww.getCode());
+				}
+				
+			if( (orig.getAnnotation_text() == null && neww.getAnnotation_text() != null)
+					|| (orig.getAnnotation_text() != null && neww.getAnnotation_text() != null && orig.getAnnotation_text().length() < neww.getAnnotation_text().length()) 
+				){
+					orig.setAnnotation_text(neww.getAnnotation_text());
+			}
+			
+			if(neww.getLOC() > orig.getLOC()){
+				orig.setLOC(neww.getLOC());
+			}
+		}
+	}
 }

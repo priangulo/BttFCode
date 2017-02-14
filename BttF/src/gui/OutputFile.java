@@ -150,6 +150,8 @@ public class OutputFile {
 		this.partition = partition;
 		String datetime = date_format.format(new Date());
 		this.file_path = file_path_base + "/" + datetime + "/";
+		boolean useAnnotFeature = !partition.thereAreAssignedElements();
+		
 		
 		if(partition != null && partition.get_elements() != null && partition.get_elements().size() > 0){
 			
@@ -163,7 +165,7 @@ public class OutputFile {
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
 					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,"
-					+ "Method_Signature,Earliest_bound,Latest_bound\r\n");
+					+ "Method_Signature,Earliest_bound,Latest_bound,CodeAnnotation,LOC\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -211,7 +213,7 @@ public class OutputFile {
 						+ e.getPackageName()+ ","
 						+ e.getClassName()+ ","
 						+ e.getMemberName().replace(",", ";")+ ","
-						+ ((e.getFeature() != null) ? e.getFeature().getFeature_name() : "") +","
+						+ ((e.getFeature() != null) ? e.getFeature().getFeature_name() : (useAnnotFeature ? getFeatureFromAnnotationText(e.getAnnotation_text(),partition.get_all_features()) : "")) +","
 						+ ((e.getFeature() != null && e.isIs_fPrivate()) ? "TRUE" : "FALSE") +","
 						+ ( (inferences.toString().isEmpty() || count_nohook_inferences == 0 ) ? "FALSE" : "TRUE" ) +","
 						+ parent_features.toString() +","
@@ -222,7 +224,9 @@ public class OutputFile {
 						+ e.getModifier() +","
 						+ e.getMethod_signature().replace(",", ";") +","
 						+ (e.getEarliest_bound().isEmpty() ? temp_eb : e.getEarliest_bound()) +","
-						+ (e.getLatest_bound().isEmpty() ? temp_lb : e.getLatest_bound())
+						+ (e.getLatest_bound().isEmpty() ? temp_lb : e.getLatest_bound()) +","
+						+ e.getAnnotation_text() +","
+						+ e.getLOC()
 						+ "\r\n"
 					);
 				}
@@ -434,6 +438,18 @@ public class OutputFile {
 		
 		contents.append("</tbody></table>");
 		return contents.toString();
+	}
+	
+	private String getFeatureFromAnnotationText(String annotation_text, ArrayList<Feature> features){
+		if(annotation_text != null){
+			for(Feature feature : features){
+				if(annotation_text.toUpperCase().contains(feature.getFeature_name())){
+					return feature.getFeature_name();
+				}
+			}
+		}
+		return "";
+		
 	}
 	
 }

@@ -26,14 +26,19 @@ public class Element implements Comparable<Element>{
 	private String earliest_bound = "";
 	private String latest_bound = "";
 	private boolean assigned_by_inference = false;
+	private String annotation_text = "";
+	private int LOC;
 	
-	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, String method_signature) {
+	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, 
+			String method_signature, String annotation_text, int LOC) {
 		this.identifier = identifier;
 		this.element_type = element_type;
 		this.modifier = modifier;
 		this.code = code;
 		this.is_terminal = is_terminal;
 		this.method_signature = method_signature;
+		this.annotation_text = annotation_text;
+		this.LOC = LOC;
 		set_packageclassmember_names();
 	}	
 	
@@ -341,6 +346,28 @@ public class Element implements Comparable<Element>{
 	public void setUser_comment(String user_comment) {
 		this.user_comment = user_comment;
 	}
+	
+	public String getAnnotation_text() {
+		if( annotation_text == null || (annotation_text!= null && annotation_text.isEmpty()) ){
+			Element parentDeclaration = this.getParentDeclaration();
+			if(parentDeclaration != null){
+				return parentDeclaration.annotation_text;
+			}
+		}
+		return annotation_text;
+	}
+	
+	public void setAnnotation_text(String annotation_text) {
+		this.annotation_text = annotation_text;
+	}
+
+	public int getLOC() {
+		return LOC;
+	}
+
+	public void setLOC(int lOC) {
+		LOC = lOC;
+	}
 
 	@Override
 	public String toString() {
@@ -431,6 +458,18 @@ public class Element implements Comparable<Element>{
 		return privRefFrom;
 	}
 
+	public Element getParentDeclaration(){
+		if(this.getParentName() != null){
+			ArrayList<Element> parent = (ArrayList<Element>) this.getRefFromThis().stream()
+					.filter(e -> e.identifier.equals(this.getParentName()))
+					.collect(Collectors.toList());
+			if(parent != null && parent.size() > 0){
+				return parent.get(0);
+			}
+		}
+		return null;
+	}
+	
 	public boolean isAssigned_by_inference() {
 		return assigned_by_inference;
 	}

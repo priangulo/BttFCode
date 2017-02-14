@@ -38,12 +38,12 @@ public class Partition {
 	public Partition(ArrayList<Reference> references_list, String project_name) {
 		this.references_list = references_list;
 		this.project_name = project_name;
-		get_list_of_elements();
 		
 		this.cycleHandler = new PartitionCycleHandler();
 		this.partitionHelper = new PartitionHelper(this);
 		this.boundsCalc = new FeatureBoundsCalculation(this);
 		
+		get_list_of_elements();
 		get_toposort();
 		
 		if(cycle_stuff_on){
@@ -55,9 +55,6 @@ public class Partition {
 				System.out.println(cycle_list.toString());
 			}
 		}
-		
-		
-		
 	}
 
 	private void reset_partition(){
@@ -160,13 +157,21 @@ public class Partition {
 	 * */
 	private void get_list_of_elements(){
 		for(Reference ref : references_list){
-			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature());
-			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature());
+			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC());
+			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC());
 			if(!elements_list.contains(call_from)){
 				elements_list.add(call_from);
 			}
+			else{
+				Element elem = this.partitionHelper.get_element_from_string(call_from.getIdentifier());
+				this.partitionHelper.get_better_attribute(elem, call_from);
+			}
 			if(!elements_list.contains(call_to)){
 				elements_list.add(call_to);
+			}
+			else{
+				Element elem = this.partitionHelper.get_element_from_string(call_to.getIdentifier());
+				this.partitionHelper.get_better_attribute(elem, call_to);
 			}
 		}
 	}
@@ -671,7 +676,13 @@ public class Partition {
 		return feature_model;
 	}
 	
-
+	public boolean thereAreAssignedElements(){
+		return this.elements_list
+				.stream()
+				.filter(e -> e.getFeature() != null)
+				.collect(Collectors.toList())
+				.size() > 0;
+	}
 	
 	/*public Fact get_fact_with_text(String fact_text){
 		if(factsAndInferences != null && factsAndInferences.size() > 0){

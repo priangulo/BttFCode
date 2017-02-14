@@ -36,9 +36,11 @@ public class CodeElement {
 	boolean is_primitive_or_proprietary;
 	boolean is_terminal = true;
 	String superclass;
+	String annotation_text;
 	boolean is_null = false;
+	int LOC;
 	
-	public CodeElement(String name, String modifier, ElementType type, String declaring_class, String code, Set<String> packages) {
+	public CodeElement(String name, String modifier, ElementType type, String declaring_class, String code, Set<String> packages, String annotation_text, int LOC) {
 		this.name = name;
 		this.modifier = modifier;
 		this.type = type;
@@ -50,7 +52,11 @@ public class CodeElement {
 		else{
 			this.is_primitive_or_proprietary = true;
 		}
-		
+		this.annotation_text = annotation_text;
+		this.LOC = LOC;
+		/*if(this.annotation_text != null){
+			System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
+		}*/		
 	}
 
 	CodeElement(IPackageBinding package_binding, Set<String> packages){
@@ -70,16 +76,16 @@ public class CodeElement {
 		else{this.is_null = true; }
 	}
 	
-	CodeElement(ITypeBinding type_binding, Set<String> packages, boolean is_terminal){
+	CodeElement(ITypeBinding type_binding, Set<String> packages, boolean is_terminal, String annotation_text, int LOC){
 		if(type_binding != null){
-			setClassAttributes(type_binding, packages, is_terminal);
+			setClassAttributes(type_binding, packages, is_terminal, annotation_text, LOC);
 		}
 		else{this.is_null = true; }
 	}
 	
-	CodeElement(ITypeBinding type_binding, String code, Set<String> packages, boolean is_terminal){
+	CodeElement(ITypeBinding type_binding, String code, Set<String> packages, boolean is_terminal, String annotation_text, int LOC){
 		if(type_binding != null){
-			setClassAttributes(type_binding, packages, is_terminal);
+			setClassAttributes(type_binding, packages, is_terminal, annotation_text, LOC);
 			if(this.code == null
 					|| (this.code != null && code != null && code.length() > this.code.length())
 				){
@@ -90,7 +96,7 @@ public class CodeElement {
 		else{this.is_null = true; }
 	}
 	
-	private void setClassAttributes(ITypeBinding type_binding, Set<String> packages, boolean is_terminal){
+	private void setClassAttributes(ITypeBinding type_binding, Set<String> packages, boolean is_terminal, String annotation_text, int LOC){
 		if(type_binding != null){
 			if(type_binding.isArray()){
 				this.name = type_binding.getElementType().getQualifiedName();
@@ -114,25 +120,32 @@ public class CodeElement {
 			else{
 				this.is_primitive_or_proprietary = true;
 			}
+			
+			this.annotation_text = annotation_text;
+			this.LOC = LOC;
+			/*if(this.annotation_text != null){
+				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
+			}*/
+			
 		}
 	}
 	
-	CodeElement(IMethodBinding method_binding, MethodDeclaration node, Set<String> packages){
+	CodeElement(IMethodBinding method_binding, MethodDeclaration node, Set<String> packages, String annotation_text, int LOC){
 		if(method_binding != null && method_binding.getDeclaringClass() != null){
-			setMethodAttributes(method_binding, node, packages);
+			setMethodAttributes(method_binding, node, packages, annotation_text,LOC);
 		}
 		else{this.is_null = true; }
 	}
 	
-	CodeElement(IMethodBinding method_binding, MethodDeclaration node, String code, Set<String> packages){
+	CodeElement(IMethodBinding method_binding, MethodDeclaration node, String code, Set<String> packages, String annotation_text, int LOC){
 		if(method_binding != null && method_binding.getDeclaringClass() != null){
-			setMethodAttributes(method_binding, node, packages);
+			setMethodAttributes(method_binding, node, packages, annotation_text, LOC);
 			this.code = code;
 		}
 		else{this.is_null = true; }
 	}
 	
-	private void setMethodAttributes(IMethodBinding method_binding, MethodDeclaration node, Set<String> packages){
+	private void setMethodAttributes(IMethodBinding method_binding, MethodDeclaration node, Set<String> packages, String annotation_text, int LOC){
 		if(method_binding != null && method_binding.getDeclaringClass() != null && !node.resolveBinding().getDeclaringClass().isAnonymous()) {
 			this.declaring_class = method_binding.getDeclaringClass().getQualifiedName();
 			this.name = declaring_class + "." + method_binding.getName() + getMethodParams(node);
@@ -153,6 +166,12 @@ public class CodeElement {
 			else{
 				this.is_primitive_or_proprietary = true;
 			}
+			
+			this.annotation_text = annotation_text;
+			this.LOC = LOC;
+			/*if(this.annotation_text != null){
+				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
+			}*/
 			
 			/*
 			 * //anonymous classes are out of scope, annotating them is horrible
@@ -203,22 +222,22 @@ public class CodeElement {
 	}
 	
 	
-	CodeElement(IVariableBinding variable_binding, Set<String> packages){
+	CodeElement(IVariableBinding variable_binding, Set<String> packages, String annotation_text, int LOC){
 		if(variable_binding != null && variable_binding.getDeclaringClass() != null && variable_binding.getVariableDeclaration() != null){
-			setFieldAttributes(variable_binding, packages);
+			setFieldAttributes(variable_binding, packages, annotation_text, LOC);
 		}
 		else{this.is_null = true; }
 	}
 	
-	CodeElement(IVariableBinding variable_binding, String code, Set<String> packages){
+	CodeElement(IVariableBinding variable_binding, String code, Set<String> packages, String annotation_text, int LOC){
 		if(variable_binding != null && variable_binding.getDeclaringClass() != null && variable_binding.getVariableDeclaration() != null){
-			setFieldAttributes(variable_binding, packages);
+			setFieldAttributes(variable_binding, packages, annotation_text, LOC);
 			this.code = code;
 		}
 		else{this.is_null = true; }
 	}
 	
-	private void setFieldAttributes(IVariableBinding variable_binding, Set<String> packages){
+	private void setFieldAttributes(IVariableBinding variable_binding, Set<String> packages, String annotation_text, int LOC){
 		if(variable_binding != null && variable_binding.getName() != null && variable_binding.getDeclaringClass() != null && variable_binding.getVariableDeclaration() != null){
 			this.declaring_class = variable_binding.getDeclaringClass().getQualifiedName();
 			this.name = declaring_class + "." + variable_binding.getName();
@@ -232,6 +251,11 @@ public class CodeElement {
 			else{
 				this.is_primitive_or_proprietary = true;
 			}
+			this.annotation_text = annotation_text;
+			this.LOC = LOC;
+			/*if(this.annotation_text != null){
+				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
+			}*/
 		}
 	}
 	

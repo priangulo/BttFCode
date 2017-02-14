@@ -29,16 +29,21 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IExtendedModifier;
+import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -161,14 +166,14 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								/*
 								 * VISIT TYPE DECLARATION
 								 */
-								public boolean visit(TypeDeclaration node){
-									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()));
+								public boolean visit(TypeDeclaration node){									
+									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(node));
 									
 									//get references to interfaces
 									List<Type> class_interfaces = new ArrayList<Type>();
 									class_interfaces = node.superInterfaceTypes();
 									for (Type t : class_interfaces){
-										CodeElement to = new CodeElement(t.resolveBinding(), packages, isClassTerminal(t.resolveBinding()));
+										CodeElement to = new CodeElement(t.resolveBinding(), packages, isClassTerminal(t.resolveBinding()), null, 0);
 										add_reference(references, from, to);
 									}
 									
@@ -185,7 +190,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 * VISIT ENUM DECLARATION
 								 */
 								public boolean visit(EnumDeclaration node) {
-									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()));
+									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(node));
 									//add references for type binding
 									get_typebinding_references(node.resolveBinding(), references, from, true);
 									
@@ -199,11 +204,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 * VISIT METHOD DECLARATION
 								 */
 								public boolean visit(MethodDeclaration node) {
-									CodeElement from = new CodeElement(node.resolveBinding(), node, node.toString(), packages);
-									
-									/*if(from.name.toLowerCase().contains("basepre.checkforerrors")){
-										System.out.println("found");
-									}*/
+									CodeElement from = new CodeElement(node.resolveBinding(), node, node.toString(), packages, getAnnotation(node), getLOC(node));
 									
 									//reference to declaring class
 									get_methodbinding_references(node.resolveBinding(), references, from);
@@ -216,13 +217,13 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 												if(node.resolveBinding().overrides(method_interface)){
 													MethodDeclaration method_interface_dec = findMethodDeclaration(method_interface);
 													if(method_interface_dec != null){
-														CodeElement method_interface_celem = new CodeElement(method_interface, method_interface_dec, packages);
+														CodeElement method_interface_celem = new CodeElement(method_interface, method_interface_dec, packages, null, 0);
 														if(method_interface_celem != null){
 															add_reference(references, from, method_interface_celem);
 														}
 															
 													}
-													CodeElement class_interface_celem = new CodeElement(class_interface, null, packages, isClassTerminal(class_interface));
+													CodeElement class_interface_celem = new CodeElement(class_interface, null, packages, isClassTerminal(class_interface), null, 0);
 													if(class_interface_celem != null){
 														add_reference(references, from, class_interface_celem);
 													}
@@ -233,7 +234,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									
 									//reference to return type
 									if(node.getReturnType2() != null){
-										add_reference(references, from, new CodeElement(node.getReturnType2().resolveBinding(), packages, isClassTerminal(node.getReturnType2().resolveBinding())));
+										add_reference(references, from, new CodeElement(node.getReturnType2().resolveBinding(), packages, isClassTerminal(node.getReturnType2().resolveBinding()), null, 0));
 									}
 									
 									//references to parameter types
@@ -241,7 +242,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									method_params = node.parameters();
 									for(SingleVariableDeclaration param : method_params){
 										if(param != null && param.getType() != null && param.getType().resolveBinding() != null){
-											CodeElement to = new CodeElement(param.getType().resolveBinding(), packages, isClassTerminal(param.getType().resolveBinding()));
+											CodeElement to = new CodeElement(param.getType().resolveBinding(), packages, isClassTerminal(param.getType().resolveBinding()), null, 0);
 											//System.out.println("from: " + from.toString());
 											//System.out.println("to: " + to.toString());
 											add_reference(references, from, to);
@@ -265,7 +266,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								public boolean visit(MethodInvocation node){
 									MethodDeclaration to_decl = findMethodDeclaration(node.resolveMethodBinding());
 									if(to_decl != null){
-										CodeElement to = new CodeElement(node.resolveMethodBinding(), to_decl, node.toString(), packages);
+										CodeElement to = new CodeElement(node.resolveMethodBinding(), to_decl, node.toString(), packages, null, 0);
 										
 										if(!to.is_null && !to.is_primitive_or_proprietary){
 											//references to caller methods
@@ -275,7 +276,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 										    }
 										    MethodDeclaration from_method = (MethodDeclaration) parentNode;
 										    if(from_method != null && from_method.resolveBinding() != null && from_method.resolveBinding().getDeclaringClass() != null){
-										    	CodeElement from = new CodeElement(from_method.resolveBinding(), from_method,  packages);
+										    	CodeElement from = new CodeElement(from_method.resolveBinding(), from_method,  packages, null, 0);
 											    add_reference(references, from, to);
 										    }
 										}
@@ -291,7 +292,8 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									String package_name = node.getClass().getPackage().getName();
 									String initializer_name = PartitioningConstants.INITIALIZER_PREFIX + node.getStartPosition();
 									CodeElement from = new CodeElement(package_name + "." + class_name + "." + initializer_name,
-											"Public", ElementType.ELEM_TYPE_METHOD, package_name + "." + class_name, node.getBody().toString(), packages);
+											"Public", ElementType.ELEM_TYPE_METHOD, package_name + "." + class_name, node.getBody().toString(), packages,
+											getAnnotation(node), getLOC(node));
 									
 									//look the elements inside the initializer and get corresponding references
 									node.getBody().accept(new ASTVisitor() {
@@ -309,13 +311,14 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 */
 								public boolean visit(EnumConstantDeclaration node){
 									if(!node.resolveConstructorBinding().isDefaultConstructor()){
-										CodeElement from_method = new CodeElement(node.resolveConstructorBinding(), findMethodDeclaration(node.resolveConstructorBinding()), packages);
+										CodeElement from_method = new CodeElement(node.resolveConstructorBinding(), 
+												findMethodDeclaration(node.resolveConstructorBinding()), packages, getAnnotation(node), getLOC(node));
 										//method binding references
 										get_methodbinding_references(node.resolveConstructorBinding(), references, from_method);
 									}
 									
 									if(!node.resolveVariable().isSynthetic()){
-										CodeElement from_field = new CodeElement(node.resolveVariable(), packages);
+										CodeElement from_field = new CodeElement(node.resolveVariable(), packages, getAnnotation(node), getLOC(node));
 										//variable binding references
 										get_variablebinding_references(node.resolveVariable(), references, from_field);
 									}
@@ -328,8 +331,22 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 */
 								public boolean visit(FieldDeclaration node) {
 									VariableDeclarationFragment inner_vardec = (VariableDeclarationFragment)node.fragments().get(0);
-									CodeElement from = new CodeElement(inner_vardec.resolveBinding(), node.toString(), packages);
-									
+									CodeElement from = new CodeElement(inner_vardec.resolveBinding(), node.toString(), packages, getAnnotation(node), getLOC(node));
+									/*
+									if( from.name.equals("org.prevayler.PrevaylerFactory._remoteServerIpAddress")
+											//|| to.name.equals("org.prevayler.PrevaylerFactory._remoteServerIpAddress")
+											|| from.name.equals("org.prevayler.PrevaylerFactory._remoteServerPort")
+											//|| to.name.equals("org.prevayler.PrevaylerFactory._remoteServerPort")
+											|| from.name.equals("org.prevayler.PrevaylerFactory._serverPort")
+											//|| to.name.equals("org.prevayler.PrevaylerFactory._serverPort")
+											|| from.name.equals("org.prevayler.PrevaylerFactory._transientMode")
+											//|| to.name.equals("org.prevayler.PrevaylerFactory._transientMode")
+											|| from.name.equals("org.prevayler.PrevaylerFactory.DEFAULT_REPLICATION_PORT")
+											//|| to.name.equals("org.prevayler.PrevaylerFactory.DEFAULT_REPLICATION_PORT")
+												){
+											System.out.println("OFFENDER!!");
+										}
+									*/
 									//get references to type, superclass and interfaces
 									get_typebinding_references(node.getType().resolveBinding(), references, from, true);
 
@@ -343,7 +360,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									List fragments = node.fragments();
 									for (Iterator iterator = fragments.iterator(); iterator.hasNext();) {
 										inner_vardec = (VariableDeclarationFragment) iterator.next();
-										CodeElement inner_from = new CodeElement(inner_vardec.resolveBinding(), packages);
+										CodeElement inner_from = new CodeElement(inner_vardec.resolveBinding(), packages, from.annotation_text, getLOC(node));
 										
 										//variable binding references
 										get_variablebinding_references(inner_vardec.resolveBinding(), references, inner_from);
@@ -353,7 +370,8 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 											get_typebinding_references(inner_vardec.resolveBinding().getType(), references, inner_from, true);
 										}
 											
-									}									
+									}	
+
 									return true;
 								}
 								
@@ -363,6 +381,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								public boolean visit(VariableDeclarationFragment node){
 									return true;
 								}
+								
 								
 							});
 
@@ -429,19 +448,19 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 		if(variableBinding != null){
 			//reference to declaring class
 			if(variableBinding.getDeclaringClass() != null){
-				add_reference(references, from, new CodeElement(variableBinding.getDeclaringClass(), packages, isClassTerminal(variableBinding.getDeclaringClass())));
+				add_reference(references, from, new CodeElement(variableBinding.getDeclaringClass(), packages, 
+						isClassTerminal(variableBinding.getDeclaringClass()),null, 0));
 			}
 			
 			//reference to variable type
 			if(variableBinding.getVariableDeclaration() != null && variableBinding.getVariableDeclaration().getType() != null){
-				add_reference(references, from, new CodeElement(variableBinding.getVariableDeclaration().getType(), packages, isClassTerminal(variableBinding.getDeclaringClass())));
+				add_reference(references, from, new CodeElement(variableBinding.getVariableDeclaration().getType(), packages, 
+						isClassTerminal(variableBinding.getDeclaringClass()),null, 0));
 			}
 			
 			//reference to fields
 			if(variableBinding.isField()){
-				CodeElement to = new CodeElement(variableBinding, packages);
-				//System.out.println(from.toString());
-				//System.out.println(to.toString());
+				CodeElement to = new CodeElement(variableBinding, packages, null, 0);
 				add_reference(references, from, to);
 			}
 		}
@@ -449,8 +468,11 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 	
 	private void get_methodbinding_references(IMethodBinding methodBinding, ArrayList<Reference> references, CodeElement from ){
 		//reference to declaring class
-		if(methodBinding != null && methodBinding.getDeclaringClass() != null){
-			add_reference(references, from, new CodeElement(methodBinding.getDeclaringClass(), packages, isClassTerminal(methodBinding.getDeclaringClass())));
+		if(methodBinding != null){
+			if (methodBinding.getDeclaringClass() != null){
+				add_reference(references, from, new CodeElement(methodBinding.getDeclaringClass(), packages, 
+						isClassTerminal(methodBinding.getDeclaringClass()), null, 0));
+			}
 		}
 	}
 	
@@ -462,23 +484,23 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 			//reference to type
 			if (typeBinding.getQualifiedName() != null && !typeBinding.getQualifiedName().equals(from.name))
 			{
-				add_reference(references, from, new CodeElement(typeBinding, packages, isClassTerminal(typeBinding)));
+				add_reference(references, from, new CodeElement(typeBinding, packages, isClassTerminal(typeBinding), null, 0));
 			}
 			
 			//reference to wildcard
 			if(typeBinding.getWildcard() != null && typeBinding.getWildcard().getQualifiedName() != null){
-				add_reference(references, from, new CodeElement(typeBinding.getWildcard(), packages, isClassTerminal(typeBinding.getWildcard())));
+				add_reference(references, from, new CodeElement(typeBinding.getWildcard(), packages, isClassTerminal(typeBinding.getWildcard()), null, 0));
 			}
 			//reference to wildcard bound
 			if(typeBinding.getBound() != null && typeBinding.getBound().getQualifiedName() != null){
-				add_reference(references, from, new CodeElement(typeBinding.getBound(), packages, isClassTerminal(typeBinding.getBound())));
+				add_reference(references, from, new CodeElement(typeBinding.getBound(), packages, isClassTerminal(typeBinding.getBound()), null, 0));
 			}
 			
 			if(go_deeper){
 				//reference to superclass
 				if (typeBinding.getSuperclass() != null && typeBinding.getSuperclass().getQualifiedName() != null)
 				{
-					CodeElement superclass = new CodeElement(typeBinding.getSuperclass(), packages, isClassTerminal(typeBinding.getSuperclass()));
+					CodeElement superclass = new CodeElement(typeBinding.getSuperclass(), packages, isClassTerminal(typeBinding.getSuperclass()), null, 0);
 					add_reference(references, from, superclass);
 					
 					//reference to implemented/overrided methods in this class
@@ -488,11 +510,11 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 							if(!method.isDefaultConstructor()){
 								MethodDeclaration frommethod_dec = findMethodDeclaration(method);
 								if(frommethod_dec != null){
-									CodeElement from_method = new CodeElement(method, findMethodDeclaration(method), packages); 
+									CodeElement from_method = new CodeElement(method, findMethodDeclaration(method), packages, null, 0); 
 									for(IMethodBinding superclass_method : typeBinding.getSuperclass().getDeclaredMethods()){
 										MethodDeclaration supermethod_dec = findMethodDeclaration(superclass_method);
 										if(supermethod_dec != null){
-											CodeElement to_method = new CodeElement(superclass_method, supermethod_dec, packages);
+											CodeElement to_method = new CodeElement(superclass_method, supermethod_dec, packages, null, 0);
 											if( method.overrides(superclass_method) || method.isSubsignature(superclass_method) ){
 												add_reference(references, from_method, to_method);
 												add_reference(references, from_method, superclass);
@@ -510,7 +532,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 				if (interfaces != null && interfaces.length > 0){
 					for (ITypeBinding inter : interfaces){
 						if(inter != null){
-							CodeElement to = new CodeElement(inter, packages, isClassTerminal(inter));
+							CodeElement to = new CodeElement(inter, packages, isClassTerminal(inter), null, 0);
 							if(to != null){
 								add_reference(references, from, to);
 							}
@@ -522,7 +544,8 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 				if (typeBinding.getTypeAnnotations() != null){
 					for(IAnnotationBinding annotation : typeBinding.getTypeAnnotations()){
 						if(annotation.getAnnotationType() != null && annotation.getAnnotationType().getQualifiedName() != null){
-							add_reference(references, from, new CodeElement(annotation.getAnnotationType(), packages, isClassTerminal(annotation.getAnnotationType())));
+							CodeElement to = new CodeElement(annotation.getAnnotationType(), packages, isClassTerminal(annotation.getAnnotationType()), null, 0);
+							add_reference(references, from, to);
 						}
 					}
 				}
@@ -540,6 +563,25 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 		return null;
 	}
 	
+	private String getAnnotation(BodyDeclaration node){
+		StringBuilder sb = new StringBuilder();
+		for(Object obj : node.modifiers()){
+			if(obj instanceof IExtendedModifier){
+				IExtendedModifier mod = (IExtendedModifier) obj;
+				if(mod.isAnnotation()){
+					sb.append(mod.toString());
+					//System.out.println(mod.toString());
+				}
+			}
+		}
+		if(!sb.toString().isEmpty()){
+			//System.out.println(node.toString());
+			//System.out.println(sb.toString());
+			return sb.toString();
+		}
+		return null;
+	}
+	
 	private boolean isClassTerminal(ITypeBinding type_binding){
 		if (type_binding != null && type_binding.getQualifiedName() != null && allSuperClasses.contains(type_binding.getQualifiedName())){
 			return false;
@@ -547,9 +589,19 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 		return true;
 	}
 	
+	
+	private int getLOC(ASTNode node){
+		return node.toString().split("\n").length;
+	}
+	
 	private void add_reference(ArrayList<Reference> references, CodeElement from, CodeElement to){
-		if(from != null && to != null && from.is_null == false && to.is_null == false && from.is_primitive_or_proprietary == false && to.is_primitive_or_proprietary == false && !from.name.equals(to.name)){
-			Reference reference = new Reference(from.name, to.name, from.type, to.type, from.modifier, to.modifier, from.code, to.code, from.is_terminal, to.is_terminal, from.signature, to.signature);
+		if(from != null && to != null && from.is_null == false && to.is_null == false && from.is_primitive_or_proprietary == false && to.is_primitive_or_proprietary == false && !from.name.equals(to.name)){			
+			Reference reference = new Reference(from.name, to.name, from.type, to.type, 
+					from.modifier, to.modifier, from.code, to.code, 
+					from.is_terminal, to.is_terminal, 
+					from.signature, to.signature,
+					from.annotation_text, to.annotation_text,
+					from.LOC, to.LOC);
 			if(!references.contains(reference)){ 
 				references.add(reference); 
 			}
@@ -567,6 +619,26 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 					}
 					if(to.code != null && ref.getCall_to_code() != null && ref.getCall_to_code().length() < to.code.length()){
 						ref.setCall_to_code(to.code);
+					}
+					if(ref.getCall_from_annotationtext() == null && from.annotation_text != null){
+						ref.setCall_from_annotationtext(from.annotation_text); 
+					}
+					if(ref.getCall_from_annotationtext() != null && ref.getCall_from_annotationtext().isEmpty() && from.annotation_text != null){
+						ref.setCall_from_annotationtext(from.annotation_text); 
+					}
+					
+					if(ref.getCall_to_annotationtext() == null && to.annotation_text != null){
+						ref.setCall_to_annotationtext(to.annotation_text); 
+					}
+					if(ref.getCall_to_annotationtext() != null && ref.getCall_to_annotationtext().isEmpty() && to.annotation_text != null){
+						ref.setCall_to_annotationtext(to.annotation_text); 
+					}
+					
+					if(from.LOC > ref.getCall_from_LOC()){
+						ref.setCall_from_LOC(from.LOC);
+					}
+					if(to.LOC > ref.getCall_to_LOC()){
+						ref.setCall_to_LOC(to.LOC);
 					}
 				}
 			}
