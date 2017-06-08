@@ -1,7 +1,6 @@
 package gui;
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -20,7 +19,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -48,21 +46,17 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.eclipse.swt.widgets.DirectoryDialog;
-
 import adapter.AnnotationElementAdapter;
 import annotation.AnnotationElement;
-import bttf.DBStorage;
+import app.AnnotationMain;
 import bttf.Element;
 import bttf.ElementType;
-import bttf.Fact;
 import bttf.FactInference;
 import bttf.Feature;
 import bttf.FeatureBoundsWExp;
 import bttf.Partition;
 import bttf.Reference;
 import errors.InvalidFeatureBounds;
-import app.AnnotationMain;
 
 
 /**
@@ -974,15 +968,46 @@ public class BttFMain extends JFrame {
 					}
 					refresh_buttons(button_options, true);
 				}
+				
+				boolean pickForMe = false; //true;
+				if(pickForMe){
+					System.out.println("Pick for me!");
+					Feature autoFeature = feature_options.stream()
+					.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
+					.get();
+					
+					find_and_click_feature_button(autoFeature.getFeature_name(), false);
+				}
 			}
 		}
 		catch(InvalidFeatureBounds ex){
 			JOptionPane.showMessageDialog(getContentPane(), "A contradiction was found in feature bounds for this declaration:\n" + ex.getMessage(), "Contradiction in feature bounds.", JOptionPane.WARNING_MESSAGE);
 		}
-		
 		return explanations_text;
 	}
 	
+	private void find_and_click_feature_button(String partition_name, boolean fprivate){
+		System.out.println(partition_name);
+		for(JButton button : bt_partitions_list){
+			if(button.isEnabled()){
+				if(fprivate){
+					if( button.isEnabled() && button.getText().endsWith("-" + partition_name + PRIV_ENDFIX)){
+						System.out.println("found fprivate");
+						partitionButtonClicked(null, button, partition_name, fprivate);
+						break;
+					}
+				}
+				else{
+					if( button.isEnabled() && button.getText().endsWith("-" + partition_name + PUB_ENDFIX)){
+						System.out.println("found fpublic");
+						partitionButtonClicked(null, button, partition_name, fprivate);
+						break;
+					}
+				}
+			}
+		}
+	}
+		
 	/*
 	 * updates the list of facts on screen 
 	 */

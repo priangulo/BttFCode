@@ -1,0 +1,411 @@
+p cnf 58 144 
+c c 1 GPL
+c c 2 MainGpl
+c c 3 TestProg
+c c 4 Alg
+c c 5 Src
+c c 6 HiddenWgt
+c c 7 Wgt
+c c 8 HiddenGtp
+c c 9 Gtp
+c c 10 Implementation
+c c 11 Base
+c c 12 _OnlyVertices
+c c 13 OnlyVertices
+c c 14 _WithNeighbors
+c c 15 WithNeighbors
+c c 16 _WithEdges
+c c 17 WithEdges
+c c 18 _Directed
+c c 19 Directed
+c c 20 _Undirected
+c c 21 Undirected
+c c 22 _DirectedWithEdges
+c c 23 DirectedWithEdges
+c c 24 _DirectedWithNeighbors
+c c 25 DirectedWithNeighbors
+c c 26 _DirectedOnlyVertices
+c c 27 DirectedOnlyVertices
+c c 28 _UndirectedWithEdges
+c c 29 UndirectedWithEdges
+c c 30 _UndirectedWithNeighbors
+c c 31 UndirectedWithNeighbors
+c c 32 _UndirectedOnlyVertices
+c c 33 UndirectedOnlyVertices
+c c 34 _Weighted
+c c 35 Weighted
+c c 36 _Unweighted
+c c 37 Unweighted
+c c 38 WeightOptions
+c c 39 WeightedWithEdges
+c c 40 WeightedWithNeighbors
+c c 41 WeightedOnlyVertices
+c c 42 _BFS
+c c 43 BFS
+c c 44 _DFS
+c c 45 DFS
+c c 46 _Number
+c c 47 Number
+c c 48 _Connected
+c c 49 Connected
+c c 50 StrongC
+c c 51 StronglyConnected
+c c 52 Transpose
+c c 53 _Cycle
+c c 54 Cycle
+c c 55 _MSTPrim
+c c 56 MSTPrim
+c c 57 _MSTKruskal
+c c 58 MSTKruskal
+c (GPL iff MainGpl)
+c ((not GPL or MainGpl) and (not MainGpl or GPL))
+c x ((not GPL or MainGpl) and (not MainGpl or GPL))
+-1 2  0
+-2 1  0
+c ((Gtp iff (_Undirected or _Directed)) and atmostone(_Undirected,_Directed))
+c ((not Gtp or _Undirected or _Directed) and ((not _Undirected and not _Directed) or Gtp) and (not _Undirected or not _Directed))
+c x ((not Gtp or _Undirected or _Directed) and (not _Undirected or Gtp) and (not _Directed or Gtp) and (not _Undirected or not _Directed))
+-9 20 18  0
+-20 9  0
+-18 9  0
+-20 -18  0
+c ((Wgt iff (_Unweighted or _Weighted)) and atmostone(_Unweighted,_Weighted))
+c ((not Wgt or _Unweighted or _Weighted) and ((not _Unweighted and not _Weighted) or Wgt) and (not _Unweighted or not _Weighted))
+c x ((not Wgt or _Unweighted or _Weighted) and (not _Unweighted or Wgt) and (not _Weighted or Wgt) and (not _Unweighted or not _Weighted))
+-7 36 34  0
+-36 7  0
+-34 7  0
+-36 -34  0
+c ((Src iff (_DFS or _BFS)) and atmostone(_DFS,_BFS))
+c ((not Src or _DFS or _BFS) and ((not _DFS and not _BFS) or Src) and (not _DFS or not _BFS))
+c x ((not Src or _DFS or _BFS) and (not _DFS or Src) and (not _BFS or Src) and (not _DFS or not _BFS))
+-5 44 42  0
+-44 5  0
+-42 5  0
+-44 -42  0
+c ((HiddenGtp iff (_UndirectedOnlyVertices or _UndirectedWithNeighbors or _UndirectedWithEdges or _DirectedOnlyVertices or _DirectedWithNeighbors or _DirectedWithEdges)) and atmostone(_UndirectedOnlyVertices,_UndirectedWithNeighbors,_UndirectedWithEdges,_DirectedOnlyVertices,_DirectedWithNeighbors,_DirectedWithEdges))
+c ((not HiddenGtp or _UndirectedOnlyVertices or _UndirectedWithNeighbors or _UndirectedWithEdges or _DirectedOnlyVertices or _DirectedWithNeighbors or _DirectedWithEdges) and ((not _UndirectedOnlyVertices and not _UndirectedWithNeighbors and not _UndirectedWithEdges and not _DirectedOnlyVertices and not _DirectedWithNeighbors and not _DirectedWithEdges) or HiddenGtp) and (not _UndirectedOnlyVertices or not _UndirectedWithNeighbors) and (not _UndirectedOnlyVertices or not _UndirectedWithEdges) and (not _UndirectedOnlyVertices or not _DirectedOnlyVertices) and (not _UndirectedOnlyVertices or not _DirectedWithNeighbors) and (not _UndirectedOnlyVertices or not _DirectedWithEdges) and (not _UndirectedWithNeighbors or not _UndirectedWithEdges) and (not _UndirectedWithNeighbors or not _DirectedOnlyVertices) and (not _UndirectedWithNeighbors or not _DirectedWithNeighbors) and (not _UndirectedWithNeighbors or not _DirectedWithEdges) and (not _UndirectedWithEdges or not _DirectedOnlyVertices) and (not _UndirectedWithEdges or not _DirectedWithNeighbors) and (not _UndirectedWithEdges or not _DirectedWithEdges) and (not _DirectedOnlyVertices or not _DirectedWithNeighbors) and (not _DirectedOnlyVertices or not _DirectedWithEdges) and (not _DirectedWithNeighbors or not _DirectedWithEdges))
+c x ((not HiddenGtp or _UndirectedOnlyVertices or _UndirectedWithNeighbors or _UndirectedWithEdges or _DirectedOnlyVertices or _DirectedWithNeighbors or _DirectedWithEdges) and (not _UndirectedOnlyVertices or HiddenGtp) and (not _UndirectedWithNeighbors or HiddenGtp) and (not _UndirectedWithEdges or HiddenGtp) and (not _DirectedOnlyVertices or HiddenGtp) and (not _DirectedWithNeighbors or HiddenGtp) and (not _DirectedWithEdges or HiddenGtp) and (not _UndirectedOnlyVertices or not _UndirectedWithNeighbors) and (not _UndirectedOnlyVertices or not _UndirectedWithEdges) and (not _UndirectedOnlyVertices or not _DirectedOnlyVertices) and (not _UndirectedOnlyVertices or not _DirectedWithNeighbors) and (not _UndirectedOnlyVertices or not _DirectedWithEdges) and (not _UndirectedWithNeighbors or not _UndirectedWithEdges) and (not _UndirectedWithNeighbors or not _DirectedOnlyVertices) and (not _UndirectedWithNeighbors or not _DirectedWithNeighbors) and (not _UndirectedWithNeighbors or not _DirectedWithEdges) and (not _UndirectedWithEdges or not _DirectedOnlyVertices) and (not _UndirectedWithEdges or not _DirectedWithNeighbors) and (not _UndirectedWithEdges or not _DirectedWithEdges) and (not _DirectedOnlyVertices or not _DirectedWithNeighbors) and (not _DirectedOnlyVertices or not _DirectedWithEdges) and (not _DirectedWithNeighbors or not _DirectedWithEdges))
+-8 32 30 28 26 24 22  0
+-32 8  0
+-30 8  0
+-28 8  0
+-26 8  0
+-24 8  0
+-22 8  0
+-32 -30  0
+-32 -28  0
+-32 -26  0
+-32 -24  0
+-32 -22  0
+-30 -28  0
+-30 -26  0
+-30 -24  0
+-30 -22  0
+-28 -26  0
+-28 -24  0
+-28 -22  0
+-26 -24  0
+-26 -22  0
+-24 -22  0
+c (HiddenWgt iff WeightOptions)
+c ((not HiddenWgt or WeightOptions) and (not WeightOptions or HiddenWgt))
+c x ((not HiddenWgt or WeightOptions) and (not WeightOptions or HiddenWgt))
+-6 38  0
+-38 6  0
+c (Alg iff (_MSTKruskal or _MSTPrim or _Cycle or StrongC or _Connected or _Number))
+c ((not Alg or _MSTKruskal or _MSTPrim or _Cycle or StrongC or _Connected or _Number) and ((not _MSTKruskal and not _MSTPrim and not _Cycle and not StrongC and not _Connected and not _Number) or Alg))
+c x ((not Alg or _MSTKruskal or _MSTPrim or _Cycle or StrongC or _Connected or _Number) and (not _MSTKruskal or Alg) and (not _MSTPrim or Alg) and (not _Cycle or Alg) and (not StrongC or Alg) and (not _Connected or Alg) and (not _Number or Alg))
+-4 57 55 53 50 48 46  0
+-57 4  0
+-55 4  0
+-53 4  0
+-50 4  0
+-48 4  0
+-46 4  0
+c ((Implementation iff (_WithEdges or _WithNeighbors or _OnlyVertices)) and atmostone(_WithEdges,_WithNeighbors,_OnlyVertices))
+c ((not Implementation or _WithEdges or _WithNeighbors or _OnlyVertices) and ((not _WithEdges and not _WithNeighbors and not _OnlyVertices) or Implementation) and (not _WithEdges or not _WithNeighbors) and (not _WithEdges or not _OnlyVertices) and (not _WithNeighbors or not _OnlyVertices))
+c x ((not Implementation or _WithEdges or _WithNeighbors or _OnlyVertices) and (not _WithEdges or Implementation) and (not _WithNeighbors or Implementation) and (not _OnlyVertices or Implementation) and (not _WithEdges or not _WithNeighbors) and (not _WithEdges or not _OnlyVertices) and (not _WithNeighbors or not _OnlyVertices))
+-10 16 14 12  0
+-16 10  0
+-14 10  0
+-12 10  0
+-16 -14  0
+-16 -12  0
+-14 -12  0
+c (_Cycle iff Cycle)
+c ((not _Cycle or Cycle) and (not Cycle or _Cycle))
+c x ((not _Cycle or Cycle) and (not Cycle or _Cycle))
+-53 54  0
+-54 53  0
+c (_MSTPrim iff MSTPrim)
+c ((not _MSTPrim or MSTPrim) and (not MSTPrim or _MSTPrim))
+c x ((not _MSTPrim or MSTPrim) and (not MSTPrim or _MSTPrim))
+-55 56  0
+-56 55  0
+c (_OnlyVertices iff OnlyVertices)
+c ((not _OnlyVertices or OnlyVertices) and (not OnlyVertices or _OnlyVertices))
+c x ((not _OnlyVertices or OnlyVertices) and (not OnlyVertices or _OnlyVertices))
+-12 13  0
+-13 12  0
+c (_DirectedWithNeighbors iff DirectedWithNeighbors)
+c ((not _DirectedWithNeighbors or DirectedWithNeighbors) and (not DirectedWithNeighbors or _DirectedWithNeighbors))
+c x ((not _DirectedWithNeighbors or DirectedWithNeighbors) and (not DirectedWithNeighbors or _DirectedWithNeighbors))
+-24 25  0
+-25 24  0
+c (_Number iff Number)
+c ((not _Number or Number) and (not Number or _Number))
+c x ((not _Number or Number) and (not Number or _Number))
+-46 47  0
+-47 46  0
+c (_UndirectedOnlyVertices iff UndirectedOnlyVertices)
+c ((not _UndirectedOnlyVertices or UndirectedOnlyVertices) and (not UndirectedOnlyVertices or _UndirectedOnlyVertices))
+c x ((not _UndirectedOnlyVertices or UndirectedOnlyVertices) and (not UndirectedOnlyVertices or _UndirectedOnlyVertices))
+-32 33  0
+-33 32  0
+c (_Connected iff Connected)
+c ((not _Connected or Connected) and (not Connected or _Connected))
+c x ((not _Connected or Connected) and (not Connected or _Connected))
+-48 49  0
+-49 48  0
+c (_MSTKruskal iff MSTKruskal)
+c ((not _MSTKruskal or MSTKruskal) and (not MSTKruskal or _MSTKruskal))
+c x ((not _MSTKruskal or MSTKruskal) and (not MSTKruskal or _MSTKruskal))
+-57 58  0
+-58 57  0
+c (_UndirectedWithNeighbors iff UndirectedWithNeighbors)
+c ((not _UndirectedWithNeighbors or UndirectedWithNeighbors) and (not UndirectedWithNeighbors or _UndirectedWithNeighbors))
+c x ((not _UndirectedWithNeighbors or UndirectedWithNeighbors) and (not UndirectedWithNeighbors or _UndirectedWithNeighbors))
+-30 31  0
+-31 30  0
+c ((MainGpl iff TestProg) and (MainGpl iff Alg) and (MainGpl iff Src) and (MainGpl iff HiddenWgt) and (MainGpl iff Wgt) and (MainGpl iff HiddenGtp) and (MainGpl iff Gtp) and (MainGpl iff Implementation) and (MainGpl iff Base))
+c ((not MainGpl or TestProg) and (not TestProg or MainGpl) and (not MainGpl or Alg) and (not Alg or MainGpl) and (not MainGpl or Src) and (not Src or MainGpl) and (not MainGpl or HiddenWgt) and (not HiddenWgt or MainGpl) and (not MainGpl or Wgt) and (not Wgt or MainGpl) and (not MainGpl or HiddenGtp) and (not HiddenGtp or MainGpl) and (not MainGpl or Gtp) and (not Gtp or MainGpl) and (not MainGpl or Implementation) and (not Implementation or MainGpl) and (not MainGpl or Base) and (not Base or MainGpl))
+c x ((not MainGpl or TestProg) and (not TestProg or MainGpl) and (not MainGpl or Alg) and (not Alg or MainGpl) and (not MainGpl or Src) and (not Src or MainGpl) and (not MainGpl or HiddenWgt) and (not HiddenWgt or MainGpl) and (not MainGpl or Wgt) and (not Wgt or MainGpl) and (not MainGpl or HiddenGtp) and (not HiddenGtp or MainGpl) and (not MainGpl or Gtp) and (not Gtp or MainGpl) and (not MainGpl or Implementation) and (not Implementation or MainGpl) and (not MainGpl or Base) and (not Base or MainGpl))
+-2 3  0
+-3 2  0
+-2 4  0
+-4 2  0
+-2 5  0
+-5 2  0
+-2 6  0
+-6 2  0
+-2 7  0
+-7 2  0
+-2 8  0
+-8 2  0
+-2 9  0
+-9 2  0
+-2 10  0
+-10 2  0
+-2 11  0
+-11 2  0
+c (_DirectedWithEdges iff DirectedWithEdges)
+c ((not _DirectedWithEdges or DirectedWithEdges) and (not DirectedWithEdges or _DirectedWithEdges))
+c x ((not _DirectedWithEdges or DirectedWithEdges) and (not DirectedWithEdges or _DirectedWithEdges))
+-22 23  0
+-23 22  0
+c ((WeightedWithEdges) implies (WeightOptions) and (WeightedWithNeighbors) implies (WeightOptions) and (WeightedOnlyVertices) implies (WeightOptions))
+c ((not WeightedWithEdges or WeightOptions) and (not WeightedWithNeighbors or WeightOptions) and (not WeightedOnlyVertices or WeightOptions))
+c x ((not WeightedWithEdges or WeightOptions) and (not WeightedWithNeighbors or WeightOptions) and (not WeightedOnlyVertices or WeightOptions))
+-39 38  0
+-40 38  0
+-41 38  0
+c (_WithNeighbors iff WithNeighbors)
+c ((not _WithNeighbors or WithNeighbors) and (not WithNeighbors or _WithNeighbors))
+c x ((not _WithNeighbors or WithNeighbors) and (not WithNeighbors or _WithNeighbors))
+-14 15  0
+-15 14  0
+c (_Directed iff Directed)
+c ((not _Directed or Directed) and (not Directed or _Directed))
+c x ((not _Directed or Directed) and (not Directed or _Directed))
+-18 19  0
+-19 18  0
+c (_DirectedOnlyVertices iff DirectedOnlyVertices)
+c ((not _DirectedOnlyVertices or DirectedOnlyVertices) and (not DirectedOnlyVertices or _DirectedOnlyVertices))
+c x ((not _DirectedOnlyVertices or DirectedOnlyVertices) and (not DirectedOnlyVertices or _DirectedOnlyVertices))
+-26 27  0
+-27 26  0
+c (_Undirected iff Undirected)
+c ((not _Undirected or Undirected) and (not Undirected or _Undirected))
+c x ((not _Undirected or Undirected) and (not Undirected or _Undirected))
+-20 21  0
+-21 20  0
+c (_WithEdges iff WithEdges)
+c ((not _WithEdges or WithEdges) and (not WithEdges or _WithEdges))
+c x ((not _WithEdges or WithEdges) and (not WithEdges or _WithEdges))
+-16 17  0
+-17 16  0
+c (_Weighted iff Weighted)
+c ((not _Weighted or Weighted) and (not Weighted or _Weighted))
+c x ((not _Weighted or Weighted) and (not Weighted or _Weighted))
+-34 35  0
+-35 34  0
+c (_Unweighted iff Unweighted)
+c ((not _Unweighted or Unweighted) and (not Unweighted or _Unweighted))
+c x ((not _Unweighted or Unweighted) and (not Unweighted or _Unweighted))
+-36 37  0
+-37 36  0
+c (_BFS iff BFS)
+c ((not _BFS or BFS) and (not BFS or _BFS))
+c x ((not _BFS or BFS) and (not BFS or _BFS))
+-42 43  0
+-43 42  0
+c (_UndirectedWithEdges iff UndirectedWithEdges)
+c ((not _UndirectedWithEdges or UndirectedWithEdges) and (not UndirectedWithEdges or _UndirectedWithEdges))
+c x ((not _UndirectedWithEdges or UndirectedWithEdges) and (not UndirectedWithEdges or _UndirectedWithEdges))
+-28 29  0
+-29 28  0
+c ((StrongC iff StronglyConnected) and (StrongC iff Transpose))
+c ((not StrongC or StronglyConnected) and (not StronglyConnected or StrongC) and (not StrongC or Transpose) and (not Transpose or StrongC))
+c x ((not StrongC or StronglyConnected) and (not StronglyConnected or StrongC) and (not StrongC or Transpose) and (not Transpose or StrongC))
+-50 51  0
+-51 50  0
+-50 52  0
+-52 50  0
+c (_DFS iff DFS)
+c ((not _DFS or DFS) and (not DFS or _DFS))
+c x ((not _DFS or DFS) and (not DFS or _DFS))
+-44 45  0
+-45 44  0
+c (Number) implies ((Gtp and Src))
+c (not Number or (Gtp and Src))
+c x ((not Number or Gtp) and (not Number or Src))
+-47 9  0
+-47 5  0
+c (Connected) implies ((Undirected and Src))
+c (not Connected or (Undirected and Src))
+c x ((not Connected or Undirected) and (not Connected or Src))
+-49 21  0
+-49 5  0
+c (StrongC) implies ((Directed and DFS))
+c (not StrongC or (Directed and DFS))
+c x ((not StrongC or Directed) and (not StrongC or DFS))
+-50 19  0
+-50 45  0
+c (Cycle) implies ((Gtp and DFS))
+c (not Cycle or (Gtp and DFS))
+c x ((not Cycle or Gtp) and (not Cycle or DFS))
+-54 9  0
+-54 45  0
+c ((MSTKruskal or MSTPrim)) implies ((Undirected and Weighted))
+c ((not MSTKruskal and not MSTPrim) or (Undirected and Weighted))
+c x ((not MSTKruskal or Undirected) and (not MSTKruskal or Weighted) and (not MSTPrim or Undirected) and (not MSTPrim or Weighted))
+-58 21  0
+-58 35  0
+-56 21  0
+-56 35  0
+c ((MSTKruskal or MSTPrim)) implies (not ((MSTKruskal and MSTPrim)))
+c ((not MSTKruskal and not MSTPrim) or not MSTKruskal or not MSTPrim)
+c x ((not MSTKruskal or not MSTKruskal or not MSTPrim) and (not MSTPrim or not MSTKruskal or not MSTPrim))
+-58 -58 -56  0
+-56 -58 -56  0
+c (MSTKruskal) implies (WithEdges)
+c (not MSTKruskal or WithEdges)
+c x (not MSTKruskal or WithEdges)
+-58 17  0
+c ((OnlyVertices and Weighted)) implies (WeightedOnlyVertices)
+c (not OnlyVertices or not Weighted or WeightedOnlyVertices)
+c x (not OnlyVertices or not Weighted or WeightedOnlyVertices)
+-13 -35 41  0
+c ((WithNeighbors and Weighted)) implies (WeightedWithNeighbors)
+c (not WithNeighbors or not Weighted or WeightedWithNeighbors)
+c x (not WithNeighbors or not Weighted or WeightedWithNeighbors)
+-15 -35 40  0
+c ((WithEdges and Weighted)) implies (WeightedWithEdges)
+c (not WithEdges or not Weighted or WeightedWithEdges)
+c x (not WithEdges or not Weighted or WeightedWithEdges)
+-17 -35 39  0
+c ((OnlyVertices and Directed)) implies (DirectedOnlyVertices)
+c (not OnlyVertices or not Directed or DirectedOnlyVertices)
+c x (not OnlyVertices or not Directed or DirectedOnlyVertices)
+-13 -19 27  0
+c ((WithNeighbors and Directed)) implies (DirectedWithNeighbors)
+c (not WithNeighbors or not Directed or DirectedWithNeighbors)
+c x (not WithNeighbors or not Directed or DirectedWithNeighbors)
+-15 -19 25  0
+c ((WithEdges and Directed)) implies (DirectedWithEdges)
+c (not WithEdges or not Directed or DirectedWithEdges)
+c x (not WithEdges or not Directed or DirectedWithEdges)
+-17 -19 23  0
+c ((OnlyVertices and Undirected)) implies (UndirectedOnlyVertices)
+c (not OnlyVertices or not Undirected or UndirectedOnlyVertices)
+c x (not OnlyVertices or not Undirected or UndirectedOnlyVertices)
+-13 -21 33  0
+c ((WithNeighbors and Undirected)) implies (UndirectedWithNeighbors)
+c (not WithNeighbors or not Undirected or UndirectedWithNeighbors)
+c x (not WithNeighbors or not Undirected or UndirectedWithNeighbors)
+-15 -21 31  0
+c ((WithEdges and Undirected)) implies (UndirectedWithEdges)
+c (not WithEdges or not Undirected or UndirectedWithEdges)
+c x (not WithEdges or not Undirected or UndirectedWithEdges)
+-17 -21 29  0
+c x GPL
+1 0
+c (Directed or DFS)
+c (Directed or DFS)
+c x (Directed or DFS)
+19 45  0
+c Cycle
+c Cycle
+c x Cycle
+54  0
+
+model is satisfiable
+0: GPL is true
+1: MainGpl is true
+2: TestProg is true
+3: Alg is true
+4: Src is true
+5: HiddenWgt is true
+6: Wgt is true
+7: HiddenGtp is true
+8: Gtp is true
+9: Implementation is true
+10: Base is true
+11: _OnlyVertices is true
+12: OnlyVertices is true
+13: _WithNeighbors is false
+14: WithNeighbors is false
+15: _WithEdges is false
+16: WithEdges is false
+17: _Directed is false
+18: Directed is false
+19: _Undirected is true
+20: Undirected is true
+21: _DirectedWithEdges is false
+22: DirectedWithEdges is false
+23: _DirectedWithNeighbors is false
+24: DirectedWithNeighbors is false
+25: _DirectedOnlyVertices is false
+26: DirectedOnlyVertices is false
+27: _UndirectedWithEdges is false
+28: UndirectedWithEdges is false
+29: _UndirectedWithNeighbors is false
+30: UndirectedWithNeighbors is false
+31: _UndirectedOnlyVertices is true
+32: UndirectedOnlyVertices is true
+33: _Weighted is false
+34: Weighted is false
+35: _Unweighted is true
+36: Unweighted is true
+37: WeightOptions is true
+38: WeightedWithEdges is false
+39: WeightedWithNeighbors is false
+40: WeightedOnlyVertices is false
+41: _BFS is false
+42: BFS is false
+43: _DFS is true
+44: DFS is true
+45: _Number is false
+46: Number is false
+47: _Connected is false
+48: Connected is false
+49: StrongC is false
+50: StronglyConnected is false
+51: Transpose is false
+52: _Cycle is true
+53: Cycle is true
+54: _MSTPrim is false
+55: MSTPrim is false
+56: _MSTKruskal is false
+57: MSTKruskal is false

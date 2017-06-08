@@ -7,10 +7,12 @@ import errors.InvalidFeatureBounds;
 
 public class FeatureBoundsCalculation {
 	private Partition partition;
+	private PartitionHelper partHelper; 
 	
 	public FeatureBoundsCalculation(Partition partition) {
 		super();
 		this.partition = partition;
+		this.partHelper = new PartitionHelper(this.partition);
 	}
 
 	public FeatureBoundsWExp get_element_feature_bounds(Element element, Feature parent_feature){
@@ -83,14 +85,6 @@ public class FeatureBoundsCalculation {
 				explanation = "Earliest bound (" + earliest_bound.getFeature_name() +") set by " + blame.size() + " declaration(s), one of them is: " + blame.get(0).getIdentifier();
 			}
 		}
-		/*else{
-			earliest_bound = feature_options.stream()
-				.filter(f -> f != parent_feature)
-				.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
-				.get();
-			
-			explanation = "Earliest bound is alpha";
-		}*/
 		
 		if(earliest_bound == null){
 			earliest_bound = feature_options.stream()
@@ -106,6 +100,7 @@ public class FeatureBoundsCalculation {
 	}
 	
 	private ArrayList<Element> get_bound_blame(ArrayList<Element> listElements, Feature bound, Feature parent_feature){
+		
 		return (ArrayList<Element>) listElements.stream()
 				.filter(e -> e != null && e.getFeature() != null && !e.getFeature().equals(parent_feature) && e.getFeature().equals(bound))
 				.collect(Collectors.toList());
@@ -118,13 +113,51 @@ public class FeatureBoundsCalculation {
 	public FeatureBound get_latest_bound(Element element, ArrayList<Feature> feature_options, Feature parent_feature){
 		Feature latest_bound = null;
 		String explanation = "";
-		
+		ArrayList<Element> blame_refTo = new ArrayList<Element>();
 		ArrayList<Feature> refToElem = element.getLayeredRefToFeatures();
-		/*In addition, since e might be a hook, it could reference fprivate declarations in the present
-		or future, but not it the past. In other words, e must be introduced at or before the earliest
-		of the fprivate declarations that it references.*/
-		if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+		
+		
+		/*
+		 * In addition, since e might be a hook, it could reference fprivate declarations in the present
+		 * or future, but not it the past. In other words, e must be introduced at or before the earliest
+		 * of the fprivate declarations that it references.
+		
+		 * an exception occurs when doing fw+pl partitioning, if a methods is member of
+		 * a non-terminal, it cannot be hook, so all the things it references should be introduced
+		 * before or at the same time than itself
+		 */
+		if( ( !partition.is_fwpi && element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) )
+			|| ( partition.is_fwpi && element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && element.getParentDeclaration().isIs_terminal())
+			|| ( partition.is_fwpi && element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) 
+					&& !element.getRefToThis().stream().map(e -> e.isIs_terminal()).collect(Collectors.toList()).contains(true)
+					&& !element.getRefToThis().stream().map(e -> e.getParentDeclaration()).map(e -> e.isIs_terminal()).collect(Collectors.toList()).contains(true)
+					)
+					
+		){
 			refToElem.addAll(element.getFprivateRefFromFeatures());
+		}
+		
+		if(partition.is_fwpi){
+			Feature fwFeature = partHelper.get_feature_by_name(Feature.FW_FEATURE_NAME);
+			ArrayList<Element> nonTerminalFwElements = new ArrayList<Element>();
+			nonTerminalFwElements.addAll(
+					element.getRefToThis().stream()
+					.filter(e -> !e.isIs_terminal() && e.getFeature() != null && e.getFeature().equals(fwFeature))
+					.collect(Collectors.toList()));
+			
+			nonTerminalFwElements.addAll(
+					element.getRefToThis().stream().map(e -> e.getParentDeclaration())
+					.filter(e -> e != null && !e.isIs_terminal() && e.getFeature() != null && e.getFeature().equals(fwFeature))
+					.collect(Collectors.toList()));
+			/*
+			 * if this declaration is reference by a declaration of a non-terminal fw class
+			 * then the latest bound has to be framework
+			 */
+			if( nonTerminalFwElements != null && nonTerminalFwElements.size() > 0){
+				refToElem = new ArrayList<Feature>();
+				refToElem.add(fwFeature);
+				blame_refTo = nonTerminalFwElements;
+			}
 		}
 		
 		if(refToElem != null 
@@ -139,7 +172,9 @@ public class FeatureBoundsCalculation {
 					.min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder()))
 					.get();
 			
-			ArrayList<Element> blame_refTo = get_bound_blame(element.getLayeredRefToThis(), latest_bound, parent_feature);
+			if(blame_refTo == null || (blame_refTo != null && blame_refTo.isEmpty()) ){
+				blame_refTo = get_bound_blame(element.getLayeredRefToThis(), latest_bound, parent_feature);
+			}
 					
 			if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) && ( blame_refTo == null || (blame_refTo != null && blame_refTo.isEmpty()) ) ){
 				ArrayList<Element> blame_fpriv = get_bound_blame(element.getFprivateRefFrom(), latest_bound, parent_feature);

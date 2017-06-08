@@ -1,6 +1,7 @@
 package adapter;
 
 import java.util.ArrayList;
+
 import bttf.Fact;
 import bttf.FactInference;
 import bttf.Inference;

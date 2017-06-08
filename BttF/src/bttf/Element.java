@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class Element implements Comparable<Element>{
 	public static final String INITIALIZER_TEXT = "initializer_";
+	public static final String ORIGTYPE_ENUM = "Enum";
+	public static final String ORIGTYPE_ANNOTATION = "Annotation";
 	
 	private String identifier;
 	private ElementType element_type;
@@ -28,9 +30,12 @@ public class Element implements Comparable<Element>{
 	private boolean assigned_by_inference = false;
 	private String annotation_text = "";
 	private int LOC;
+	int commentsLength;
+	String origType;
+	
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, 
-			String method_signature, String annotation_text, int LOC) {
+			String method_signature, String annotation_text, int LOC, String origType) {
 		this.identifier = identifier;
 		this.element_type = element_type;
 		this.modifier = modifier;
@@ -39,6 +44,7 @@ public class Element implements Comparable<Element>{
 		this.method_signature = method_signature;
 		this.annotation_text = annotation_text;
 		this.LOC = LOC;
+		this.origType = origType;
 		set_packageclassmember_names();
 	}	
 	
@@ -361,12 +367,30 @@ public class Element implements Comparable<Element>{
 		this.annotation_text = annotation_text;
 	}
 
-	public int getLOC() {
-		return LOC;
+	public int getLOCAdjusted() {		
+		ArrayList<Element> children = this.getChildrenDeclarations();
+		if(this.element_type.equals(ElementType.ELEM_TYPE_CLASS)
+			&& children != null && children.size() > 0
+			&& children.stream().filter(c -> c.getAnnotation_text() != null).count() > 0
+		){
+			int difLength = this.getLOC() - 
+					children.stream().mapToInt(c -> c.getLOC()).sum(); 
+			return 3 + (difLength > 0 ? difLength : 0);
+		}
+		
+		return LOC + (this.annotation_text != null ? 1 : 0);
+		
 	}
 
+	public int getLOC(){
+		return LOC;
+	}
 	public void setLOC(int lOC) {
 		LOC = lOC;
+	}
+
+	public String getOrigType() {
+		return origType;
 	}
 
 	@Override
@@ -476,6 +500,116 @@ public class Element implements Comparable<Element>{
 
 	public void setAssigned_by_inference(boolean assigned_by_inference) {
 		this.assigned_by_inference = assigned_by_inference;
+	}
+	
+	public ArrayList<Element> getChildrenDeclarations(){
+		return (ArrayList<Element>) this.getRefToThis().stream()
+		.filter(e -> e.getParentName() != null 
+			&& e.getParentName().equals(this.getIdentifier())) 
+		.collect(Collectors.toList());
+	}
+	
+	public int belongLevelFW(){
+		if (feature != null){
+			if(element_type.equals(ElementType.ELEM_TYPE_PACKAGE) || element_type.equals(ElementType.ELEM_TYPE_CLASS)){
+				if(belongsToFW()){
+					if(allChildrenSameFeature(true)){
+						return FWPlBelongLevel.FULLY_BELONGS_FW.getLevel();
+					}
+					else{
+						FWPlBelongLevel.PARTIALLY_BELONGS_FW.getLevel();
+					}
+				}
+				else if(belongsToPL()){
+					if(allChildrenSameFeature(false)){
+						return FWPlBelongLevel.FULLY_BELONGS_PL.getLevel();
+					}
+					else{
+						FWPlBelongLevel.PARTIALLY_BELONGS_FW.getLevel();
+					}
+				}
+			} 
+			else{
+				if(belongsToFW()){
+					return FWPlBelongLevel.FULLY_BELONGS_FW.getLevel();
+				}
+				else if(belongsToPL()){
+					return FWPlBelongLevel.FULLY_BELONGS_PL.getLevel();
+				}
+			}
+		}
+		return 0;
+	}
+	
+	private boolean belongsToFW(){
+		if(feature != null && feature.getFeature_name().equals(Feature.FW_FEATURE_NAME)){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean belongsToPL(){
+		if(feature != null && feature.getFeature_name().equals(Feature.PL_FEATURE_NAME)){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean allChildrenSameFeature(boolean FW){
+		boolean allChildrenSame = true;
+		for(Element e : getChildrenDeclarations()){
+			if(e.getFeature() == null){
+				allChildrenSame = false;
+				break;
+			}
+			else{
+				if(FW && !e.belongsToFW()){
+					allChildrenSame = false;
+					break;
+				}
+				if(!FW && e.belongsToFW()){
+					allChildrenSame = false;
+					break;
+				}
+			}
+		}
+		return allChildrenSame;
+	}
+
+	public boolean needsLocalConstructor(){
+		if(this.belongsToFW()){
+			if(element_type.equals(ElementType.ELEM_TYPE_CLASS)
+				&& is_terminal
+				&& belongLevelFW() == FWPlBelongLevel.FULLY_BELONGS_FW.getLevel()
+				&& this.getChildrenDeclarations().stream()
+					.map(e -> e.needsLocalConstructor())
+					.collect(Collectors.toList()).contains(true)
+				){
+				return true;
+			}
+			if(element_type.equals(ElementType.ELEM_TYPE_FIELD) || element_type.equals(ElementType.ELEM_TYPE_METHOD)){
+				for(Element e : this.getRefFromThis()){
+					if(e.isConstructor() 
+						&& e.getParentDeclaration() != null
+						&& e.getParentDeclaration().belongsToFW() 
+						&& !e.getParentDeclaration().isIs_terminal()
+							){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean isConstructor(){
+		if(element_type.equals(ElementType.ELEM_TYPE_METHOD) && class_name.equals(member_name)){
+			return true;
+		}
+		if(element_type.equals(ElementType.ELEM_TYPE_METHOD) && this.origType.toLowerCase().contains("constructor")){
+			return true;
+		}
+		return false;
 	}
 	
 	

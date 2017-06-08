@@ -8,21 +8,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.IRegion;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
@@ -38,30 +32,27 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
-import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import bttf.Element;
 import bttf.ElementType;
 import bttf.Partition;
+import bttf.PartitioningConstants;
 import bttf.Reference;
 import gui.BttFMain;
 
@@ -167,7 +158,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 * VISIT TYPE DECLARATION
 								 */
 								public boolean visit(TypeDeclaration node){									
-									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(node));
+									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(compilationUnit, node));
 									
 									//get references to interfaces
 									List<Type> class_interfaces = new ArrayList<Type>();
@@ -190,7 +181,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 * VISIT ENUM DECLARATION
 								 */
 								public boolean visit(EnumDeclaration node) {
-									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(node));
+									CodeElement from = new CodeElement(node.resolveBinding(), node.toString(), packages, isClassTerminal(node.resolveBinding()), getAnnotation(node), getLOC(compilationUnit, node));
 									//add references for type binding
 									get_typebinding_references(node.resolveBinding(), references, from, true);
 									
@@ -204,7 +195,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 * VISIT METHOD DECLARATION
 								 */
 								public boolean visit(MethodDeclaration node) {
-									CodeElement from = new CodeElement(node.resolveBinding(), node, node.toString(), packages, getAnnotation(node), getLOC(node));
+									CodeElement from = new CodeElement(node.resolveBinding(), node, node.toString(), packages, getAnnotation(node), getLOC(compilationUnit, node));
 									
 									//reference to declaring class
 									get_methodbinding_references(node.resolveBinding(), references, from);
@@ -293,7 +284,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									String initializer_name = PartitioningConstants.INITIALIZER_PREFIX + node.getStartPosition();
 									CodeElement from = new CodeElement(package_name + "." + class_name + "." + initializer_name,
 											"Public", ElementType.ELEM_TYPE_METHOD, package_name + "." + class_name, node.getBody().toString(), packages,
-											getAnnotation(node), getLOC(node));
+											getAnnotation(node), getLOC(compilationUnit, node), "Initializer");
 									
 									//look the elements inside the initializer and get corresponding references
 									node.getBody().accept(new ASTVisitor() {
@@ -312,13 +303,13 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								public boolean visit(EnumConstantDeclaration node){
 									if(!node.resolveConstructorBinding().isDefaultConstructor()){
 										CodeElement from_method = new CodeElement(node.resolveConstructorBinding(), 
-												findMethodDeclaration(node.resolveConstructorBinding()), packages, getAnnotation(node), getLOC(node));
+												findMethodDeclaration(node.resolveConstructorBinding()), packages, getAnnotation(node), getLOC(compilationUnit, node));
 										//method binding references
 										get_methodbinding_references(node.resolveConstructorBinding(), references, from_method);
 									}
 									
 									if(!node.resolveVariable().isSynthetic()){
-										CodeElement from_field = new CodeElement(node.resolveVariable(), packages, getAnnotation(node), getLOC(node));
+										CodeElement from_field = new CodeElement(node.resolveVariable(), packages, getAnnotation(node), getLOC(compilationUnit, node));
 										//variable binding references
 										get_variablebinding_references(node.resolveVariable(), references, from_field);
 									}
@@ -331,7 +322,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								 */
 								public boolean visit(FieldDeclaration node) {
 									VariableDeclarationFragment inner_vardec = (VariableDeclarationFragment)node.fragments().get(0);
-									CodeElement from = new CodeElement(inner_vardec.resolveBinding(), node.toString(), packages, getAnnotation(node), getLOC(node));
+									CodeElement from = new CodeElement(inner_vardec.resolveBinding(), node.toString(), packages, getAnnotation(node), getLOC(compilationUnit, node));
 									/*
 									if( from.name.equals("org.prevayler.PrevaylerFactory._remoteServerIpAddress")
 											//|| to.name.equals("org.prevayler.PrevaylerFactory._remoteServerIpAddress")
@@ -360,7 +351,7 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 									List fragments = node.fragments();
 									for (Iterator iterator = fragments.iterator(); iterator.hasNext();) {
 										inner_vardec = (VariableDeclarationFragment) iterator.next();
-										CodeElement inner_from = new CodeElement(inner_vardec.resolveBinding(), packages, from.annotation_text, getLOC(node));
+										CodeElement inner_from = new CodeElement(inner_vardec.resolveBinding(), packages, from.annotation_text, getLOC(compilationUnit, node));
 										
 										//variable binding references
 										get_variablebinding_references(inner_vardec.resolveBinding(), references, inner_from);
@@ -381,6 +372,33 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 								public boolean visit(VariableDeclarationFragment node){
 									return true;
 								}
+								
+								public boolean visit(SingleMemberAnnotation node){
+									return true;
+								}
+								
+								@SuppressWarnings("unused")
+								public boolean visit(Annotation node){
+									return true;
+								}
+
+
+								/*public boolean visit(NormalAnnotation node){
+									return true;
+								}
+								
+								public boolean visit(Modifier node){
+									return true;
+								}
+								
+								public boolean visit(MarkerAnnotation node){
+									return true;
+								}
+								
+								public boolean visit(SingleVariableDeclaration node){
+									System.out.println(node.getModifiers());
+									return true;
+								}*/
 								
 								
 							});
@@ -590,18 +608,30 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 	}
 	
 	
-	private int getLOC(ASTNode node){
-		return node.toString().split("\n").length;
+	private int getLOC(CompilationUnit compilationUnit,ASTNode node){
+		if(node.toString().contains("PrevaylerImpl(org.prevayler.implementation.snapshot.GenericSnapshotManager snapshotManager")){
+			System.out.println(node.toString());
+		}
+		
+		int startPos = compilationUnit.getExtendedStartPosition(node);
+		int endPos = compilationUnit.getExtendedStartPosition(node) + node.getLength();
+		int lines = compilationUnit.getLineNumber(endPos) - compilationUnit.getLineNumber(startPos);
+		return lines + 1;
 	}
+	
 	
 	private void add_reference(ArrayList<Reference> references, CodeElement from, CodeElement to){
 		if(from != null && to != null && from.is_null == false && to.is_null == false && from.is_primitive_or_proprietary == false && to.is_primitive_or_proprietary == false && !from.name.equals(to.name)){			
-			Reference reference = new Reference(from.name, to.name, from.type, to.type, 
-					from.modifier, to.modifier, from.code, to.code, 
+			Reference reference = new Reference(
+					from.name, to.name, 
+					from.type, to.type, 
+					from.modifier, to.modifier, 
+					from.code, to.code, 
 					from.is_terminal, to.is_terminal, 
 					from.signature, to.signature,
 					from.annotation_text, to.annotation_text,
-					from.LOC, to.LOC);
+					from.LOC, to.LOC, 
+					from.orig_lang_type, to.orig_lang_type);
 			if(!references.contains(reference)){ 
 				references.add(reference); 
 			}

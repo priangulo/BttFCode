@@ -1,6 +1,6 @@
 package gui;
 
-public class StandAlone {
+class StandAlone {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

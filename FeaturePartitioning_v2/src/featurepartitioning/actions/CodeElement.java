@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Type;
 
 import bttf.ElementType;
+import bttf.PartitioningConstants;
 
 public class CodeElement {
 	private static Set<String> primitive = new HashSet<String>();
@@ -39,8 +40,9 @@ public class CodeElement {
 	String annotation_text;
 	boolean is_null = false;
 	int LOC;
+	String orig_lang_type = "";
 	
-	public CodeElement(String name, String modifier, ElementType type, String declaring_class, String code, Set<String> packages, String annotation_text, int LOC) {
+	public CodeElement(String name, String modifier, ElementType type, String declaring_class, String code, Set<String> packages, String annotation_text, int LOC, String orig_lang_type) {
 		this.name = name;
 		this.modifier = modifier;
 		this.type = type;
@@ -57,6 +59,8 @@ public class CodeElement {
 		/*if(this.annotation_text != null){
 			System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
 		}*/		
+		
+		this.orig_lang_type = orig_lang_type;
 	}
 
 	CodeElement(IPackageBinding package_binding, Set<String> packages){
@@ -72,7 +76,9 @@ public class CodeElement {
 			else{
 				this.is_primitive_or_proprietary = true;
 			}
+			this.orig_lang_type = "Package";
 		}
+		
 		else{this.is_null = true; }
 	}
 	
@@ -127,6 +133,8 @@ public class CodeElement {
 				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
 			}*/
 			
+			this.orig_lang_type = getOriginalTypeofType(type_binding);
+			
 		}
 	}
 	
@@ -169,6 +177,7 @@ public class CodeElement {
 			
 			this.annotation_text = annotation_text;
 			this.LOC = LOC;
+			this.orig_lang_type = getOriginalTypeofMethod(method_binding);
 			/*if(this.annotation_text != null){
 				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
 			}*/
@@ -253,6 +262,8 @@ public class CodeElement {
 			}
 			this.annotation_text = annotation_text;
 			this.LOC = LOC;
+			
+			this.orig_lang_type = getOriginalTypeofVariable(variable_binding);
 			/*if(this.annotation_text != null){
 				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
 			}*/
@@ -260,12 +271,23 @@ public class CodeElement {
 	}
 	
 	private String get_modifier(int flags_mod, ElementType type){
-		if(Modifier.isPrivate(flags_mod)) return PartitioningConstants.PRIVATE_MOD;
-		else if(Modifier.isPublic(flags_mod)) return PartitioningConstants.PUBLIC_MOD;
-		else if(Modifier.isProtected(flags_mod)) return PartitioningConstants.PROTECTED_MOD;
-		else if(Modifier.isDefault(flags_mod)) return PartitioningConstants.PACKPRIV_MOD;
-		else if(!type.equals(ElementType.ELEM_TYPE_PACKAGE)) return PartitioningConstants.PACKPRIV_MOD;
-		else return "";
+		StringBuilder mod = new StringBuilder("");
+		if(Modifier.isPrivate(flags_mod)) 
+			mod.append(PartitioningConstants.PRIVATE_MOD + " ");
+		if(Modifier.isPublic(flags_mod)) 
+			mod.append(PartitioningConstants.PUBLIC_MOD + " ");
+		if(Modifier.isProtected(flags_mod))
+			mod.append(PartitioningConstants.PROTECTED_MOD + " ");
+		if(Modifier.isDefault(flags_mod)) 
+			mod.append(PartitioningConstants.PACKPRIV_MOD + " ");
+		if(Modifier.isAbstract(flags_mod))	
+			mod.append(PartitioningConstants.ABSTRACT + " ");
+		if(Modifier.isFinal(flags_mod))	
+			mod.append(PartitioningConstants.FINAL + " ");
+		if(Modifier.isStatic(flags_mod))	
+			mod.append(PartitioningConstants.STATIC + " ");
+		
+		return mod.toString();
 	}
 	
 	private boolean checkNotBindingPrimitive(ITypeBinding binding ){
@@ -301,6 +323,51 @@ public class CodeElement {
 		return false;
 	}
 
+	private String getOriginalTypeofType(ITypeBinding type_binding){
+		if(type_binding != null){
+			if(type_binding.isAnnotation()){
+				return "Annotation";
+			}
+			if(type_binding.isEnum()){
+				return "Enum";
+			}
+			if(type_binding.isInterface()){
+				return "Interface";
+			}
+			if(type_binding.isClass()){
+				return "Class";
+			}
+		}
+		
+		return "";
+	}
+	private String getOriginalTypeofMethod(IMethodBinding method_binding){
+		if(method_binding != null){
+			if(method_binding.isConstructor()){
+				return "Constructor";
+			}
+			return "Method";
+		}
+		return "";
+	}
+	
+	private String getOriginalTypeofVariable(IVariableBinding variable_binding){
+		if(variable_binding != null){
+			if(variable_binding.isField()){
+				return "Field";
+			}
+			if(variable_binding.isEnumConstant()){
+				return "Enum Constant";
+			}
+			if(variable_binding.isParameter()){
+				return "Parameter";
+			}
+			return "Variable";
+		}
+		return "";
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "CodeElement [name=" + name + ", is_primitive_or_proprietary=" + is_primitive_or_proprietary + "]";

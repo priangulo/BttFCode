@@ -1,0 +1,9 @@
+expression = ((A) implies (D) or not ((B) implies ((C or D))))
+
+
+simplified = (not A or D or (B and not C and not D))
+
+
+cnf expr   = ((not A or D or B) and (not A or D or not C) and (not A or D or not D))
+
+

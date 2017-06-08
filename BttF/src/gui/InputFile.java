@@ -1,15 +1,12 @@
 package gui;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -211,7 +208,7 @@ public class InputFile {
 									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
 								)
 							){
-							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0);
+							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0, null);
 							file_elem.setFeature(feature);
 							
 							if( ( fields.length > modifier_column
@@ -376,7 +373,9 @@ public class InputFile {
 								"", //from annotation text
 								"", //to annotation text
 								0, //from LOC
-								0 //to LOC
+								0, //to LOC
+								"",//from origType
+								"" //to origType
 							);
 						if(ref.isThisValid()){
 							if(!ref_list.contains(ref)){

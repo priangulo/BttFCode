@@ -5,13 +5,23 @@ package gui;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingWorker;
 import javax.swing.text.DefaultCaret;
-
-import java.beans.*;
 
 public class ProgressBar extends JFrame
         implements PropertyChangeListener {

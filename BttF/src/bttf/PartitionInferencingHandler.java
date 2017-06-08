@@ -1,13 +1,12 @@
 package bttf;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class PartitionInferencingHandler {
 	private PartitionHookHandler hookHandler = new PartitionHookHandler();
 	private PartitionCycleHandler cycleHandler = new PartitionCycleHandler();
+	private PartitionHelper partHelper; 
 	private boolean cycle_stuff_on;
 	private ArrayList<Cycle> cycle_list;
 	private boolean is_fwpi;
@@ -18,6 +17,7 @@ public class PartitionInferencingHandler {
 		this.cycle_list = cycle_list;
 		this.is_fwpi = is_fwpi;
 		this.partition = partition;
+		this.partHelper = new PartitionHelper(this.partition);
 	}
 	
 	/*
@@ -71,11 +71,17 @@ public class PartitionInferencingHandler {
 		
 		//if we are partitioning into fw+pi and we have a non terminal class, 
 		//all of its members go to its same feature
-		if(is_fwpi && element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && !element.isIs_terminal()){
-			//all of its members go to its same feature
-			propagate_members_of_nonterminal_fwpi(element, feature_to_assign, factInf, parent_feature);
+		if(is_fwpi){
+			if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS)){
+				//check if it not should be pulled apart and add all of its members go to its same feature
+				propagate_members_of_unbreakable_fwpi(element, feature_to_assign, factInf, parent_feature);
+				propagate_members_of_nonterminal(element, feature_to_assign, factInf, parent_feature);
+			}
+			if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+				propagate_reffrom_cannotbehook_fwpi(element, feature_to_assign, factInf, parent_feature);
+				propagate_reffrom_staticmethodmember_fwpi(element, feature_to_assign, factInf, parent_feature);
+			}
 		}
-		
 		hookHandler.late_check_for_hooks(element, factInf, parent_feature);
 		hookHandler.recheck_hook(element, factInf);
 		
@@ -188,13 +194,10 @@ public class PartitionInferencingHandler {
 		return false;
 	}
 	
-	void propagate_members_of_nonterminal_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+	void propagate_members_of_nonterminal(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && !element.isIs_terminal()){
-			//get members of the class
-			List<Element> class_members = element.getRefToThis().stream()
-				.filter(e -> e.getParentName().equals(element.getIdentifier()))
-				.collect(Collectors.toList());
-			for(Element member : class_members){
+			String reason = ", BttF says it's a member of non-terminal class ";
+			for(Element member : element.getChildrenDeclarations()){
 				if(member.getFeature() != null){
 					Feature prevFeature = member.getFeature();
 					prevFeature.removeElement(member);
@@ -203,11 +206,117 @@ public class PartitionInferencingHandler {
 				if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
 					is_hook = hookHandler.check_is_hook(feature_to_assign, element);
 				}
-				factInf.addInference(member.getIdentifier() + ", BttF says it's a member of non-terminal class " + element.getIdentifier() + 
+				factInf.addInference(member.getIdentifier() + reason + element.getIdentifier() + 
 						" THEN it also has to belong to " + feature_to_assign.getFeature_name(), member, feature_to_assign);
-				feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
+				//feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
+				add_element_to_feature(factInf, feature_to_assign, member, element.isIs_fPrivate(), element.isIs_fPublic(), parent_feature, true);
+				
+				if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+					propagate_reffrom_cannotbehook_fwpi(member, feature_to_assign, factInf, parent_feature);
+				}
 			}
 		}
 		
+	}
+	
+	void propagate_members_of_unbreakable_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && 
+				( element.getOrigType().equals(Element.ORIGTYPE_ANNOTATION) || element.getOrigType().equals(Element.ORIGTYPE_ENUM))
+			){
+			String reason = "";
+			if(element.getOrigType().equals(Element.ORIGTYPE_ANNOTATION)) {reason = ", BttF says it's a member of an Annotation ";}
+			else if(element.getOrigType().equals(Element.ORIGTYPE_ENUM)) {reason = ", BttF says it's a member of an Enum ";}
+			
+			//get members of the class
+			for(Element member : element.getChildrenDeclarations()){
+				if(member.getFeature() != null){
+					Feature prevFeature = member.getFeature();
+					prevFeature.removeElement(member);
+				}
+				boolean is_hook = false;
+				if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+					is_hook = hookHandler.check_is_hook(feature_to_assign, element);
+				}
+				factInf.addInference(member.getIdentifier() + reason + element.getIdentifier() + 
+						" THEN it also has to belong to " + feature_to_assign.getFeature_name(), member, feature_to_assign);
+				feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
+				//add_element_to_feature(factInf, feature_to_assign, member, element.isIs_fPrivate(), element.isIs_fPublic(), parent_feature, true);
+			}
+		}	
+	}
+	
+	/*
+	 * A method on a fw non-terminal class CANNOT be a hook
+	 * Change the declarations it references to be part of the fw too
+	*/
+	void propagate_reffrom_cannotbehook_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+		Feature fwFeature = partHelper.get_feature_by_name(Feature.FW_FEATURE_NAME);
+		
+		if( feature_to_assign.equals(fwFeature)
+				&& element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) 
+				&& ( !element.getParentDeclaration().isIs_terminal()
+						|| element.getModifier().contains(PartitioningConstants.STATIC) )
+		){
+			String reason = "";
+			if(element.getModifier().contains(PartitioningConstants.STATIC)){
+				reason = ", BttF says a static method of a framework class references it ";
+			}
+			else{
+				reason = ", BttF says a method of a non-terminal class references it ";
+			}
+			
+			for(Element ref : element.getRefFromThis()){
+				if(!ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE)){
+					if(ref.getFeature() != null && !ref.getFeature().equals(fwFeature)){
+						Feature prevFeature = ref.getFeature();
+						prevFeature.removeElement(ref);
+					}
+					boolean is_hook = false;
+					if(ref.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+						is_hook = hookHandler.check_is_hook(feature_to_assign, ref);
+					}
+					factInf.addInference(ref.getIdentifier() + reason + ref.getIdentifier() + 
+							" THEN it also has to belong to " + feature_to_assign.getFeature_name(), ref, feature_to_assign);
+					//add_element_to_feature(factInf, feature_to_assign, ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), parent_feature, true);
+					feature_to_assign.addElement(ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), is_hook, true);
+					propagate_members_of_unbreakable_fwpi(ref, feature_to_assign, factInf, parent_feature);
+					propagate_reffrom_staticmethodmember_fwpi(ref, feature_to_assign, factInf, parent_feature);
+				}
+			}
+		}	
+	}
+	
+	
+	/*
+	 * A static method on a fw class CANNOT be a hook
+	 * Change the declarations it references to be part of the fw too
+	*/
+	void propagate_reffrom_staticmethodmember_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+		Feature fwFeature = partHelper.get_feature_by_name(Feature.FW_FEATURE_NAME);
+		
+		if( feature_to_assign.equals(fwFeature)
+				&& element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD) 
+				&& element.getModifier().contains(PartitioningConstants.STATIC)
+			){
+			String reason = ", BttF says a static method of a framework class references it ";
+			
+			for(Element ref : element.getRefFromThis()){
+				if(!ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE)){
+					if(ref.getFeature() != null && !ref.getFeature().equals(fwFeature)){
+						Feature prevFeature = ref.getFeature();
+						prevFeature.removeElement(ref);
+					}
+					boolean is_hook = false;
+					if(ref.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+						is_hook = hookHandler.check_is_hook(feature_to_assign, ref);
+					}
+					factInf.addInference(ref.getIdentifier() + reason + ref.getIdentifier() + 
+							" THEN it also has to belong to " + feature_to_assign.getFeature_name(), ref, feature_to_assign);
+					//add_element_to_feature(factInf, feature_to_assign, ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), parent_feature, true);
+					feature_to_assign.addElement(ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), is_hook, true);
+					propagate_members_of_unbreakable_fwpi(ref, feature_to_assign, factInf, parent_feature);
+				}
+			}
+		}	
 	}
 }

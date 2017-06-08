@@ -1,14 +1,10 @@
 package bttf;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import adapter.FactInferenceAdapter;
 import errors.InvalidFeatureBounds;
 import gui.InputFile;
 import gui.InvalidFileFact;
@@ -18,7 +14,7 @@ public class Partition {
 	private String project_name;
 	private String feature_model;
 	public String current_task;
-	private boolean is_fwpi;
+	public boolean is_fwpi;
 	
 	private ArrayList<Reference> references_list;
 	private ArrayList<Element> elements_list = new ArrayList<Element>();
@@ -157,8 +153,8 @@ public class Partition {
 	 * */
 	private void get_list_of_elements(){
 		for(Reference ref : references_list){
-			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC());
-			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC());
+			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC(), ref.getCall_from_origType());
+			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC(), ref.getCall_to_origType());
 			if(!elements_list.contains(call_from)){
 				elements_list.add(call_from);
 			}
@@ -407,9 +403,14 @@ public class Partition {
 						element.setIs_fPrivate(true);
 						element.setIs_fPublic(false);
 					}
-					feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook(), true);
+					
 					//Add inference to last fact
-					factsAndInferences.get(factsAndInferences.size()-1).addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because it's the only feature in bounds.", element, feature);
+					Fact factInf = factsAndInferences.get(factsAndInferences.size()-1); 
+					factInf.addInference(element.getIdentifier() + " belongs to " + feature.getFeature_name() + " because it's the only feature in bounds.", element, feature);
+					partitionInferencing.add_element_to_feature(factInf, feature, element, false, false, parent_feature, true);
+					
+					//feature.addElement(element, element.isIs_fPrivate(), element.isIs_fPublic(), element.isIs_hook(), true);
+					
 					return true;
 				}
 			}

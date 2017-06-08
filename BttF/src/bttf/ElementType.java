@@ -9,6 +9,7 @@ public enum ElementType{
 
 	private String element_type;
 	private int granularity;
+	private String orig_lang_type;
 	
 	private ElementType(String element_type, int granularity){
 		this.element_type = element_type;

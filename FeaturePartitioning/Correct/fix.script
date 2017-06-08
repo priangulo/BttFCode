@@ -1,0 +1,4 @@
+for i in *.txt ; do
+   cat $i | sed '/^c/ d' > $i.noc
+done
+

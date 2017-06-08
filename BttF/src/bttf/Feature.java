@@ -3,6 +3,9 @@ package bttf;
 import java.util.ArrayList;
 
 public class Feature {
+	public static final String FW_FEATURE_NAME = "FRAMEWORK";
+	public static final String PL_FEATURE_NAME = "PLUGIN"; 
+	
 	private String feature_name;
 	private ArrayList<Element> feature_elements = new ArrayList<Element>();
 	private int order;

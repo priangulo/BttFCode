@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -152,6 +151,10 @@ public class OutputFile {
 		this.file_path = file_path_base + "/" + datetime + "/";
 		boolean useAnnotFeature = !partition.thereAreAssignedElements();
 		
+		if(useAnnotFeature){
+			JOptionPane.showMessageDialog(main_window.getContentPane(), "No assignments have been made. "
+					+ "\nFeature will be harvested from declarations' annotation text, if available.", "Harvest features from annotations.", JOptionPane.INFORMATION_MESSAGE);
+		}
 		
 		if(partition != null && partition.get_elements() != null && partition.get_elements().size() > 0){
 			
@@ -165,7 +168,7 @@ public class OutputFile {
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
 					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,"
-					+ "Method_Signature,Earliest_bound,Latest_bound,CodeAnnotation,LOC\r\n");
+					+ "Method_Signature,Earliest_bound,Latest_bound,CodeAnnotation,LOC,FWBelongLevel,NeedsLocalConstructor\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -226,7 +229,9 @@ public class OutputFile {
 						+ (e.getEarliest_bound().isEmpty() ? temp_eb : e.getEarliest_bound()) +","
 						+ (e.getLatest_bound().isEmpty() ? temp_lb : e.getLatest_bound()) +","
 						+ e.getAnnotation_text() +","
-						+ e.getLOC()
+						+ e.getLOCAdjusted() +","
+						+ e.belongLevelFW() +","
+						+ e.needsLocalConstructor()
 						+ "\r\n"
 					);
 				}
