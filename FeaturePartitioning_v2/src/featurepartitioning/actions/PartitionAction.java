@@ -477,10 +477,16 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 			}
 			
 			//reference to fields
-			if(variableBinding.isField()){
-				CodeElement to = new CodeElement(variableBinding, packages, null, 0);
-				add_reference(references, from, to);
-			}
+//			if(variableBinding.isField()){
+//				CodeElement to = new CodeElement(variableBinding, packages, null, 0);
+//				add_reference(references, from, to);
+//			}
+			
+			//reference to all vars??
+			CodeElement to = new CodeElement(variableBinding, packages, null, 0);
+			add_reference(references, from, to);
+			
+			
 		}
 	}
 	
@@ -631,7 +637,9 @@ public class PartitionAction implements IWorkbenchWindowActionDelegate {
 					from.signature, to.signature,
 					from.annotation_text, to.annotation_text,
 					from.LOC, to.LOC, 
-					from.orig_lang_type, to.orig_lang_type);
+					from.orig_lang_type, to.orig_lang_type,
+					from.method_return_type, to.method_return_type
+					);
 			if(!references.contains(reference)){ 
 				references.add(reference); 
 			}

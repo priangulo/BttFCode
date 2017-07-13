@@ -74,7 +74,7 @@ public class OutputFile {
 	public void save_reference_list(boolean showSaveMsg){
 		if(!this.references_saved){
 			try{
-				if(this.partition.get_references_list() != null && this.partition.get_references_list().size() > 0){
+				if(this.partition != null && this.partition.get_references_list() != null && this.partition.get_references_list().size() > 0){
 					String file_name = "ReferencesList.csv";
 					
 					writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
@@ -214,8 +214,8 @@ public class OutputFile {
 						+ e.getElement_type_granularity_trick()+ ","
 						+ e.getElement_type_trick()+ ","
 						+ e.getPackageName()+ ","
-						+ e.getClassName()+ ","
-						+ e.getMemberName().replace(",", ";")+ ","
+						+ e.getClassName().replaceAll(",", ";")+ ","
+						+ e.getMemberName().replaceAll(",", ";")+ ","
 						+ ((e.getFeature() != null) ? e.getFeature().getFeature_name() : (useAnnotFeature ? getFeatureFromAnnotationText(e.getAnnotation_text(),partition.get_all_features()) : "")) +","
 						+ ((e.getFeature() != null && e.isIs_fPrivate()) ? "TRUE" : "FALSE") +","
 						+ ( (inferences.toString().isEmpty() || count_nohook_inferences == 0 ) ? "FALSE" : "TRUE" ) +","
@@ -230,7 +230,7 @@ public class OutputFile {
 						+ (e.getLatest_bound().isEmpty() ? temp_lb : e.getLatest_bound()) +","
 						+ e.getAnnotation_text() +","
 						+ e.getLOCAdjusted() +","
-						+ e.belongLevelFW() +","
+						+ ((e.belongLevelFW() ==  null) ? "" : e.belongLevelFW().getLevel()) +","
 						+ e.needsLocalConstructor()
 						+ "\r\n"
 					);

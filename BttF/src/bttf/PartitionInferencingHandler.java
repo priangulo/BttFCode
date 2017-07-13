@@ -75,7 +75,7 @@ public class PartitionInferencingHandler {
 			if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS)){
 				//check if it not should be pulled apart and add all of its members go to its same feature
 				propagate_members_of_unbreakable_fwpi(element, feature_to_assign, factInf, parent_feature);
-				propagate_members_of_nonterminal(element, feature_to_assign, factInf, parent_feature);
+				//propagate_members_of_nonterminal(element, feature_to_assign, factInf, parent_feature);
 			}
 			if(element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
 				propagate_reffrom_cannotbehook_fwpi(element, feature_to_assign, factInf, parent_feature);
@@ -194,30 +194,31 @@ public class PartitionInferencingHandler {
 		return false;
 	}
 	
-	void propagate_members_of_nonterminal(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+	/*void propagate_members_of_nonterminal(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && !element.isIs_terminal()){
-			String reason = ", BttF says it's a member of non-terminal class ";
+			String reason = ", BttF says it's a public/protected member of non-terminal class ";
 			for(Element member : element.getChildrenDeclarations()){
-				if(member.getFeature() != null){
-					Feature prevFeature = member.getFeature();
-					prevFeature.removeElement(member);
-				}
-				boolean is_hook = false;
-				if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
-					is_hook = hookHandler.check_is_hook(feature_to_assign, element);
-				}
-				factInf.addInference(member.getIdentifier() + reason + element.getIdentifier() + 
-						" THEN it also has to belong to " + feature_to_assign.getFeature_name(), member, feature_to_assign);
-				//feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
-				add_element_to_feature(factInf, feature_to_assign, member, element.isIs_fPrivate(), element.isIs_fPublic(), parent_feature, true);
-				
-				if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
-					propagate_reffrom_cannotbehook_fwpi(member, feature_to_assign, factInf, parent_feature);
+				if(!member.getModifier().contains("private")){
+					if(member.getFeature() != null){
+						Feature prevFeature = member.getFeature();
+						prevFeature.removeElement(member);
+					}
+					boolean is_hook = false;
+					if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+						is_hook = hookHandler.check_is_hook(feature_to_assign, element);
+					}
+					factInf.addInference(member.getIdentifier() + reason + element.getIdentifier() + 
+							" THEN it also has to belong to " + feature_to_assign.getFeature_name(), member, feature_to_assign);
+					//feature_to_assign.addElement(member, element.isIs_fPrivate(), element.isIs_fPublic(), is_hook, true);
+					add_element_to_feature(factInf, feature_to_assign, member, element.isIs_fPrivate(), element.isIs_fPublic(), parent_feature, true);
+					
+					if(member.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+						propagate_reffrom_cannotbehook_fwpi(member, feature_to_assign, factInf, parent_feature);
+					}
 				}
 			}
 		}
-		
-	}
+	}*/
 	
 	void propagate_members_of_unbreakable_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && 
@@ -259,14 +260,21 @@ public class PartitionInferencingHandler {
 		){
 			String reason = "";
 			if(element.getModifier().contains(PartitioningConstants.STATIC)){
-				reason = ", BttF says a static method of a framework class references it ";
+				reason = ", BttF says a static method of a framework class references it, this method cannot be hook, ";
 			}
 			else{
-				reason = ", BttF says a method of a non-terminal class references it ";
+				reason = ", BttF says a method of a non-terminal class references it, this method cannot be hook,  ";
 			}
 			
 			for(Element ref : element.getRefFromThis()){
-				if(!ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE)){
+				if( 
+					(element.getModifier().contains(PartitioningConstants.STATIC)
+					&& !ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE)
+					&& !ref.getModifier().toLowerCase().contains("private")	)
+				||
+					(!element.getModifier().contains(PartitioningConstants.STATIC)
+					&& !ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE))
+				){
 					if(ref.getFeature() != null && !ref.getFeature().equals(fwFeature)){
 						Feature prevFeature = ref.getFeature();
 						prevFeature.removeElement(ref);
@@ -275,7 +283,7 @@ public class PartitionInferencingHandler {
 					if(ref.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
 						is_hook = hookHandler.check_is_hook(feature_to_assign, ref);
 					}
-					factInf.addInference(ref.getIdentifier() + reason + ref.getIdentifier() + 
+					factInf.addInference(ref.getIdentifier() + reason + 
 							" THEN it also has to belong to " + feature_to_assign.getFeature_name(), ref, feature_to_assign);
 					//add_element_to_feature(factInf, feature_to_assign, ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), parent_feature, true);
 					feature_to_assign.addElement(ref, ref.isIs_fPrivate(), ref.isIs_fPublic(), is_hook, true);
@@ -283,6 +291,9 @@ public class PartitionInferencingHandler {
 					propagate_reffrom_staticmethodmember_fwpi(ref, feature_to_assign, factInf, parent_feature);
 				}
 			}
+			element.setIs_hook(false);
+			element.setIs_fPrivate(false);
+			element.setIs_fPublic(true);
 		}	
 	}
 	
@@ -301,7 +312,9 @@ public class PartitionInferencingHandler {
 			String reason = ", BttF says a static method of a framework class references it ";
 			
 			for(Element ref : element.getRefFromThis()){
-				if(!ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE)){
+				if(!ref.getElement_type().equals(ElementType.ELEM_TYPE_PACKAGE) 
+						&& !ref.getModifier().toLowerCase().contains("private")
+				){
 					if(ref.getFeature() != null && !ref.getFeature().equals(fwFeature)){
 						Feature prevFeature = ref.getFeature();
 						prevFeature.removeElement(ref);
@@ -317,6 +330,9 @@ public class PartitionInferencingHandler {
 					propagate_members_of_unbreakable_fwpi(ref, feature_to_assign, factInf, parent_feature);
 				}
 			}
+			element.setIs_hook(false);
+			element.setIs_fPrivate(false);
+			element.setIs_fPublic(true);
 		}	
 	}
 }

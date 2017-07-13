@@ -32,10 +32,13 @@ public class Element implements Comparable<Element>{
 	private int LOC;
 	int commentsLength;
 	String origType;
+	private FWPlBelongLevel fwplbelong;
+	private Boolean needsLocalConstructor;
+	private String methodReturnType;
 	
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, 
-			String method_signature, String annotation_text, int LOC, String origType) {
+			String method_signature, String annotation_text, int LOC, String origType, String methodReturnType) {
 		this.identifier = identifier;
 		this.element_type = element_type;
 		this.modifier = modifier;
@@ -45,9 +48,83 @@ public class Element implements Comparable<Element>{
 		this.annotation_text = annotation_text;
 		this.LOC = LOC;
 		this.origType = origType;
+		this.methodReturnType = methodReturnType;
 		set_packageclassmember_names();
 	}	
 	
+	
+	
+	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal,
+			boolean is_hook, boolean in_cycle, boolean is_fPrivate, boolean is_fPublic, ArrayList<Element> refToThis,
+			ArrayList<Element> refFromThis, Feature feature, String package_name, String class_name, String member_name,
+			String user_comment, String method_signature, String earliest_bound, String latest_bound,
+			boolean assigned_by_inference, String annotation_text, int lOC, int commentsLength, String origType,
+			FWPlBelongLevel fwplbelong, Boolean needsLocalConstructor) {
+		super();
+		this.identifier = identifier;
+		this.element_type = element_type;
+		this.modifier = modifier;
+		this.code = code;
+		this.is_terminal = is_terminal;
+		this.is_hook = is_hook;
+		this.in_cycle = in_cycle;
+		this.is_fPrivate = is_fPrivate;
+		this.is_fPublic = is_fPublic;
+		this.refToThis = refToThis;
+		this.refFromThis = refFromThis;
+		this.feature = feature;
+		this.package_name = package_name;
+		this.class_name = class_name;
+		this.member_name = member_name;
+		this.user_comment = user_comment;
+		this.method_signature = method_signature;
+		this.earliest_bound = earliest_bound;
+		this.latest_bound = latest_bound;
+		this.assigned_by_inference = assigned_by_inference;
+		this.annotation_text = annotation_text;
+		LOC = lOC;
+		this.commentsLength = commentsLength;
+		this.origType = origType;
+		this.fwplbelong = fwplbelong;
+		this.needsLocalConstructor = needsLocalConstructor;
+	}
+
+
+
+	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal,
+			boolean is_hook, boolean in_cycle, boolean is_fPrivate, boolean is_fPublic, ArrayList<Element> refToThis,
+			ArrayList<Element> refFromThis, Feature feature, String package_name, String class_name, String member_name,
+			String user_comment, String method_signature, String earliest_bound, String latest_bound,
+			boolean assigned_by_inference, String annotation_text, int lOC, int commentsLength, String origType) {
+		this.identifier = identifier;
+		this.element_type = element_type;
+		this.modifier = modifier;
+		this.code = code;
+		this.is_terminal = is_terminal;
+		this.is_hook = is_hook;
+		this.in_cycle = in_cycle;
+		this.is_fPrivate = is_fPrivate;
+		this.is_fPublic = is_fPublic;
+		this.refToThis = refToThis;
+		this.refFromThis = refFromThis;
+		this.feature = feature;
+		this.package_name = package_name;
+		this.class_name = class_name;
+		this.member_name = member_name;
+		this.user_comment = user_comment;
+		this.method_signature = method_signature;
+		this.earliest_bound = earliest_bound;
+		this.latest_bound = latest_bound;
+		this.assigned_by_inference = assigned_by_inference;
+		this.annotation_text = annotation_text;
+		LOC = lOC;
+		this.commentsLength = commentsLength;
+		this.origType = origType;
+		set_packageclassmember_names();
+	}
+
+
+
 	void resetElement(){
 		this.is_fPrivate = false;
 		this.is_fPublic = false;
@@ -298,6 +375,10 @@ public class Element implements Comparable<Element>{
 	}
 	
 	public String getParentName(){
+		if(this.element_type.equals(ElementType.ELEM_TYPE_METHOD)){
+			String nameNoParams = identifier.substring(0, identifier.lastIndexOf("("));
+			return nameNoParams.substring(0, nameNoParams.lastIndexOf("."));
+		}
 		if(identifier.lastIndexOf(".") != -1){
 			return identifier.substring(0, identifier.lastIndexOf("."));
 		}
@@ -484,13 +565,28 @@ public class Element implements Comparable<Element>{
 
 	public Element getParentDeclaration(){
 		if(this.getParentName() != null){
-			ArrayList<Element> parent = (ArrayList<Element>) this.getRefFromThis().stream()
-					.filter(e -> e.identifier.equals(this.getParentName()))
-					.collect(Collectors.toList());
-			if(parent != null && parent.size() > 0){
-				return parent.get(0);
+			//use reffromthis to find parent
+			if(getRefFromThis() != null && !getRefFromThis().isEmpty()){
+				ArrayList<Element> parent = (ArrayList<Element>) this.getRefFromThis().stream()
+						.filter(e -> e.identifier.equals(this.getParentName()))
+						.collect(Collectors.toList());
+				if(parent != null && parent.size() > 0){
+					return parent.get(0);
+				}
 			}
 		}
+		return null;
+	}
+	
+	
+	public Element getParentDeclarationFromList(ArrayList<Element> allelems){
+		ArrayList<Element> parent = (ArrayList<Element>) allelems.stream()
+				.filter(e -> e.identifier.equals(this.getParentName()))
+				.collect(Collectors.toList());
+		if(parent != null && parent.size() > 0){
+			return parent.get(0);
+		}
+		
 		return null;
 	}
 	
@@ -503,42 +599,49 @@ public class Element implements Comparable<Element>{
 	}
 	
 	public ArrayList<Element> getChildrenDeclarations(){
-		return (ArrayList<Element>) this.getRefToThis().stream()
-		.filter(e -> e.getParentName() != null 
-			&& e.getParentName().equals(this.getIdentifier())) 
-		.collect(Collectors.toList());
+		if(this.getRefToThis() != null){
+			return (ArrayList<Element>) this.getRefToThis().stream()
+			.filter(e -> e.getParentName() != null 
+				&& e.getParentName().equals(this.getIdentifier())) 
+			.collect(Collectors.toList());
+		}
+		return null;
+		
 	}
-	
-	public int belongLevelFW(){
-		if (feature != null){
+
+	public FWPlBelongLevel belongLevelFW(){
+		if(fwplbelong != null){
+			return fwplbelong;
+		}
+		else if (feature != null){
 			if(element_type.equals(ElementType.ELEM_TYPE_PACKAGE) || element_type.equals(ElementType.ELEM_TYPE_CLASS)){
 				if(belongsToFW()){
 					if(allChildrenSameFeature(true)){
-						return FWPlBelongLevel.FULLY_BELONGS_FW.getLevel();
+						this.fwplbelong = FWPlBelongLevel.FULLY_BELONGS_FW;
 					}
 					else{
-						FWPlBelongLevel.PARTIALLY_BELONGS_FW.getLevel();
+						this.fwplbelong = FWPlBelongLevel.PARTIALLY_BELONGS_FW;
 					}
 				}
 				else if(belongsToPL()){
 					if(allChildrenSameFeature(false)){
-						return FWPlBelongLevel.FULLY_BELONGS_PL.getLevel();
+						this.fwplbelong = FWPlBelongLevel.FULLY_BELONGS_PL;
 					}
 					else{
-						FWPlBelongLevel.PARTIALLY_BELONGS_FW.getLevel();
+						this.fwplbelong = FWPlBelongLevel.PARTIALLY_BELONGS_FW;
 					}
 				}
 			} 
 			else{
 				if(belongsToFW()){
-					return FWPlBelongLevel.FULLY_BELONGS_FW.getLevel();
+					this.fwplbelong = FWPlBelongLevel.FULLY_BELONGS_FW;
 				}
 				else if(belongsToPL()){
-					return FWPlBelongLevel.FULLY_BELONGS_PL.getLevel();
+					this.fwplbelong = FWPlBelongLevel.FULLY_BELONGS_PL;
 				}
 			}
 		}
-		return 0;
+		return this.fwplbelong;
 	}
 	
 	private boolean belongsToFW(){
@@ -557,19 +660,25 @@ public class Element implements Comparable<Element>{
 	
 	private boolean allChildrenSameFeature(boolean FW){
 		boolean allChildrenSame = true;
-		for(Element e : getChildrenDeclarations()){
-			if(e.getFeature() == null){
-				allChildrenSame = false;
-				break;
-			}
-			else{
-				if(FW && !e.belongsToFW()){
+		if(getChildrenDeclarations() != null){
+			for(Element e : getChildrenDeclarations()){
+				if(e.getFeature() == null){
 					allChildrenSame = false;
 					break;
 				}
-				if(!FW && e.belongsToFW()){
-					allChildrenSame = false;
-					break;
+				else{
+					/*if a class child belongs to the framework, but it is a hook, 
+					 * it needs a counter-part in the plugin, 
+					 * then the class cannot fully belong to the FW 
+					 */
+					if(FW && ( !e.belongsToFW() || (e.belongsToFW() && e.isIs_hook())) ){
+						allChildrenSame = false;
+						break;
+					}
+					if(!FW && e.belongsToFW()){
+						allChildrenSame = false;
+						break;
+					}
 				}
 			}
 		}
@@ -577,29 +686,40 @@ public class Element implements Comparable<Element>{
 	}
 
 	public boolean needsLocalConstructor(){
-		if(this.belongsToFW()){
-			if(element_type.equals(ElementType.ELEM_TYPE_CLASS)
-				&& is_terminal
-				&& belongLevelFW() == FWPlBelongLevel.FULLY_BELONGS_FW.getLevel()
-				&& this.getChildrenDeclarations().stream()
-					.map(e -> e.needsLocalConstructor())
-					.collect(Collectors.toList()).contains(true)
+		boolean tempNeedsLocalConstr = false;
+		if(this.needsLocalConstructor != null){
+			return this.needsLocalConstructor;
+		}else{
+			if(this.belongsToFW()){
+				if(element_type.equals(ElementType.ELEM_TYPE_CLASS)
+					&& is_terminal
+					&& belongLevelFW() == FWPlBelongLevel.FULLY_BELONGS_FW
+					&& this.getChildrenDeclarations().stream()
+						.map(e -> e.needsLocalConstructor())
+						.collect(Collectors.toList()).contains(true)
+					){
+					tempNeedsLocalConstr = true;
+				}
+				if( !this.isConstructor() &&
+						(element_type.equals(ElementType.ELEM_TYPE_FIELD) || 
+						element_type.equals(ElementType.ELEM_TYPE_METHOD))
 				){
-				return true;
-			}
-			if(element_type.equals(ElementType.ELEM_TYPE_FIELD) || element_type.equals(ElementType.ELEM_TYPE_METHOD)){
-				for(Element e : this.getRefFromThis()){
-					if(e.isConstructor() 
-						&& e.getParentDeclaration() != null
-						&& e.getParentDeclaration().belongsToFW() 
-						&& !e.getParentDeclaration().isIs_terminal()
-							){
-						return true;
+					Element superParent = (this.getParentDeclaration() != null) ? this.getParentDeclaration().getParentDeclaration() : null;
+					for(Element e : this.getRefFromThis()){
+						if(e.isConstructor() 
+							&& e.getParentDeclaration() != null
+							&& e.getParentDeclaration().belongsToFW() 
+							&& !e.getParentDeclaration().isIs_terminal()
+							&& !e.getParentDeclaration().equals(superParent) //omit calls to super
+								){
+							tempNeedsLocalConstr = true;
+						}
 					}
 				}
 			}
+			this.needsLocalConstructor = tempNeedsLocalConstr;
 		}
-		return false;
+		return this.needsLocalConstructor;
 	}
 	
 	public boolean isConstructor(){
@@ -612,5 +732,11 @@ public class Element implements Comparable<Element>{
 		return false;
 	}
 	
+	public boolean isSingleton(){
+		if(element_type.equals(ElementType.ELEM_TYPE_METHOD) && class_name.equals(methodReturnType)){
+			return true;
+		}
+		return false;
+	}
 	
 }

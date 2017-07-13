@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,13 +9,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.omg.CosNaming.IstringHelper;
+
 import adapter.GAML_Adapter;
 import bttf.Element;
 import bttf.ElementType;
+import bttf.FWPlBelongLevel;
 import bttf.Feature;
 import bttf.Partition;
 import bttf.Reference;
@@ -35,11 +41,21 @@ public class InputFile {
 	private final int class_column = 4;
 	private final int member_column = 5;		
 	private final int feature_column = 6;
-	private final int modifier_column = 7;
+	private final int isfprivate_column = 7;
 	private final int inferred_column = 8;
 	private final int parentfeatures_column = 9;
 	private final int isterminal_column = 10;
+	private final int ishook_column = 11;
 	private final int usercomment_column = 13;
+	private final int javamodifier_column = 14;
+	private final int methodsignature_column = 15;
+	private final int earliestbound_column = 16;
+	private final int latestbound_column = 17;
+	private final int annotationtext_column = 18;
+	private final int loc_column = 19;
+	private final int fwplbelong_column = 20; 
+	private final int needsLocalConstructor_column = 21;
+	
 	private final Feature container_feature = new Feature(container_feature_name, -1, true, null, false);
 	
 	private final int call_from_column = 0;
@@ -63,14 +79,16 @@ public class InputFile {
 	private final String call_to_code_name = "call_to_code";
 	private final String call_from_isterminal_name = "call_from_isterminal";
 	private final String call_to_isterminal_name = "call_to_isterminal";
-
-	
 	
 	public InputFile(JFrame main_window, Partition partition, String project_name) {
 		this.partition = partition;
 		this.main_window = main_window;
 		this.project_name = project_name;
 		this.output = OutputFile.OutputFileInstance(main_window, this.project_name, this.partition);
+	}
+	
+	public InputFile(){
+		
 	}
 	
 	public void disposeInstance(){
@@ -208,13 +226,13 @@ public class InputFile {
 									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
 								)
 							){
-							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0, null);
+							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0, null, null);
 							file_elem.setFeature(feature);
 							
-							if( ( fields.length > modifier_column
-									&& fields[modifier_column] != null
-									&& !fields[modifier_column].trim().isEmpty()
-									&& fields[modifier_column].toUpperCase().trim().equals("TRUE") )
+							if( ( fields.length > isfprivate_column
+									&& fields[isfprivate_column] != null
+									&& !fields[isfprivate_column].trim().isEmpty()
+									&& fields[isfprivate_column].toUpperCase().trim().equals("TRUE") )
 								|| (feature != null && feature.getOrder() == latest_feature_order)
 							){
 								file_elem.setIs_fPrivate(true);
@@ -311,13 +329,14 @@ public class InputFile {
 		}
 		else if(elementType.equals(ElementType.ELEM_TYPE_CLASS)){
 			String name = fields[package_column] + "." + fields[class_column];
+			name = name.replaceAll(";", ",");
 			if(identifier.toUpperCase().equals(name.toUpperCase())){
 				return true;
 			}
 		}
 		else if(elementType.equals(ElementType.ELEM_TYPE_FIELD) || elementType.equals(ElementType.ELEM_TYPE_METHOD) ){
 			String name = fields[package_column] + "." + fields[class_column] + "." + fields[member_column];
-			name = name.replace(";", ",");
+			name = name.replaceAll(";", ",");
 			if(identifier.toUpperCase().equals(name.toUpperCase())){
 				return true;
 			}
@@ -443,4 +462,130 @@ public class InputFile {
 			);
 	}
 	
+	public Partition get_elements_from_csv_file_nocheck(String file_name){
+		Partition partition = null;
+		ArrayList<Element> declarations = new ArrayList<Element>();
+		ArrayList<Feature> featureList = new ArrayList<Feature>();
+		
+		BufferedReader reader = null;
+		String line = "";
+		String comma = ",";
+		
+		try {
+			reader = new BufferedReader(new FileReader(file_name));
+			int line_number = 1;
+			reader.readLine(); //ignore first line, it is the header
+			while ((line = reader.readLine()) != null) {
+				String[] fields = line.split(comma);
+				String identifier = fields[identifier_column].trim().replace(";", ",");
+				ElementType element_type = get_type(fields[type_column].trim().toUpperCase()); 
+				String modifier = fields[javamodifier_column].trim();
+				String code = "";
+				boolean is_terminal = fields[isterminal_column].toUpperCase().trim().equals("TRUE");
+				boolean is_hook  = fields[ishook_column].toUpperCase().trim().equals("TRUE"); 
+				boolean in_cycle = false;
+				boolean is_fPrivate = fields[isfprivate_column].toUpperCase().trim().equals("TRUE"); 
+				boolean is_fPublic = !is_fPrivate;
+				ArrayList<Element> refToThis = null;
+				ArrayList<Element> refFromThis = null;
+				Feature feature = getSetFeatureFWPL(featureList, fields[feature_column].trim());
+				String package_name = null; 
+				String class_name = null;
+				String member_name = null;
+				String user_comment = fields[usercomment_column];
+				String method_signature = fields[methodsignature_column];
+				String earliest_bound = fields[earliestbound_column].toUpperCase().trim();
+				String latest_bound  = fields[latestbound_column].toUpperCase().trim();
+				boolean assigned_by_inference = !fields[inferred_column].trim().isEmpty() && fields[inferred_column].toUpperCase().trim().equals("TRUE"); 
+				String annotation_text = fields[annotationtext_column];
+				int lOC = stringToInt(fields[latestbound_column].trim());  
+				int commentsLength = 0; 
+				String origType = null;
+				FWPlBelongLevel fwplbelong = get_fwplBelongLevel((fields[fwplbelong_column].trim()));
+				boolean needsLocalConstructor = fields[needsLocalConstructor_column].toUpperCase().trim().equals("TRUE");
+				
+				Element declaration = new Element(identifier, element_type, modifier, code, is_terminal, is_hook, 
+						in_cycle, is_fPrivate, is_fPublic, refToThis, refFromThis, feature, package_name, class_name, 
+						member_name, user_comment, method_signature, earliest_bound, latest_bound, assigned_by_inference, 
+						annotation_text, lOC, commentsLength, origType, fwplbelong, needsLocalConstructor);
+						
+				declarations.add(declaration);
+			}
+			partition = new Partition(declarations, featureList);
+			
+		}catch(Exception ex){
+			System.out.println(ex.toString());
+		}
+		
+		return partition;
+	}
+	
+	private Feature getSetFeatureFWPL(ArrayList<Feature> featureList, String featureName){
+		Feature feature = null;
+		if(featureList != null 
+			&& !featureList.isEmpty()
+			&& featureList.stream().map(f -> f.getFeature_name()).collect(Collectors.toList()).contains(featureName)
+		){
+			feature = featureList.stream()
+					.filter(f -> f.getFeature_name().equals(featureName))
+					.collect(Collectors.toList())
+					.get(0);
+		}
+		else{
+			feature = setFeatureFWPL(featureList, featureName);
+		}
+		return feature;
+	}
+	
+	private Feature setFeatureFWPL(ArrayList<Feature> featureList, String featureName){
+		Feature feature; 
+		if(featureName.equals(Feature.FW_FEATURE_NAME)){
+			feature = new Feature(featureName, 0, true, null, false);
+		}
+		else{
+			feature = new Feature(featureName, 1, true, null, true);
+		}
+		featureList.add(feature);
+		return feature;
+	}
+	
+	public static int stringToInt(String param) {
+        try {
+        	return Integer.valueOf(param);
+        } catch(NumberFormatException e) {
+        	return -1;
+        }
+	}
+	
+	private FWPlBelongLevel get_fwplBelongLevel(String levelString){
+		FWPlBelongLevel result = null; 
+		try {
+        	int level = Integer.valueOf(levelString);
+        	if(level== 1){
+        		result = FWPlBelongLevel.FULLY_BELONGS_FW;
+        	}
+        	else if(level == 2){
+        		result = FWPlBelongLevel.FULLY_BELONGS_PL;
+        	}
+        	else if(level == 3){
+        		result = FWPlBelongLevel.PARTIALLY_BELONGS_FW;
+        	}
+        } catch(NumberFormatException e) {}
+		return result;
+	}
+	
+	public static String getFileFromFileDialog(Frame parentWindow, String start_path, String extension, String message){
+		FileDialog fd = new FileDialog(parentWindow, message + "Choose a " + extension + " file", FileDialog.LOAD);
+		fd.setDirectory(start_path);
+		fd.setFile("*" + extension);
+		fd.setVisible(true);
+		String file_name = fd.getDirectory() + "\\" + fd.getFile();
+		if (file_name != null && file_name.endsWith(extension)){
+			return file_name;
+		}
+		return null;
+	}
 }
+
+
+

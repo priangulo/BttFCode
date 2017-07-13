@@ -41,6 +41,7 @@ public class CodeElement {
 	boolean is_null = false;
 	int LOC;
 	String orig_lang_type = "";
+	String method_return_type = "";
 	
 	public CodeElement(String name, String modifier, ElementType type, String declaring_class, String code, Set<String> packages, String annotation_text, int LOC, String orig_lang_type) {
 		this.name = name;
@@ -178,6 +179,9 @@ public class CodeElement {
 			this.annotation_text = annotation_text;
 			this.LOC = LOC;
 			this.orig_lang_type = getOriginalTypeofMethod(method_binding);
+			
+			this.method_return_type = method_binding.getReturnType().getQualifiedName();
+			
 			/*if(this.annotation_text != null){
 				System.out.println(this.name.replace(",", ";") + "," + this.annotation_text);
 			}*/

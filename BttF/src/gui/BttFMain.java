@@ -79,11 +79,9 @@ public class BttFMain extends JFrame {
 	private final String PRIV_ENDFIX = "-priv";
 	private final String PUB_ENDFIX = "-pub";
 	private final String FWPI_ACTION = "PROGRAM : FRAMEWORK PLUGIN";
-	private final String FACTSFILE = "FactsAndInferences.csv";
-	private final String CSV_EXTENSION = ".csv"; 
-	private final String BTTF_EXTENSION = ".bttf";
 	
 	private String start_path = System.getProperty("user.home") + "\\Desktop"; 
+	
 	
 	private String csv_file = null;
 	private String fm_file = null;
@@ -123,7 +121,7 @@ public class BttFMain extends JFrame {
 		this.setTitle("Back to the Future - Standalone");
 		
 		//get crg file
-		String file_name = (getFileFromFileDialog(CSV_EXTENSION, "CRG required. "));
+		String file_name = (inputFile.getFileFromFileDialog(this, this.start_path, GuiConstants.CSV_EXTENSION, "CRG required. "));
 		if(file_name != null){
 			this.project_name = getProjectNameFromFileName(file_name);
 			this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
@@ -204,10 +202,10 @@ public class BttFMain extends JFrame {
 			    File dir = fc.getSelectedFile();
 			    for (final File fileEntry : dir.listFiles()) {
 			        if (!fileEntry.isDirectory()) {
-			            if(csv_file == null && fileEntry.getName().toLowerCase().equals(FACTSFILE.toLowerCase())){
+			            if(csv_file == null && fileEntry.getName().toLowerCase().equals(GuiConstants.FACTSFILE.toLowerCase())){
 			            	csv_file = fileEntry.getAbsolutePath();
 			            }
-			            if(fm_file == null && fileEntry.getName().endsWith(BTTF_EXTENSION)){
+			            if(fm_file == null && fileEntry.getName().endsWith(GuiConstants.BTTF_EXTENSION)){
 			            	fm_file = fileEntry.getAbsolutePath();
 			            }
 			        }
@@ -434,7 +432,7 @@ public class BttFMain extends JFrame {
 	
 	private void reload_partitionpanel(){
 		
-		String file_name = (getFileFromFileDialog(CSV_EXTENSION, ""));
+		String file_name = (inputFile.getFileFromFileDialog(this, this.start_path, GuiConstants.CSV_EXTENSION, ""));
 		if(file_name != null){
 			inputFile.get_elements_from_csv_file(file_name, partition_names, false);
 			//System.out.println(partition.get_elements_from_file().toString());
@@ -482,7 +480,7 @@ public class BttFMain extends JFrame {
 		if(file_name == null){
 			int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Do you want to upload a csv facts file?", "Input file.", JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.YES_OPTION){
-				file_name = (getFileFromFileDialog(CSV_EXTENSION, ""));			
+				file_name = (inputFile.getFileFromFileDialog(this, this.start_path, GuiConstants.CSV_EXTENSION, ""));			
 			}
 		}
 		
@@ -495,19 +493,6 @@ public class BttFMain extends JFrame {
 		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Partitions"));
 		bt_uploadcvs.setEnabled(true);
 	}
-		
-	private String getFileFromFileDialog(String extension, String message){
-		FileDialog fd = new FileDialog(this, message + "Choose a " + extension + " file", FileDialog.LOAD);
-		fd.setDirectory(this.start_path);
-		fd.setFile("*" + extension);
-		fd.setVisible(true);
-		String file_name = fd.getDirectory() + "\\" + fd.getFile();
-		if (file_name != null && file_name.endsWith(extension)){
-			return file_name;
-		}
-		return null;
-	}
-	
 	
 	/*
 	 * delete an action button
@@ -757,6 +742,8 @@ public class BttFMain extends JFrame {
 	private void display_next_element(){
 		String explanations_text = "";
 		ArrayList<Element> elements_to_classify = partition.get_next_elems_to_classify(this.parent_feature);
+		
+		//System.out.println(elements_to_classify.toString());
 		
 		int count_pendingelems = partition.get_elements().stream().filter(e -> e.getFeature() == parent_feature).collect(Collectors.toList()).size();
 		//int count_facts = partition.get_facts().size();

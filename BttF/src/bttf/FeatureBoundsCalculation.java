@@ -145,12 +145,22 @@ public class FeatureBoundsCalculation {
 					.filter(e -> !e.isIs_terminal() && e.getFeature() != null && e.getFeature().equals(fwFeature))
 					.collect(Collectors.toList()));
 			
+			if(element.getIdentifier().equals("com.example.expressiontree.State.visitorFactory")){
+				System.out.println("here!");
+			}
+			
 			nonTerminalFwElements.addAll(
 					element.getRefToThis().stream().map(e -> e.getParentDeclaration())
-					.filter(e -> e != null && !e.isIs_terminal() && e.getFeature() != null && e.getFeature().equals(fwFeature))
+					.filter(e -> 
+						e != null
+						&& !e.getIdentifier().equals( (element.getParentDeclaration() == null ? "" : element.getParentDeclaration().getIdentifier()) )
+						&& !e.isIs_terminal() 
+						&& e.getFeature() != null 
+						&& e.getFeature().equals(fwFeature)
+					)
 					.collect(Collectors.toList()));
 			/*
-			 * if this declaration is reference by a declaration of a non-terminal fw class
+			 * if this declaration is referenced by a declaration of a non-terminal fw class
 			 * then the latest bound has to be framework
 			 */
 			if( nonTerminalFwElements != null && nonTerminalFwElements.size() > 0){

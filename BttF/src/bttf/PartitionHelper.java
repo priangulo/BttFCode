@@ -27,6 +27,28 @@ public class PartitionHelper {
 		return null;
 	}
 	
+	public static Element get_element_from_string(ArrayList<Element> allelems, String elem_identifier){
+		for(Element elem : allelems){
+			if(elem.getIdentifier().equals(elem_identifier)){
+				return elem;
+			}
+		}
+		return null;
+	}
+	
+	/*public static Element get_element_from_string_flexMethod(ArrayList<Element> allelems, String elem_identifier){
+		Element found = null;
+		for(Element elem : allelems){
+			if(elem.getIdentifier().equals(elem_identifier)){
+				found = elem;
+			}
+		}
+		if(found == null){
+			
+		}
+		return found;
+	}*/
+	
 	/*
 	 * Search feature using name 
 	 */

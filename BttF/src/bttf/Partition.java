@@ -52,6 +52,16 @@ public class Partition {
 			}
 		}
 	}
+	
+	public Partition(ArrayList<Element> elements, ArrayList<Feature> features){
+		this.cycleHandler = new PartitionCycleHandler();
+		this.partitionHelper = new PartitionHelper(this);
+		this.boundsCalc = new FeatureBoundsCalculation(this);
+		
+		this.elements_list = elements;
+		this.feature_list = features;
+		//get_toposort(); // toposort needs reference list
+	}
 
 	private void reset_partition(){
 		this.factsAndInferences = new ArrayList<Fact>();
@@ -153,8 +163,8 @@ public class Partition {
 	 * */
 	private void get_list_of_elements(){
 		for(Reference ref : references_list){
-			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC(), ref.getCall_from_origType());
-			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC(), ref.getCall_to_origType());
+			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC(), ref.getCall_from_origType(), ref.getCall_from_returnType());
+			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC(), ref.getCall_to_origType(), ref.getCall_to_returnType());
 			if(!elements_list.contains(call_from)){
 				elements_list.add(call_from);
 			}
@@ -336,32 +346,39 @@ public class Partition {
 		    	return 0;
 		    }
 		});
-		//System.out.println("elements to classify: " + elements_to_classify.toString());
+		
 		return elements_to_classify;
 	}
 	
 	private ArrayList<Element> get_elems_to_classify(Feature parent_feature){
 		ArrayList<Element> elements_to_classify = (ArrayList<Element>) elements_list.stream().filter(
-				e -> e.getFeature() == parent_feature).collect(Collectors.toList());
+				e -> e.getFeature() == parent_feature).collect(Collectors.toList());		
+		
+		System.out.println("elements to classify before filter: " + elements_to_classify.toString());
 		
 		//filter those which the elements they call have been all classified
-		elements_to_classify = (ArrayList<Element>) elements_to_classify.stream().filter(
-				e -> e.getRefFromThis().stream().filter(
-						p -> p.getFeature() != null).collect(Collectors.toList()).size() 
+		ArrayList<Element> elements_to_classify_filter = (ArrayList<Element>) elements_to_classify.stream()
+				.filter(e -> e.getRefFromThis().stream().filter(
+						p -> p.getFeature() != parent_feature).collect(Collectors.toList()).size() 
 				== e.getRefFromThis().size()
 				).collect(Collectors.toList());
 		
-		boolean change = false;
-		for(Element elem : elements_to_classify){
-			//System.out.println("try to assign: " + elem.getIdentifier());
-			boolean temp_change = assign_elements_with_bounds_in_same_feature(elem, parent_feature);
-			if(!change && temp_change){
-				change = true;
-			}
-		}
+		if(!elements_to_classify.isEmpty() && elements_to_classify_filter.isEmpty()){
+			return elements_to_classify;
 		
-		if(change){
-			return get_elems_to_classify(parent_feature);
+		}else{
+			boolean change = false;
+			for(Element elem : elements_to_classify_filter){
+				//System.out.println("try to assign: " + elem.getIdentifier());
+				boolean temp_change = assign_elements_with_bounds_in_same_feature(elem, parent_feature);
+				if(!change && temp_change){
+					change = true;
+				}
+			}
+			
+			if(change){
+				return get_elems_to_classify(parent_feature);
+			}
 		}
 		
 		return elements_to_classify;
