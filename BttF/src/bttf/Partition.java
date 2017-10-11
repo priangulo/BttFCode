@@ -715,6 +715,18 @@ public class Partition {
 		}
 		return null;
 	}*/
+	
+	public int getInferencesCountPerElement(Element element){
+		ArrayList<Fact> fis = (ArrayList<Fact>) factsAndInferences.stream()
+			.filter(f -> f.getElement().equals(element))
+			.collect(Collectors.toList());
+		
+		if(fis != null && fis.size() > 0){
+			return fis.get(0).getInferences().size();
+		}
+		
+		return 0;
+	}
 }
 
 

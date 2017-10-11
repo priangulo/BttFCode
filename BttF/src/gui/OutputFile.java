@@ -168,7 +168,8 @@ public class OutputFile {
 				writer = new BufferedWriter( new FileWriter(create_new_file(file_name),false));
 				writer.append("Identifier,TypeID,Type,Package,Class,Member,Feature,Is_fprivate?,"
 					+ "Is_inferred?,Parent_features,Is_terminal?,Is_hook?,Inferences,User_comment,Member_modifier,"
-					+ "Method_Signature,Earliest_bound,Latest_bound,CodeAnnotation,LOC,FWBelongLevel,NeedsLocalConstructor\r\n");
+					+ "Method_Signature,Earliest_bound,Latest_bound,CodeAnnotation,LOC,FWBelongLevel,NeedsLocalConstructor,"
+					+ "NumberOfFeaturesInBounds,AssignmentOrder,NumberOfPossibilities,NumberOfInferences,RefToSize,RefToLaySize,RefFromSize\r\n");
 				for(Element e : partition.get_elements()){
 					int count_nohook_inferences = 0;
 					StringBuilder inferences = new StringBuilder();
@@ -195,18 +196,26 @@ public class OutputFile {
 					
 					String temp_eb = "";
 					String temp_lb = "";
+					int boundsStart = 0;
+					int boundsEnd = 0;
 					
 					if(e.getEarliest_bound().isEmpty()){
 						FeatureBound eb = this.partition.boundsCalc.get_earliest_bound(e, partition.get_all_features(), parent_feature);
 						if(eb != null && eb.getFeature() != null){
 							temp_eb = eb.getFeature().getFeature_name();
+							boundsStart = eb.getFeature().getOrder();
 						}
+					}else{
+						boundsStart = e.getEarliest_bound_number();
 					}
 					if(e.getLatest_bound().isEmpty()){
 						FeatureBound lb = this.partition.boundsCalc.get_latest_bound(e, partition.get_all_features(), parent_feature);
 						if(lb != null && lb.getFeature() != null){
 							temp_lb = lb.getFeature().getFeature_name();
+							boundsEnd = lb.getFeature().getOrder();
 						}
+					}else{
+						boundsEnd = e.getLatest_bound_number();
 					}
 					
 					writer.append(
@@ -231,7 +240,14 @@ public class OutputFile {
 						+ e.getAnnotation_text() +","
 						+ e.getLOCAdjusted() +","
 						+ ((e.belongLevelFW() ==  null) ? "" : e.belongLevelFW().getLevel()) +","
-						+ e.needsLocalConstructor()
+						+ e.needsLocalConstructor() +","
+						+ (boundsEnd - boundsStart) +","
+						+ e.getOrderOfAssignment() +","
+						+ e.getNumber_possibilities() +","
+						+ partition.getInferencesCountPerElement(e) +","
+						+ e.getRefToThis().size() +","
+						+ e.getLayeredRefToThis().size() +","
+						+ e.getRefFromThis().size()
 						+ "\r\n"
 					);
 				}

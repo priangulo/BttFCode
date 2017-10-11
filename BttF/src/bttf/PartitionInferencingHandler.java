@@ -11,6 +11,7 @@ public class PartitionInferencingHandler {
 	private ArrayList<Cycle> cycle_list;
 	private boolean is_fwpi;
 	private Partition partition;
+	private int orderOfAssignment;
 	
 	public PartitionInferencingHandler(boolean cycle_stuff_on, ArrayList<Cycle> cycle_list, boolean is_fwpi, Partition partition){
 		this.cycle_stuff_on = cycle_stuff_on;
@@ -18,6 +19,7 @@ public class PartitionInferencingHandler {
 		this.is_fwpi = is_fwpi;
 		this.partition = partition;
 		this.partHelper = new PartitionHelper(this.partition);
+		orderOfAssignment = 1;
 	}
 	
 	/*
@@ -27,12 +29,17 @@ public class PartitionInferencingHandler {
 	void add_element_to_feature(Fact factInf, Feature feature_to_assign, Element element, boolean is_fprivate, boolean is_fpublic, Feature parent_feature, boolean by_inference){
 		FeatureBound eb = this.partition.boundsCalc.get_earliest_bound(element, partition.get_all_features(), parent_feature);
 		FeatureBound lb = this.partition.boundsCalc.get_latest_bound(element, partition.get_all_features(), parent_feature);
+		FeaturePossibility poss = this.partition.boundsCalc.get_element_possibilities(element, parent_feature, false);
 		
 		if(eb != null && eb.getFeature() != null){
-			element.setEarliest_bound(eb.getFeature().getFeature_name());
+			element.setEarliest_bound(eb.getFeature());
 		}
 		if(lb != null && lb.getFeature() != null){
-			element.setLatest_bound(lb.getFeature().getFeature_name());
+			element.setLatest_bound(lb.getFeature());
+		}
+		
+		if(poss != null & poss.getButton_options() != null){
+			element.setNumber_possibilities(poss.getButton_options().size());
 		}
 		
 		boolean already_hook = element.isIs_hook();
@@ -57,6 +64,8 @@ public class PartitionInferencingHandler {
 		}
 		
 		feature_to_assign.addElement(element, is_fprivate, is_fpublic, is_hook, by_inference);
+		element.setOrderOfAssignment(orderOfAssignment);
+		orderOfAssignment++;
 		
 		if(is_fprivate){
 			propagate_childs_of_fprivate_containers(element, feature_to_assign, factInf, parent_feature);

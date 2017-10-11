@@ -27,6 +27,9 @@ public class Element implements Comparable<Element>{
 	private String method_signature = "";
 	private String earliest_bound = "";
 	private String latest_bound = "";
+	private int earliest_bound_number = 0;
+	private int latest_bound_number = 0;
+	private int number_possibilities = 0;
 	private boolean assigned_by_inference = false;
 	private String annotation_text = "";
 	private int LOC;
@@ -35,6 +38,7 @@ public class Element implements Comparable<Element>{
 	private FWPlBelongLevel fwplbelong;
 	private Boolean needsLocalConstructor;
 	private String methodReturnType;
+	private int orderOfAssignment = 0;
 	
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, 
@@ -259,7 +263,15 @@ public class Element implements Comparable<Element>{
 			this.member_name = "";
 		}
 		else if(element_type.equals(ElementType.ELEM_TYPE_CLASS)){
-			int name_begin_index = identifier.lastIndexOf(".");
+			int name_begin_index = 0;
+			if(identifier.contains("<")){
+				int type_index = identifier.indexOf("<");
+				name_begin_index = identifier.lastIndexOf(".", type_index);
+			}
+			else{
+				name_begin_index = identifier.lastIndexOf(".");
+			}
+			
 			if(name_begin_index == -1){
 				this.package_name = "default";
 				this.class_name = identifier;
@@ -289,7 +301,13 @@ public class Element implements Comparable<Element>{
 			if(name_begin_index != -1 && name_end_index != -1){
 				//name = identifier.substring(name_begin_index+1, name_end_index);
 				pack_and_class = identifier.substring(0, name_begin_index);
-				class_name_begin_index = pack_and_class.lastIndexOf(".");
+				if(pack_and_class.contains("<")){
+					int type_index = pack_and_class.indexOf("<");
+					class_name_begin_index = pack_and_class.lastIndexOf(".", type_index);
+				}
+				else{
+					class_name_begin_index = pack_and_class.lastIndexOf(".");
+				}
 			}
 			
 			if(class_name_begin_index == -1){
@@ -315,7 +333,14 @@ public class Element implements Comparable<Element>{
 			if(name_begin_index != -1){
 				name = identifier.substring(name_begin_index + 1);
 				pack_and_class = identifier.substring(0, name_begin_index);
-				class_name_begin_index = pack_and_class.lastIndexOf(".");
+				if(pack_and_class.contains("<")){
+					int type_index = pack_and_class.indexOf("<");
+					class_name_begin_index = pack_and_class.lastIndexOf(".", type_index);
+				}
+				else{
+					class_name_begin_index = pack_and_class.lastIndexOf(".");
+				}
+				
 			}
 			
 			if(class_name_begin_index == -1){
@@ -405,17 +430,31 @@ public class Element implements Comparable<Element>{
 		return earliest_bound;
 	}
 
-	public void setEarliest_bound(String earliest_bound) {
-		this.earliest_bound = earliest_bound;
+	public void setEarliest_bound(Feature earliest_bound) {
+		this.earliest_bound = earliest_bound.getFeature_name();
+		this.earliest_bound_number = earliest_bound.getOrder();
 	}
 
 	public String getLatest_bound() {
 		return latest_bound;
 	}
 
-	public void setLatest_bound(String latest_bound) {
-		this.latest_bound = latest_bound;
+	public void setLatest_bound(Feature latest_bound) {
+		this.latest_bound = latest_bound.getFeature_name();
+		this.latest_bound_number = latest_bound.getOrder();
 	}
+	
+	public int getEarliest_bound_number() {
+		return earliest_bound_number;
+	}
+
+
+
+	public int getLatest_bound_number() {
+		return latest_bound_number;
+	}
+
+
 
 	public String get_assignment_text(){
 		String assignment = "";
@@ -738,5 +777,22 @@ public class Element implements Comparable<Element>{
 		}
 		return false;
 	}
+
+	public int getOrderOfAssignment() {
+		return orderOfAssignment;
+	}
+
+	public void setOrderOfAssignment(int orderOfAssignment) {
+		this.orderOfAssignment = orderOfAssignment;
+	}
+
+	public int getNumber_possibilities() {
+		return number_possibilities;
+	}
+
+	public void setNumber_possibilities(int number_possibilities) {
+		this.number_possibilities = number_possibilities;
+	}
+	
 	
 }

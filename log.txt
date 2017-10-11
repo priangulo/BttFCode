@@ -1,0 +1,1273 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://1776.fwk1385140107:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://1776.fwk1385140107:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+!SESSION 2017-09-06 22:42:22.889 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.platform.ide
+Command-line arguments:  -product org.eclipse.platform.ide -data E:\UTAustin\runtime-EclipseApplication -dev file:E:/UTAustin/workspace/.metadata/.plugins/org.eclipse.pde.core/Eclipse Application/dev.properties -os win32 -ws win32 -arch x86_64 -consoleLog
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-09-06 22:43:09.243
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Priscila'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.oomph.setup.ui 2 0 2017-09-06 22:43:16.960
+!MESSAGE java.lang.NullPointerException
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.oomph.setup.ui.SetupUIPlugin.performStartup(SetupUIPlugin.java:353)
+	at org.eclipse.oomph.setup.ui.SetupUIPlugin.access$4(SetupUIPlugin.java:347)
+	at org.eclipse.oomph.setup.ui.SetupUIPlugin$1$1.run(SetupUIPlugin.java:244)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+PartitionAction -  Finished getting CRG.
+com.mysql.jdbc.Driver cannot be found by BttF_1.0.0.qualifier
+[MIXIN, KERNEL, SYNTAX, JAVA, COMMENTS, STRINGAST, COMMONERRORAST, LOCALIDAST, COMMONBASE, COMMONERROR, MIXINBASE, LOCALID, ASPECTDECL, MIXINCLASS, MIXININT, MIXINSM, ANTCOMPOSE]
+[Feature [feature_name=KERNEL, order=0 islast=false]
+, Feature [feature_name=SYNTAX, order=1 islast=false]
+, Feature [feature_name=JAVA, order=2 islast=false]
+, Feature [feature_name=COMMENTS, order=3 islast=false]
+, Feature [feature_name=STRINGAST, order=4 islast=false]
+, Feature [feature_name=COMMONERRORAST, order=5 islast=false]
+, Feature [feature_name=LOCALIDAST, order=6 islast=false]
+, Feature [feature_name=COMMONBASE, order=7 islast=false]
+, Feature [feature_name=COMMONERROR, order=8 islast=false]
+, Feature [feature_name=MIXINBASE, order=9 islast=false]
+, Feature [feature_name=LOCALID, order=10 islast=false]
+, Feature [feature_name=ASPECTDECL, order=11 islast=false]
+, Feature [feature_name=MIXINCLASS, order=12 islast=false]
+, Feature [feature_name=MIXININT, order=13 islast=false]
+, Feature [feature_name=MIXINSM, order=14 islast=false]
+, Feature [feature_name=ANTCOMPOSE, order=15 islast=true]
+]
+Nodes: 3953 Edges: 19963
+Line#75 supposed to be ignored: mixin.ComposeAntTask.SourceFile.getFile() - mixin.ComposeAntTask.SourceFile.getFile() assigned to ANTCOMPOSE
+Line#76 supposed to be ignored: mixin.ComposeAntTask.SourceFile.file - mixin.ComposeAntTask.SourceFile.file assigned to ANTCOMPOSE
+Line#77 supposed to be ignored: mixin.ComposeAntTask.SourceFile.setName(File file) - mixin.ComposeAntTask.SourceFile.setName(File file) assigned to ANTCOMPOSE
+Line#78 supposed to be ignored: mixin.ComposeAntTask.addFile(SourceFile file) - mixin.ComposeAntTask.addFile(SourceFile file) assigned to ANTCOMPOSE
+Line#79 supposed to be ignored: mixin.ComposeAntTask.operands - mixin.ComposeAntTask.operands assigned to ANTCOMPOSE
+Line#80 supposed to be ignored: mixin.ComposeAntTask.addFilelist(FileList files) - mixin.ComposeAntTask.addFilelist(FileList files) assigned to ANTCOMPOSE
+Line#81 supposed to be ignored: mixin.ComposeAntTask.execute() - mixin.ComposeAntTask.execute() assigned to ANTCOMPOSE
+Line#82 supposed to be ignored: mixin.ComposeAntTask.outputFile - mixin.ComposeAntTask.outputFile assigned to ANTCOMPOSE
+Line#83 supposed to be ignored: mixin.ComposeAntTask.getFiles() - mixin.ComposeAntTask.getFiles() assigned to ANTCOMPOSE
+Line#84 supposed to be ignored: mixin.ComposeAntTask.upToDate(File[] sources, File target) - mixin.ComposeAntTask.upToDate(File[] sources, File target) assigned to ANTCOMPOSE
+Line#85 supposed to be ignored: mixin.ComposeAntTask.compose(File[] sources, File target) - mixin.ComposeAntTask.compose(File[] sources, File target) assigned to ANTCOMPOSE
+Line#86 supposed to be ignored: mixin.ComposeAntTask.asList(FileList fileList) - mixin.ComposeAntTask.asList(FileList fileList) assigned to ANTCOMPOSE
+Line#87 supposed to be ignored: mixin.ComposeAntTask.setAspect(String aspectName) - mixin.ComposeAntTask.setAspect(String aspectName) assigned to ANTCOMPOSE
+Line#88 supposed to be ignored: mixin.ComposeAntTask.aspectName - mixin.ComposeAntTask.aspectName assigned to ANTCOMPOSE
+Line#89 supposed to be ignored: mixin.ComposeAntTask.setFailonerror(boolean failOnError) - mixin.ComposeAntTask.setFailonerror(boolean failOnError) assigned to ANTCOMPOSE
+Line#90 supposed to be ignored: mixin.ComposeAntTask.failOnError - mixin.ComposeAntTask.failOnError assigned to ANTCOMPOSE
+Line#91 supposed to be ignored: mixin.ComposeAntTask.setOutput(File outputFile) - mixin.ComposeAntTask.setOutput(File outputFile) assigned to ANTCOMPOSE
+Line#92 supposed to be ignored: mixin.ComposeAntTask.setTarget(File outputFile) - mixin.ComposeAntTask.setTarget(File outputFile) assigned to ANTCOMPOSE
+Line#190 supposed to be ignored: mixin.Parser.parseAll() - mixin.Parser.parseAll() assigned to SYNTAX
+Line#370 supposed to be ignored: mixin.TokenMgrError.serialVersionUID - mixin.TokenMgrError.serialVersionUID assigned to SYNTAX
+Line#371 supposed to be ignored: mixin.TokenMgrError.LEXICAL_ERROR - mixin.TokenMgrError.LEXICAL_ERROR assigned to SYNTAX
+Line#372 supposed to be ignored: mixin.TokenMgrError.STATIC_LEXER_ERROR - mixin.TokenMgrError.STATIC_LEXER_ERROR assigned to SYNTAX
+Line#373 supposed to be ignored: mixin.TokenMgrError.INVALID_LEXICAL_STATE - mixin.TokenMgrError.INVALID_LEXICAL_STATE assigned to SYNTAX
+Line#374 supposed to be ignored: mixin.TokenMgrError.LOOP_DETECTED - mixin.TokenMgrError.LOOP_DETECTED assigned to SYNTAX
+Line#375 supposed to be ignored: mixin.TokenMgrError.errorCode - mixin.TokenMgrError.errorCode assigned to SYNTAX
+Line#376 supposed to be ignored: mixin.TokenMgrError.addEscapes(String str) - mixin.TokenMgrError.addEscapes(String str) assigned to SYNTAX
+Line#377 supposed to be ignored: mixin.TokenMgrError.LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) - mixin.TokenMgrError.LexicalError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar) assigned to SYNTAX
+Line#378 supposed to be ignored: mixin.TokenMgrError.getMessage() - mixin.TokenMgrError.getMessage() assigned to SYNTAX
+Line#379 supposed to be ignored: mixin.TokenMgrError.TokenMgrError() - mixin.TokenMgrError.TokenMgrError() assigned to SYNTAX
+Line#380 supposed to be ignored: mixin.TokenMgrError.TokenMgrError(String message, int reason) - mixin.TokenMgrError.TokenMgrError(String message, int reason) assigned to SYNTAX
+Line#381 supposed to be ignored: mixin.TokenMgrError.TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar, int reason) - mixin.TokenMgrError.TokenMgrError(boolean EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar, int reason) assigned to SYNTAX
+Line#385 supposed to be ignored: mixin.Parser.parse(String rule) - mixin.Parser.parse(String rule) assigned to SYNTAX
+Line#529 supposed to be ignored: mixin.JavaCharStream.staticFlag - mixin.JavaCharStream.staticFlag assigned to SYNTAX
+Line#530 supposed to be ignored: mixin.JavaCharStream.hexval(char c) - mixin.JavaCharStream.hexval(char c) assigned to SYNTAX
+Line#531 supposed to be ignored: mixin.JavaCharStream.bufpos - mixin.JavaCharStream.bufpos assigned to SYNTAX
+Line#532 supposed to be ignored: mixin.JavaCharStream.bufsize - mixin.JavaCharStream.bufsize assigned to SYNTAX
+Line#533 supposed to be ignored: mixin.JavaCharStream.available - mixin.JavaCharStream.available assigned to SYNTAX
+Line#534 supposed to be ignored: mixin.JavaCharStream.tokenBegin - mixin.JavaCharStream.tokenBegin assigned to SYNTAX
+Line#535 supposed to be ignored: mixin.JavaCharStream.bufline - mixin.JavaCharStream.bufline assigned to SYNTAX
+Line#536 supposed to be ignored: mixin.JavaCharStream.bufcolumn - mixin.JavaCharStream.bufcolumn assigned to SYNTAX
+Line#537 supposed to be ignored: mixin.JavaCharStream.column - mixin.JavaCharStream.column assigned to SYNTAX
+Line#538 supposed to be ignored: mixin.JavaCharStream.line - mixin.JavaCharStream.line assigned to SYNTAX
+Line#539 supposed to be ignored: mixin.JavaCharStream.prevCharIsCR - mixin.JavaCharStream.prevCharIsCR assigned to SYNTAX
+Line#540 supposed to be ignored: mixin.JavaCharStream.prevCharIsLF - mixin.JavaCharStream.prevCharIsLF assigned to SYNTAX
+Line#541 supposed to be ignored: mixin.JavaCharStream.inputStream - mixin.JavaCharStream.inputStream assigned to SYNTAX
+Line#542 supposed to be ignored: mixin.JavaCharStream.nextCharBuf - mixin.JavaCharStream.nextCharBuf assigned to SYNTAX
+Line#543 supposed to be ignored: mixin.JavaCharStream.buffer - mixin.JavaCharStream.buffer assigned to SYNTAX
+Line#544 supposed to be ignored: mixin.JavaCharStream.maxNextCharInd - mixin.JavaCharStream.maxNextCharInd assigned to SYNTAX
+Line#545 supposed to be ignored: mixin.JavaCharStream.nextCharInd - mixin.JavaCharStream.nextCharInd assigned to SYNTAX
+Line#546 supposed to be ignored: mixin.JavaCharStream.inBuf - mixin.JavaCharStream.inBuf assigned to SYNTAX
+Line#547 supposed to be ignored: mixin.JavaCharStream.tabSize - mixin.JavaCharStream.tabSize assigned to SYNTAX
+Line#548 supposed to be ignored: mixin.JavaCharStream.trackLineColumn - mixin.JavaCharStream.trackLineColumn assigned to SYNTAX
+Line#549 supposed to be ignored: mixin.JavaCharStream.setTabSize(int i) - mixin.JavaCharStream.setTabSize(int i) assigned to SYNTAX
+Line#550 supposed to be ignored: mixin.JavaCharStream.getTabSize() - mixin.JavaCharStream.getTabSize() assigned to SYNTAX
+Line#551 supposed to be ignored: mixin.JavaCharStream.ExpandBuff(boolean wrapAround) - mixin.JavaCharStream.ExpandBuff(boolean wrapAround) assigned to SYNTAX
+Line#552 supposed to be ignored: mixin.JavaCharStream.FillBuff() - mixin.JavaCharStream.FillBuff() assigned to SYNTAX
+Line#553 supposed to be ignored: mixin.JavaCharStream.backup(int amount) - mixin.JavaCharStream.backup(int amount) assigned to SYNTAX
+Line#554 supposed to be ignored: mixin.JavaCharStream.ReadByte() - mixin.JavaCharStream.ReadByte() assigned to SYNTAX
+Line#555 supposed to be ignored: mixin.JavaCharStream.BeginToken() - mixin.JavaCharStream.BeginToken() assigned to SYNTAX
+Line#556 supposed to be ignored: mixin.JavaCharStream.readChar() - mixin.JavaCharStream.readChar() assigned to SYNTAX
+Line#557 supposed to be ignored: mixin.JavaCharStream.AdjustBuffSize() - mixin.JavaCharStream.AdjustBuffSize() assigned to SYNTAX
+Line#558 supposed to be ignored: mixin.JavaCharStream.UpdateLineColumn(char c) - mixin.JavaCharStream.UpdateLineColumn(char c) assigned to SYNTAX
+Line#559 supposed to be ignored: mixin.JavaCharStream.getColumn() - mixin.JavaCharStream.getColumn() assigned to SYNTAX
+Line#560 supposed to be ignored: mixin.JavaCharStream.getLine() - mixin.JavaCharStream.getLine() assigned to SYNTAX
+Line#561 supposed to be ignored: mixin.JavaCharStream.getEndColumn() - mixin.JavaCharStream.getEndColumn() assigned to SYNTAX
+Line#562 supposed to be ignored: mixin.JavaCharStream.getEndLine() - mixin.JavaCharStream.getEndLine() assigned to SYNTAX
+Line#563 supposed to be ignored: mixin.JavaCharStream.getBeginColumn() - mixin.JavaCharStream.getBeginColumn() assigned to SYNTAX
+Line#564 supposed to be ignored: mixin.JavaCharStream.getBeginLine() - mixin.JavaCharStream.getBeginLine() assigned to SYNTAX
+Line#565 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#566 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream, int startline, int startcolumn) - mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream, int startline, int startcolumn) assigned to SYNTAX
+Line#567 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream) - mixin.JavaCharStream.JavaCharStream(java.io.Reader dstream) assigned to SYNTAX
+Line#568 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.Reader dstream, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.ReInit(java.io.Reader dstream, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#569 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.Reader dstream, int startline, int startcolumn) - mixin.JavaCharStream.ReInit(java.io.Reader dstream, int startline, int startcolumn) assigned to SYNTAX
+Line#570 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.Reader dstream) - mixin.JavaCharStream.ReInit(java.io.Reader dstream) assigned to SYNTAX
+Line#571 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#572 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#573 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn) assigned to SYNTAX
+Line#574 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, int startline, int startcolumn) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, int startline, int startcolumn) assigned to SYNTAX
+Line#575 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream, String encoding) assigned to SYNTAX
+Line#576 supposed to be ignored: mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream) - mixin.JavaCharStream.JavaCharStream(java.io.InputStream dstream) assigned to SYNTAX
+Line#577 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#578 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream, int startline, int startcolumn, int buffersize) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream, int startline, int startcolumn, int buffersize) assigned to SYNTAX
+Line#579 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding, int startline, int startcolumn) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding, int startline, int startcolumn) assigned to SYNTAX
+Line#580 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream, int startline, int startcolumn) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream, int startline, int startcolumn) assigned to SYNTAX
+Line#581 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream, String encoding) assigned to SYNTAX
+Line#582 supposed to be ignored: mixin.JavaCharStream.ReInit(java.io.InputStream dstream) - mixin.JavaCharStream.ReInit(java.io.InputStream dstream) assigned to SYNTAX
+Line#583 supposed to be ignored: mixin.JavaCharStream.GetImage() - mixin.JavaCharStream.GetImage() assigned to SYNTAX
+Line#584 supposed to be ignored: mixin.JavaCharStream.GetSuffix(int len) - mixin.JavaCharStream.GetSuffix(int len) assigned to SYNTAX
+Line#585 supposed to be ignored: mixin.JavaCharStream.Done() - mixin.JavaCharStream.Done() assigned to SYNTAX
+Line#586 supposed to be ignored: mixin.JavaCharStream.adjustBeginLineColumn(int newLine, int newCol) - mixin.JavaCharStream.adjustBeginLineColumn(int newLine, int newCol) assigned to SYNTAX
+Line#587 supposed to be ignored: mixin.JavaCharStream.getTrackLineColumn() - mixin.JavaCharStream.getTrackLineColumn() assigned to SYNTAX
+Line#588 supposed to be ignored: mixin.JavaCharStream.setTrackLineColumn(boolean tlc) - mixin.JavaCharStream.setTrackLineColumn(boolean tlc) assigned to SYNTAX
+Line#1153 supposed to be ignored: mixin.BaliParser.parseRoot - mixin.BaliParser.parseRoot assigned to SYNTAX
+Line#1154 supposed to be ignored: mixin.BaliParser.getStartRoot() - mixin.BaliParser.getStartRoot() assigned to SYNTAX
+Line#1155 supposed to be ignored: mixin.BaliParser.getStartRoot(BaliParser parser) - mixin.BaliParser.getStartRoot(BaliParser parser) assigned to SYNTAX
+Line#1156 supposed to be ignored: mixin.BaliParser.AST_Program() - mixin.BaliParser.AST_Program() assigned to SYNTAX
+Line#1157 supposed to be ignored: mixin.BaliParser.requireEOF() - mixin.BaliParser.requireEOF() assigned to SYNTAX
+Line#1158 supposed to be ignored: mixin.BaliParser.opt(AstNode node) - mixin.BaliParser.opt(AstNode node) assigned to SYNTAX
+Line#1159 supposed to be ignored: mixin.BaliParser.opt(AstToken token) - mixin.BaliParser.opt(AstToken token) assigned to SYNTAX
+Line#1161 supposed to be ignored: mixin.BaliParserConstants.EOF - mixin.BaliParserConstants.EOF assigned to SYNTAX
+Line#1162 supposed to be ignored: mixin.BaliParser.jj_consume_token(int kind) - mixin.BaliParser.jj_consume_token(int kind) assigned to SYNTAX
+Line#1163 supposed to be ignored: mixin.BaliParser.t2at(Token tok) - mixin.BaliParser.t2at(Token tok) assigned to SYNTAX
+Line#1165 supposed to be ignored: mixin.Token.specialToken - mixin.Token.specialToken assigned to SYNTAX
+Line#1166 supposed to be ignored: mixin.Token.image - mixin.Token.image assigned to SYNTAX
+Line#1167 supposed to be ignored: mixin.Token.endLine - mixin.Token.endLine assigned to SYNTAX
+Line#1168 supposed to be ignored: mixin.Token.toString() - mixin.Token.toString() assigned to SYNTAX
+Line#1170 supposed to be ignored: mixin.BaliParser.jj_nt - mixin.BaliParser.jj_nt assigned to SYNTAX
+Line#1171 supposed to be ignored: mixin.Token.kind - mixin.Token.kind assigned to SYNTAX
+Line#1172 supposed to be ignored: mixin.BaliParserConstants.PACKAGE - mixin.BaliParserConstants.PACKAGE assigned to SYNTAX
+Line#1173 supposed to be ignored: mixin.BaliParserConstants.LAYER - mixin.BaliParserConstants.LAYER assigned to SYNTAX
+Line#1174 supposed to be ignored: mixin.BaliParser.jj_la1 - mixin.BaliParser.jj_la1 assigned to SYNTAX
+Line#1175 supposed to be ignored: mixin.BaliParser.jj_gen - mixin.BaliParser.jj_gen assigned to SYNTAX
+Line#1176 supposed to be ignored: mixin.BaliParserConstants.IMPORT - mixin.BaliParserConstants.IMPORT assigned to SYNTAX
+Line#1177 supposed to be ignored: mixin.BaliParserConstants.IMP_ESCAPE - mixin.BaliParserConstants.IMP_ESCAPE assigned to SYNTAX
+Line#1178 supposed to be ignored: mixin.BaliParserConstants.STATE_MACHINE - mixin.BaliParserConstants.STATE_MACHINE assigned to SYNTAX
+Line#1179 supposed to be ignored: mixin.BaliParserConstants.ABSTRACT - mixin.BaliParserConstants.ABSTRACT assigned to SYNTAX
+Line#1180 supposed to be ignored: mixin.BaliParserConstants.CLASS - mixin.BaliParserConstants.CLASS assigned to SYNTAX
+Line#1181 supposed to be ignored: mixin.BaliParserConstants.FINAL - mixin.BaliParserConstants.FINAL assigned to SYNTAX
+Line#1182 supposed to be ignored: mixin.BaliParserConstants.INTERFACE - mixin.BaliParserConstants.INTERFACE assigned to SYNTAX
+Line#1183 supposed to be ignored: mixin.BaliParserConstants.NATIVE - mixin.BaliParserConstants.NATIVE assigned to SYNTAX
+Line#1184 supposed to be ignored: mixin.BaliParserConstants.NEW - mixin.BaliParserConstants.NEW assigned to SYNTAX
+Line#1185 supposed to be ignored: mixin.BaliParserConstants.PRIVATE - mixin.BaliParserConstants.PRIVATE assigned to SYNTAX
+Line#1186 supposed to be ignored: mixin.BaliParserConstants.PROTECTED - mixin.BaliParserConstants.PROTECTED assigned to SYNTAX
+Line#1187 supposed to be ignored: mixin.BaliParserConstants.PUBLIC - mixin.BaliParserConstants.PUBLIC assigned to SYNTAX
+Line#1188 supposed to be ignored: mixin.BaliParserConstants.STATIC - mixin.BaliParserConstants.STATIC assigned to SYNTAX
+Line#1189 supposed to be ignored: mixin.BaliParserConstants.SYNCHRONIZED - mixin.BaliParserConstants.SYNCHRONIZED assigned to SYNTAX
+Line#1190 supposed to be ignored: mixin.BaliParserConstants.TRANSIENT - mixin.BaliParserConstants.TRANSIENT assigned to SYNTAX
+Line#1191 supposed to be ignored: mixin.BaliParserConstants.VOLATILE - mixin.BaliParserConstants.VOLATILE assigned to SYNTAX
+Line#1192 supposed to be ignored: mixin.BaliParserConstants.SEMICOLON - mixin.BaliParserConstants.SEMICOLON assigned to SYNTAX
+Line#1193 supposed to be ignored: mixin.BaliParserConstants.CLS_ESCAPE - mixin.BaliParserConstants.CLS_ESCAPE assigned to SYNTAX
+Line#1194 supposed to be ignored: mixin.BaliParserConstants.MOD_ESCAPE - mixin.BaliParserConstants.MOD_ESCAPE assigned to SYNTAX
+Line#1195 supposed to be ignored: mixin.BaliParserConstants.OVERRIDES - mixin.BaliParserConstants.OVERRIDES assigned to SYNTAX
+Line#1196 supposed to be ignored: mixin.BaliParserConstants.REFINES - mixin.BaliParserConstants.REFINES assigned to SYNTAX
+Line#1197 supposed to be ignored: mixin.BaliParserConstants.SOURCE - mixin.BaliParserConstants.SOURCE assigned to SYNTAX
+Line#1198 supposed to be ignored: mixin.BaliParserConstants.IDENTIFIER - mixin.BaliParserConstants.IDENTIFIER assigned to SYNTAX
+Line#1200 supposed to be ignored: mixin.BaliParser.PackageDeclaration() - mixin.BaliParser.PackageDeclaration() assigned to SYNTAX
+Line#1201 supposed to be ignored: mixin.BaliParser.AST_Imports() - mixin.BaliParser.AST_Imports() assigned to SYNTAX
+Line#1202 supposed to be ignored: mixin.BaliParser.AST_Class() - mixin.BaliParser.AST_Class() assigned to SYNTAX
+Line#1204 supposed to be ignored: mixin.BaliParser.AEBody() - mixin.BaliParser.AEBody() assigned to SYNTAX
+Line#1205 supposed to be ignored: mixin.BaliParserConstants.BIT_AND - mixin.BaliParserConstants.BIT_AND assigned to SYNTAX
+Line#1206 supposed to be ignored: mixin.BaliParser.EqualityExpression() - mixin.BaliParser.EqualityExpression() assigned to SYNTAX
+Line#1207 supposed to be ignored: mixin.BaliParser.AST_ArgList() - mixin.BaliParser.AST_ArgList() assigned to SYNTAX
+Line#1209 supposed to be ignored: mixin.BaliParserConstants.COMMA - mixin.BaliParserConstants.COMMA assigned to SYNTAX
+Line#1210 supposed to be ignored: mixin.BaliParser.Expression() - mixin.BaliParser.Expression() assigned to SYNTAX
+Line#1213 supposed to be ignored: mixin.BaliParser.AST_ArrayInit() - mixin.BaliParser.AST_ArrayInit() assigned to SYNTAX
+Line#1216 supposed to be ignored: mixin.BaliParserConstants.AI_ESCAPE - mixin.BaliParserConstants.AI_ESCAPE assigned to SYNTAX
+Line#1217 supposed to be ignored: mixin.BaliParserConstants.LPAREN - mixin.BaliParserConstants.LPAREN assigned to SYNTAX
+Line#1218 supposed to be ignored: mixin.BaliParserConstants.RPAREN - mixin.BaliParserConstants.RPAREN assigned to SYNTAX
+Line#1220 supposed to be ignored: mixin.BaliParserConstants.PROCEED - mixin.BaliParserConstants.PROCEED assigned to SYNTAX
+Line#1221 supposed to be ignored: mixin.BaliParserConstants.BOOLEAN - mixin.BaliParserConstants.BOOLEAN assigned to SYNTAX
+Line#1222 supposed to be ignored: mixin.BaliParserConstants.BYTE - mixin.BaliParserConstants.BYTE assigned to SYNTAX
+Line#1223 supposed to be ignored: mixin.BaliParserConstants.CHAR - mixin.BaliParserConstants.CHAR assigned to SYNTAX
+Line#1224 supposed to be ignored: mixin.BaliParserConstants.DOUBLE - mixin.BaliParserConstants.DOUBLE assigned to SYNTAX
+Line#1225 supposed to be ignored: mixin.BaliParserConstants.FALSE - mixin.BaliParserConstants.FALSE assigned to SYNTAX
+Line#1226 supposed to be ignored: mixin.BaliParserConstants.FLOAT - mixin.BaliParserConstants.FLOAT assigned to SYNTAX
+Line#1227 supposed to be ignored: mixin.BaliParserConstants.INT - mixin.BaliParserConstants.INT assigned to SYNTAX
+Line#1228 supposed to be ignored: mixin.BaliParserConstants.LONG - mixin.BaliParserConstants.LONG assigned to SYNTAX
+Line#1229 supposed to be ignored: mixin.BaliParserConstants.NULL - mixin.BaliParserConstants.NULL assigned to SYNTAX
+Line#1230 supposed to be ignored: mixin.BaliParserConstants.SHORT - mixin.BaliParserConstants.SHORT assigned to SYNTAX
+Line#1231 supposed to be ignored: mixin.BaliParserConstants.SUPER - mixin.BaliParserConstants.SUPER assigned to SYNTAX
+Line#1232 supposed to be ignored: mixin.BaliParserConstants.THIS - mixin.BaliParserConstants.THIS assigned to SYNTAX
+Line#1233 supposed to be ignored: mixin.BaliParserConstants.TRUE - mixin.BaliParserConstants.TRUE assigned to SYNTAX
+Line#1234 supposed to be ignored: mixin.BaliParserConstants.VOID - mixin.BaliParserConstants.VOID assigned to SYNTAX
+Line#1235 supposed to be ignored: mixin.BaliParserConstants.INTEGER_LITERAL - mixin.BaliParserConstants.INTEGER_LITERAL assigned to SYNTAX
+Line#1236 supposed to be ignored: mixin.BaliParserConstants.FLOATING_POINT_LITERAL - mixin.BaliParserConstants.FLOATING_POINT_LITERAL assigned to SYNTAX
+Line#1237 supposed to be ignored: mixin.BaliParserConstants.CHARACTER_LITERAL - mixin.BaliParserConstants.CHARACTER_LITERAL assigned to SYNTAX
+Line#1238 supposed to be ignored: mixin.BaliParserConstants.STRING_LITERAL - mixin.BaliParserConstants.STRING_LITERAL assigned to SYNTAX
+Line#1239 supposed to be ignored: mixin.BaliParserConstants.LBRACE - mixin.BaliParserConstants.LBRACE assigned to SYNTAX
+Line#1240 supposed to be ignored: mixin.BaliParserConstants.BANG - mixin.BaliParserConstants.BANG assigned to SYNTAX
+Line#1241 supposed to be ignored: mixin.BaliParserConstants.TILDE - mixin.BaliParserConstants.TILDE assigned to SYNTAX
+Line#1242 supposed to be ignored: mixin.BaliParserConstants.INCR - mixin.BaliParserConstants.INCR assigned to SYNTAX
+Line#1243 supposed to be ignored: mixin.BaliParserConstants.DECR - mixin.BaliParserConstants.DECR assigned to SYNTAX
+Line#1244 supposed to be ignored: mixin.BaliParserConstants.PLUS - mixin.BaliParserConstants.PLUS assigned to SYNTAX
+Line#1245 supposed to be ignored: mixin.BaliParserConstants.MINUS - mixin.BaliParserConstants.MINUS assigned to SYNTAX
+Line#1246 supposed to be ignored: mixin.BaliParserConstants.AI_BEGIN - mixin.BaliParserConstants.AI_BEGIN assigned to SYNTAX
+Line#1247 supposed to be ignored: mixin.BaliParserConstants.CASE_BEGIN - mixin.BaliParserConstants.CASE_BEGIN assigned to SYNTAX
+Line#1248 supposed to be ignored: mixin.BaliParserConstants.CAT_BEGIN - mixin.BaliParserConstants.CAT_BEGIN assigned to SYNTAX
+Line#1249 supposed to be ignored: mixin.BaliParserConstants.CLS_BEGIN - mixin.BaliParserConstants.CLS_BEGIN assigned to SYNTAX
+Line#1250 supposed to be ignored: mixin.BaliParserConstants.ESTM_BEGIN - mixin.BaliParserConstants.ESTM_BEGIN assigned to SYNTAX
+Line#1251 supposed to be ignored: mixin.BaliParserConstants.EXP_BEGIN - mixin.BaliParserConstants.EXP_BEGIN assigned to SYNTAX
+Line#1252 supposed to be ignored: mixin.BaliParserConstants.EXP_ESCAPE - mixin.BaliParserConstants.EXP_ESCAPE assigned to SYNTAX
+Line#1253 supposed to be ignored: mixin.BaliParserConstants.ID_BEGIN - mixin.BaliParserConstants.ID_BEGIN assigned to SYNTAX
+Line#1254 supposed to be ignored: mixin.BaliParserConstants.ID_ESCAPE - mixin.BaliParserConstants.ID_ESCAPE assigned to SYNTAX
+Line#1255 supposed to be ignored: mixin.BaliParserConstants.NAMEID_ESCAPE - mixin.BaliParserConstants.NAMEID_ESCAPE assigned to SYNTAX
+Line#1256 supposed to be ignored: mixin.BaliParserConstants.IMP_BEGIN - mixin.BaliParserConstants.IMP_BEGIN assigned to SYNTAX
+Line#1257 supposed to be ignored: mixin.BaliParserConstants.MOD_BEGIN - mixin.BaliParserConstants.MOD_BEGIN assigned to SYNTAX
+Line#1258 supposed to be ignored: mixin.BaliParserConstants.MTH_BEGIN - mixin.BaliParserConstants.MTH_BEGIN assigned to SYNTAX
+Line#1259 supposed to be ignored: mixin.BaliParserConstants.PLST_BEGIN - mixin.BaliParserConstants.PLST_BEGIN assigned to SYNTAX
+Line#1260 supposed to be ignored: mixin.BaliParserConstants.PRG_BEGIN - mixin.BaliParserConstants.PRG_BEGIN assigned to SYNTAX
+Line#1261 supposed to be ignored: mixin.BaliParserConstants.STM_BEGIN - mixin.BaliParserConstants.STM_BEGIN assigned to SYNTAX
+Line#1262 supposed to be ignored: mixin.BaliParserConstants.STR_ESCAPE - mixin.BaliParserConstants.STR_ESCAPE assigned to SYNTAX
+Line#1263 supposed to be ignored: mixin.BaliParserConstants.TLST_BEGIN - mixin.BaliParserConstants.TLST_BEGIN assigned to SYNTAX
+Line#1264 supposed to be ignored: mixin.BaliParserConstants.TYP_BEGIN - mixin.BaliParserConstants.TYP_BEGIN assigned to SYNTAX
+Line#1265 supposed to be ignored: mixin.BaliParserConstants.TYP_ESCAPE - mixin.BaliParserConstants.TYP_ESCAPE assigned to SYNTAX
+Line#1266 supposed to be ignored: mixin.BaliParserConstants.VI_BEGIN - mixin.BaliParserConstants.VI_BEGIN assigned to SYNTAX
+Line#1267 supposed to be ignored: mixin.BaliParserConstants.VI_ESCAPE - mixin.BaliParserConstants.VI_ESCAPE assigned to SYNTAX
+Line#1268 supposed to be ignored: mixin.BaliParserConstants.VLST_BEGIN - mixin.BaliParserConstants.VLST_BEGIN assigned to SYNTAX
+Line#1269 supposed to be ignored: mixin.BaliParserConstants.XLST_BEGIN - mixin.BaliParserConstants.XLST_BEGIN assigned to SYNTAX
+Line#1270 supposed to be ignored: mixin.BaliParserConstants.XLST_ESCAPE - mixin.BaliParserConstants.XLST_ESCAPE assigned to SYNTAX
+Line#1272 supposed to be ignored: mixin.BaliParser.AST_Exp() - mixin.BaliParser.AST_Exp() assigned to SYNTAX
+Line#1274 supposed to be ignored: mixin.BaliParser.ArrayInitializer() - mixin.BaliParser.ArrayInitializer() assigned to SYNTAX
+Line#1276 supposed to be ignored: mixin.BaliParser.AST_Catches() - mixin.BaliParser.AST_Catches() assigned to SYNTAX
+Line#1280 supposed to be ignored: mixin.BaliParserConstants.CATCH - mixin.BaliParserConstants.CATCH assigned to SYNTAX
+Line#1281 supposed to be ignored: mixin.BaliParserConstants.CAT_ESCAPE - mixin.BaliParserConstants.CAT_ESCAPE assigned to SYNTAX
+Line#1282 supposed to be ignored: mixin.BaliParser.Catch() - mixin.BaliParser.Catch() assigned to SYNTAX
+Line#1285 supposed to be ignored: mixin.BaliParser.TypeDeclaration() - mixin.BaliParser.TypeDeclaration() assigned to SYNTAX
+Line#1287 supposed to be ignored: mixin.BaliParser.AST_ExpStmt() - mixin.BaliParser.AST_ExpStmt() assigned to SYNTAX
+Line#1290 supposed to be ignored: mixin.BaliParser.StatementExpression() - mixin.BaliParser.StatementExpression() assigned to SYNTAX
+Line#1293 supposed to be ignored: mixin.BaliParser.AST_FieldDecl() - mixin.BaliParser.AST_FieldDecl() assigned to SYNTAX
+Line#1295 supposed to be ignored: mixin.BaliParserConstants.MTH_ESCAPE - mixin.BaliParserConstants.MTH_ESCAPE assigned to SYNTAX
+Line#1296 supposed to be ignored: mixin.BaliParserConstants.ENVIRONMENT - mixin.BaliParserConstants.ENVIRONMENT assigned to SYNTAX
+Line#1297 supposed to be ignored: mixin.BaliParser.ClassBodyDeclaration() - mixin.BaliParser.ClassBodyDeclaration() assigned to SYNTAX
+Line#1299 supposed to be ignored: mixin.BaliParser.ImportDeclaration() - mixin.BaliParser.ImportDeclaration() assigned to SYNTAX
+Line#1300 supposed to be ignored: mixin.BaliParser.AST_Modifiers() - mixin.BaliParser.AST_Modifiers() assigned to SYNTAX
+Line#1302 supposed to be ignored: mixin.BaliParser.Modifier() - mixin.BaliParser.Modifier() assigned to SYNTAX
+Line#1304 supposed to be ignored: mixin.BaliParser.AST_ParList() - mixin.BaliParser.AST_ParList() assigned to SYNTAX
+Line#1307 supposed to be ignored: mixin.BaliParser.FormalParameter() - mixin.BaliParser.FormalParameter() assigned to SYNTAX
+Line#1310 supposed to be ignored: mixin.BaliParser.AST_QualifiedName() - mixin.BaliParser.AST_QualifiedName() assigned to SYNTAX
+Line#1311 supposed to be ignored: mixin.BaliParserConstants.DOT - mixin.BaliParserConstants.DOT assigned to SYNTAX
+Line#1312 supposed to be ignored: mixin.BaliParser.QName() - mixin.BaliParser.QName() assigned to SYNTAX
+Line#1313 supposed to be ignored: mixin.BaliParser.jj_2_1(int xla) - mixin.BaliParser.jj_2_1(int xla) assigned to SYNTAX
+Line#1314 supposed to be ignored: mixin.BaliParser.AST_Stmt() - mixin.BaliParser.AST_Stmt() assigned to SYNTAX
+Line#1315 supposed to be ignored: mixin.BaliParserConstants.GOTO_STATE - mixin.BaliParserConstants.GOTO_STATE assigned to SYNTAX
+Line#1316 supposed to be ignored: mixin.BaliParserConstants.BREAK - mixin.BaliParserConstants.BREAK assigned to SYNTAX
+Line#1317 supposed to be ignored: mixin.BaliParserConstants.CONTINUE - mixin.BaliParserConstants.CONTINUE assigned to SYNTAX
+Line#1318 supposed to be ignored: mixin.BaliParserConstants.DO - mixin.BaliParserConstants.DO assigned to SYNTAX
+Line#1319 supposed to be ignored: mixin.BaliParserConstants.FOR - mixin.BaliParserConstants.FOR assigned to SYNTAX
+Line#1320 supposed to be ignored: mixin.BaliParserConstants.IF - mixin.BaliParserConstants.IF assigned to SYNTAX
+Line#1321 supposed to be ignored: mixin.BaliParserConstants.RETURN - mixin.BaliParserConstants.RETURN assigned to SYNTAX
+Line#1322 supposed to be ignored: mixin.BaliParserConstants.SWITCH - mixin.BaliParserConstants.SWITCH assigned to SYNTAX
+Line#1323 supposed to be ignored: mixin.BaliParserConstants.THROW - mixin.BaliParserConstants.THROW assigned to SYNTAX
+Line#1324 supposed to be ignored: mixin.BaliParserConstants.TRY - mixin.BaliParserConstants.TRY assigned to SYNTAX
+Line#1325 supposed to be ignored: mixin.BaliParserConstants.WHILE - mixin.BaliParserConstants.WHILE assigned to SYNTAX
+Line#1326 supposed to be ignored: mixin.BaliParserConstants.STM_ESCAPE - mixin.BaliParserConstants.STM_ESCAPE assigned to SYNTAX
+Line#1327 supposed to be ignored: mixin.BaliParserConstants.ALIAS - mixin.BaliParserConstants.ALIAS assigned to SYNTAX
+Line#1328 supposed to be ignored: mixin.BaliParser.BlockStatement() - mixin.BaliParser.BlockStatement() assigned to SYNTAX
+Line#1329 supposed to be ignored: mixin.BaliParser.AST_SwitchEntry() - mixin.BaliParser.AST_SwitchEntry() assigned to SYNTAX
+Line#1330 supposed to be ignored: mixin.BaliParserConstants.CASE - mixin.BaliParserConstants.CASE assigned to SYNTAX
+Line#1331 supposed to be ignored: mixin.BaliParserConstants._DEFAULT - mixin.BaliParserConstants._DEFAULT assigned to SYNTAX
+Line#1332 supposed to be ignored: mixin.BaliParserConstants.CASE_ESCAPE - mixin.BaliParserConstants.CASE_ESCAPE assigned to SYNTAX
+Line#1333 supposed to be ignored: mixin.BaliParser.SwitchEntryBody() - mixin.BaliParser.SwitchEntryBody() assigned to SYNTAX
+Line#1334 supposed to be ignored: mixin.BaliParser.AST_TypeName() - mixin.BaliParser.AST_TypeName() assigned to SYNTAX
+Line#1338 supposed to be ignored: mixin.BaliParser.PrimitiveType() - mixin.BaliParser.PrimitiveType() assigned to SYNTAX
+Line#1339 supposed to be ignored: mixin.BaliParser.jj_2_2(int xla) - mixin.BaliParser.jj_2_2(int xla) assigned to SYNTAX
+Line#1340 supposed to be ignored: mixin.BaliParser.Dims() - mixin.BaliParser.Dims() assigned to SYNTAX
+Line#1341 supposed to be ignored: mixin.BaliParser.jj_2_3(int xla) - mixin.BaliParser.jj_2_3(int xla) assigned to SYNTAX
+Line#1343 supposed to be ignored: mixin.BaliParser.AST_TypeNameList() - mixin.BaliParser.AST_TypeNameList() assigned to SYNTAX
+Line#1345 supposed to be ignored: mixin.BaliParser.TName() - mixin.BaliParser.TName() assigned to SYNTAX
+Line#1348 supposed to be ignored: mixin.BaliParser.AST_VarDecl() - mixin.BaliParser.AST_VarDecl() assigned to SYNTAX
+Line#1349 supposed to be ignored: mixin.BaliParser.VariableDeclarator() - mixin.BaliParser.VariableDeclarator() assigned to SYNTAX
+Line#1350 supposed to be ignored: mixin.BaliParser.AST_VarInit() - mixin.BaliParser.AST_VarInit() assigned to SYNTAX
+Line#1352 supposed to be ignored: mixin.BaliParserConstants.RBRACE - mixin.BaliParserConstants.RBRACE assigned to SYNTAX
+Line#1358 supposed to be ignored: mixin.BaliParser.AdEBody() - mixin.BaliParser.AdEBody() assigned to SYNTAX
+Line#1359 supposed to be ignored: mixin.BaliParser.AddExprChoices() - mixin.BaliParser.AddExprChoices() assigned to SYNTAX
+Line#1360 supposed to be ignored: mixin.BaliParser.MultiplicativeExpression() - mixin.BaliParser.MultiplicativeExpression() assigned to SYNTAX
+Line#1365 supposed to be ignored: mixin.BaliParser.AdditiveExpression() - mixin.BaliParser.AdditiveExpression() assigned to SYNTAX
+Line#1368 supposed to be ignored: mixin.BaliParser.jj_2_4(int xla) - mixin.BaliParser.jj_2_4(int xla) assigned to SYNTAX
+Line#1369 supposed to be ignored: mixin.BaliParser.MoreAddExpr() - mixin.BaliParser.MoreAddExpr() assigned to SYNTAX
+Line#1371 supposed to be ignored: mixin.BaliParser.AllocExprChoices() - mixin.BaliParser.AllocExprChoices() assigned to SYNTAX
+Line#1375 supposed to be ignored: mixin.BaliParserConstants.LBRACKET - mixin.BaliParserConstants.LBRACKET assigned to SYNTAX
+Line#1377 supposed to be ignored: mixin.BaliParser.ArrayDimsAndInits() - mixin.BaliParser.ArrayDimsAndInits() assigned to SYNTAX
+Line#1378 supposed to be ignored: mixin.BaliParser.Arguments() - mixin.BaliParser.Arguments() assigned to SYNTAX
+Line#1379 supposed to be ignored: mixin.BaliParser.ClassBody() - mixin.BaliParser.ClassBody() assigned to SYNTAX
+Line#1381 supposed to be ignored: mixin.BaliParser.AllocationExpression() - mixin.BaliParser.AllocationExpression() assigned to SYNTAX
+Line#1384 supposed to be ignored: mixin.BaliParser.jj_2_5(int xla) - mixin.BaliParser.jj_2_5(int xla) assigned to SYNTAX
+Line#1387 supposed to be ignored: mixin.BaliParser.AndExpression() - mixin.BaliParser.AndExpression() assigned to SYNTAX
+Line#1391 supposed to be ignored: mixin.BaliParser.jj_2_6(int xla) - mixin.BaliParser.jj_2_6(int xla) assigned to SYNTAX
+Line#1392 supposed to be ignored: mixin.BaliParser.MoreAndExpr() - mixin.BaliParser.MoreAndExpr() assigned to SYNTAX
+Line#1396 supposed to be ignored: mixin.BaliParser.jj_2_8(int xla) - mixin.BaliParser.jj_2_8(int xla) assigned to SYNTAX
+Line#1397 supposed to be ignored: mixin.BaliParser.ExprDims() - mixin.BaliParser.ExprDims() assigned to SYNTAX
+Line#1398 supposed to be ignored: mixin.BaliParser.jj_2_7(int xla) - mixin.BaliParser.jj_2_7(int xla) assigned to SYNTAX
+Line#1403 supposed to be ignored: mixin.BaliParser.jj_2_9(int xla) - mixin.BaliParser.jj_2_9(int xla) assigned to SYNTAX
+Line#1405 supposed to be ignored: mixin.BaliParser.AssignmentOperator() - mixin.BaliParser.AssignmentOperator() assigned to SYNTAX
+Line#1406 supposed to be ignored: mixin.BaliParserConstants.ASSIGN - mixin.BaliParserConstants.ASSIGN assigned to SYNTAX
+Line#1408 supposed to be ignored: mixin.BaliParserConstants.STARASSIGN - mixin.BaliParserConstants.STARASSIGN assigned to SYNTAX
+Line#1410 supposed to be ignored: mixin.BaliParserConstants.SLASHASSIGN - mixin.BaliParserConstants.SLASHASSIGN assigned to SYNTAX
+Line#1412 supposed to be ignored: mixin.BaliParserConstants.REMASSIGN - mixin.BaliParserConstants.REMASSIGN assigned to SYNTAX
+Line#1414 supposed to be ignored: mixin.BaliParserConstants.PLUSASSIGN - mixin.BaliParserConstants.PLUSASSIGN assigned to SYNTAX
+Line#1416 supposed to be ignored: mixin.BaliParserConstants.MINUSASSIGN - mixin.BaliParserConstants.MINUSASSIGN assigned to SYNTAX
+Line#1418 supposed to be ignored: mixin.BaliParserConstants.LSHIFTASSIGN - mixin.BaliParserConstants.LSHIFTASSIGN assigned to SYNTAX
+Line#1419 supposed to be ignored: mixin.BaliParserConstants.RSIGNEDSHIFTASSIGN - mixin.BaliParserConstants.RSIGNEDSHIFTASSIGN assigned to SYNTAX
+Line#1421 supposed to be ignored: mixin.BaliParserConstants.RUNSIGNEDSHIFTASSIGN - mixin.BaliParserConstants.RUNSIGNEDSHIFTASSIGN assigned to SYNTAX
+Line#1423 supposed to be ignored: mixin.BaliParserConstants.ANDASSIGN - mixin.BaliParserConstants.ANDASSIGN assigned to SYNTAX
+Line#1425 supposed to be ignored: mixin.BaliParserConstants.XORASSIGN - mixin.BaliParserConstants.XORASSIGN assigned to SYNTAX
+Line#1427 supposed to be ignored: mixin.BaliParserConstants.ORASSIGN - mixin.BaliParserConstants.ORASSIGN assigned to SYNTAX
+Line#1438 supposed to be ignored: mixin.BaliParser.Block() - mixin.BaliParser.Block() assigned to SYNTAX
+Line#1442 supposed to be ignored: mixin.BaliParser.jj_2_10(int xla) - mixin.BaliParser.jj_2_10(int xla) assigned to SYNTAX
+Line#1443 supposed to be ignored: mixin.BaliParser.LocalVariableDeclaration() - mixin.BaliParser.LocalVariableDeclaration() assigned to SYNTAX
+Line#1445 supposed to be ignored: mixin.BaliParser.jj_2_11(int xla) - mixin.BaliParser.jj_2_11(int xla) assigned to SYNTAX
+Line#1446 supposed to be ignored: mixin.BaliParser.Statement() - mixin.BaliParser.Statement() assigned to SYNTAX
+Line#1447 supposed to be ignored: mixin.BaliParser.UnmodifiedClassDeclaration() - mixin.BaliParser.UnmodifiedClassDeclaration() assigned to SYNTAX
+Line#1449 supposed to be ignored: mixin.BaliParser.UnmodifiedInterfaceDeclaration() - mixin.BaliParser.UnmodifiedInterfaceDeclaration() assigned to SYNTAX
+Line#1451 supposed to be ignored: mixin.BaliParser.BooleanLiteral() - mixin.BaliParser.BooleanLiteral() assigned to SYNTAX
+Line#1456 supposed to be ignored: mixin.BaliParser.BreakStatement() - mixin.BaliParser.BreakStatement() assigned to SYNTAX
+Line#1459 supposed to be ignored: mixin.BaliParser.CAEBody() - mixin.BaliParser.CAEBody() assigned to SYNTAX
+Line#1460 supposed to be ignored: mixin.BaliParserConstants.SC_AND - mixin.BaliParserConstants.SC_AND assigned to SYNTAX
+Line#1461 supposed to be ignored: mixin.BaliParser.InclusiveOrExpression() - mixin.BaliParser.InclusiveOrExpression() assigned to SYNTAX
+Line#1462 supposed to be ignored: mixin.BaliParser.COEBody() - mixin.BaliParser.COEBody() assigned to SYNTAX
+Line#1464 supposed to be ignored: mixin.BaliParserConstants.SC_OR - mixin.BaliParserConstants.SC_OR assigned to SYNTAX
+Line#1466 supposed to be ignored: mixin.BaliParser.ConditionalAndExpression() - mixin.BaliParser.ConditionalAndExpression() assigned to SYNTAX
+Line#1468 supposed to be ignored: mixin.BaliParser.CastExpression() - mixin.BaliParser.CastExpression() assigned to SYNTAX
+Line#1473 supposed to be ignored: mixin.BaliParser.jj_2_12(int xla) - mixin.BaliParser.jj_2_12(int xla) assigned to SYNTAX
+Line#1474 supposed to be ignored: mixin.BaliParser.UnaryExpression() - mixin.BaliParser.UnaryExpression() assigned to SYNTAX
+Line#1476 supposed to be ignored: mixin.BaliParser.UnaryExpressionNotPlusMinus() - mixin.BaliParser.UnaryExpressionNotPlusMinus() assigned to SYNTAX
+Line#1478 supposed to be ignored: mixin.BaliParser.CastLookahead() - mixin.BaliParser.CastLookahead() assigned to SYNTAX
+Line#1480 supposed to be ignored: mixin.BaliParserConstants.RBRACKET - mixin.BaliParserConstants.RBRACKET assigned to SYNTAX
+Line#1482 supposed to be ignored: mixin.BaliParser.jj_2_13(int xla) - mixin.BaliParser.jj_2_13(int xla) assigned to SYNTAX
+Line#1484 supposed to be ignored: mixin.BaliParser.jj_2_14(int xla) - mixin.BaliParser.jj_2_14(int xla) assigned to SYNTAX
+Line#1486 supposed to be ignored: mixin.BaliParser.CastLookaheadChoices() - mixin.BaliParser.CastLookaheadChoices() assigned to SYNTAX
+Line#1500 supposed to be ignored: mixin.BaliParser.Literal() - mixin.BaliParser.Literal() assigned to SYNTAX
+Line#1513 supposed to be ignored: mixin.BaliParser.jj_2_15(int xla) - mixin.BaliParser.jj_2_15(int xla) assigned to SYNTAX
+Line#1514 supposed to be ignored: mixin.BaliParser.NestedSmDeclaration() - mixin.BaliParser.NestedSmDeclaration() assigned to SYNTAX
+Line#1515 supposed to be ignored: mixin.BaliParser.ConstructorRefinement() - mixin.BaliParser.ConstructorRefinement() assigned to SYNTAX
+Line#1516 supposed to be ignored: mixin.BaliParser.jj_2_16(int xla) - mixin.BaliParser.jj_2_16(int xla) assigned to SYNTAX
+Line#1518 supposed to be ignored: mixin.BaliParser.jj_2_17(int xla) - mixin.BaliParser.jj_2_17(int xla) assigned to SYNTAX
+Line#1519 supposed to be ignored: mixin.BaliParser.Initializer() - mixin.BaliParser.Initializer() assigned to SYNTAX
+Line#1520 supposed to be ignored: mixin.BaliParser.jj_2_18(int xla) - mixin.BaliParser.jj_2_18(int xla) assigned to SYNTAX
+Line#1521 supposed to be ignored: mixin.BaliParser.NestedClassDeclaration() - mixin.BaliParser.NestedClassDeclaration() assigned to SYNTAX
+Line#1522 supposed to be ignored: mixin.BaliParser.jj_2_19(int xla) - mixin.BaliParser.jj_2_19(int xla) assigned to SYNTAX
+Line#1523 supposed to be ignored: mixin.BaliParser.NestedInterfaceDeclaration() - mixin.BaliParser.NestedInterfaceDeclaration() assigned to SYNTAX
+Line#1524 supposed to be ignored: mixin.BaliParser.jj_2_20(int xla) - mixin.BaliParser.jj_2_20(int xla) assigned to SYNTAX
+Line#1525 supposed to be ignored: mixin.BaliParser.ConstructorDeclaration() - mixin.BaliParser.ConstructorDeclaration() assigned to SYNTAX
+Line#1526 supposed to be ignored: mixin.BaliParser.jj_2_21(int xla) - mixin.BaliParser.jj_2_21(int xla) assigned to SYNTAX
+Line#1527 supposed to be ignored: mixin.BaliParser.MethodDeclaration() - mixin.BaliParser.MethodDeclaration() assigned to SYNTAX
+Line#1528 supposed to be ignored: mixin.BaliParser.FieldDeclaration() - mixin.BaliParser.FieldDeclaration() assigned to SYNTAX
+Line#1529 supposed to be ignored: mixin.BaliParser.jj_2_22(int xla) - mixin.BaliParser.jj_2_22(int xla) assigned to SYNTAX
+Line#1530 supposed to be ignored: mixin.BaliParser.MoreCondAndExpr() - mixin.BaliParser.MoreCondAndExpr() assigned to SYNTAX
+Line#1531 supposed to be ignored: mixin.BaliParser.ConditionalExpression() - mixin.BaliParser.ConditionalExpression() assigned to SYNTAX
+Line#1534 supposed to be ignored: mixin.BaliParserConstants.COLON - mixin.BaliParserConstants.COLON assigned to SYNTAX
+Line#1537 supposed to be ignored: mixin.BaliParser.JakartaSST() - mixin.BaliParser.JakartaSST() assigned to SYNTAX
+Line#1538 supposed to be ignored: mixin.BaliParser.ConditionalOrExpression() - mixin.BaliParser.ConditionalOrExpression() assigned to SYNTAX
+Line#1539 supposed to be ignored: mixin.BaliParser.jj_2_23(int xla) - mixin.BaliParser.jj_2_23(int xla) assigned to SYNTAX
+Line#1541 supposed to be ignored: mixin.BaliParser.jj_2_24(int xla) - mixin.BaliParser.jj_2_24(int xla) assigned to SYNTAX
+Line#1542 supposed to be ignored: mixin.BaliParser.MoreCondOrExpr() - mixin.BaliParser.MoreCondOrExpr() assigned to SYNTAX
+Line#1544 supposed to be ignored: mixin.BaliParserConstants.PLST_ESCAPE - mixin.BaliParserConstants.PLST_ESCAPE assigned to SYNTAX
+Line#1545 supposed to be ignored: mixin.BaliParserConstants.THROWS - mixin.BaliParserConstants.THROWS assigned to SYNTAX
+Line#1547 supposed to be ignored: mixin.BaliParser.ThrowsClause() - mixin.BaliParser.ThrowsClause() assigned to SYNTAX
+Line#1548 supposed to be ignored: mixin.BaliParser.jj_2_25(int xla) - mixin.BaliParser.jj_2_25(int xla) assigned to SYNTAX
+Line#1549 supposed to be ignored: mixin.BaliParser.ExplicitConstructorInvocation() - mixin.BaliParser.ExplicitConstructorInvocation() assigned to SYNTAX
+Line#1553 supposed to be ignored: mixin.BaliParser.ContinueStatement() - mixin.BaliParser.ContinueStatement() assigned to SYNTAX
+Line#1557 supposed to be ignored: mixin.BaliParser.DeclNameList() - mixin.BaliParser.DeclNameList() assigned to SYNTAX
+Line#1562 supposed to be ignored: mixin.BaliParser.DelivClause() - mixin.BaliParser.DelivClause() assigned to SYNTAX
+Line#1564 supposed to be ignored: mixin.BaliParserConstants.DELIVERY - mixin.BaliParserConstants.DELIVERY assigned to SYNTAX
+Line#1567 supposed to be ignored: mixin.BaliParser.Dim() - mixin.BaliParser.Dim() assigned to SYNTAX
+Line#1572 supposed to be ignored: mixin.BaliParser.jj_2_26(int xla) - mixin.BaliParser.jj_2_26(int xla) assigned to SYNTAX
+Line#1573 supposed to be ignored: mixin.BaliParser.DoStatement() - mixin.BaliParser.DoStatement() assigned to SYNTAX
+Line#1576 supposed to be ignored: mixin.BaliParser.DotTimes() - mixin.BaliParser.DotTimes() assigned to SYNTAX
+Line#1577 supposed to be ignored: mixin.BaliParserConstants.STAR - mixin.BaliParserConstants.STAR assigned to SYNTAX
+Line#1580 supposed to be ignored: mixin.BaliParser.EEBody() - mixin.BaliParser.EEBody() assigned to SYNTAX
+Line#1581 supposed to be ignored: mixin.BaliParser.EqExprChoices() - mixin.BaliParser.EqExprChoices() assigned to SYNTAX
+Line#1582 supposed to be ignored: mixin.BaliParser.InstanceOfExpression() - mixin.BaliParser.InstanceOfExpression() assigned to SYNTAX
+Line#1583 supposed to be ignored: mixin.BaliParser.EOEBody() - mixin.BaliParser.EOEBody() assigned to SYNTAX
+Line#1585 supposed to be ignored: mixin.BaliParserConstants.XOR - mixin.BaliParserConstants.XOR assigned to SYNTAX
+Line#1588 supposed to be ignored: mixin.BaliParser.ESList() - mixin.BaliParser.ESList() assigned to SYNTAX
+Line#1591 supposed to be ignored: mixin.BaliParserConstants.EDGE - mixin.BaliParserConstants.EDGE assigned to SYNTAX
+Line#1592 supposed to be ignored: mixin.BaliParserConstants.EDGEACTION - mixin.BaliParserConstants.EDGEACTION assigned to SYNTAX
+Line#1593 supposed to be ignored: mixin.BaliParserConstants.EDGETEST - mixin.BaliParserConstants.EDGETEST assigned to SYNTAX
+Line#1594 supposed to be ignored: mixin.BaliParserConstants.ENTER - mixin.BaliParserConstants.ENTER assigned to SYNTAX
+Line#1595 supposed to be ignored: mixin.BaliParserConstants.EXIT - mixin.BaliParserConstants.EXIT assigned to SYNTAX
+Line#1596 supposed to be ignored: mixin.BaliParserConstants.OTHERWISE - mixin.BaliParserConstants.OTHERWISE assigned to SYNTAX
+Line#1597 supposed to be ignored: mixin.BaliParserConstants.PREPARE - mixin.BaliParserConstants.PREPARE assigned to SYNTAX
+Line#1598 supposed to be ignored: mixin.BaliParser.Es() - mixin.BaliParser.Es() assigned to SYNTAX
+Line#1600 supposed to be ignored: mixin.BaliParser.ElseClause() - mixin.BaliParser.ElseClause() assigned to SYNTAX
+Line#1601 supposed to be ignored: mixin.BaliParserConstants.ELSE - mixin.BaliParserConstants.ELSE assigned to SYNTAX
+Line#1604 supposed to be ignored: mixin.BaliParser.EmptyStatement() - mixin.BaliParser.EmptyStatement() assigned to SYNTAX
+Line#1607 supposed to be ignored: mixin.BaliParserConstants.EQ - mixin.BaliParserConstants.EQ assigned to SYNTAX
+Line#1609 supposed to be ignored: mixin.BaliParserConstants.NE - mixin.BaliParserConstants.NE assigned to SYNTAX
+Line#1614 supposed to be ignored: mixin.BaliParser.jj_2_27(int xla) - mixin.BaliParser.jj_2_27(int xla) assigned to SYNTAX
+Line#1615 supposed to be ignored: mixin.BaliParser.MoreEqExpr() - mixin.BaliParser.MoreEqExpr() assigned to SYNTAX
+Line#1619 supposed to be ignored: mixin.BaliParserConstants.ARROW - mixin.BaliParserConstants.ARROW assigned to SYNTAX
+Line#1620 supposed to be ignored: mixin.BaliParserConstants.CONDITION - mixin.BaliParserConstants.CONDITION assigned to SYNTAX
+Line#1625 supposed to be ignored: mixin.BaliParser.StartName() - mixin.BaliParser.StartName() assigned to SYNTAX
+Line#1628 supposed to be ignored: mixin.BaliParser.ExDimBody() - mixin.BaliParser.ExDimBody() assigned to SYNTAX
+Line#1629 supposed to be ignored: mixin.BaliParser.ExclusiveOrExpression() - mixin.BaliParser.ExclusiveOrExpression() assigned to SYNTAX
+Line#1632 supposed to be ignored: mixin.BaliParser.jj_2_28(int xla) - mixin.BaliParser.jj_2_28(int xla) assigned to SYNTAX
+Line#1633 supposed to be ignored: mixin.BaliParser.MoreExclOrExpr() - mixin.BaliParser.MoreExclOrExpr() assigned to SYNTAX
+Line#1635 supposed to be ignored: mixin.BaliParserConstants.TLST_ESCAPE - mixin.BaliParserConstants.TLST_ESCAPE assigned to SYNTAX
+Line#1636 supposed to be ignored: mixin.BaliParser.jj_2_30(int xla) - mixin.BaliParser.jj_2_30(int xla) assigned to SYNTAX
+Line#1637 supposed to be ignored: mixin.BaliParser.jj_2_31(int xla) - mixin.BaliParser.jj_2_31(int xla) assigned to SYNTAX
+Line#1638 supposed to be ignored: mixin.BaliParser.jj_2_29(int xla) - mixin.BaliParser.jj_2_29(int xla) assigned to SYNTAX
+Line#1639 supposed to be ignored: mixin.BaliParser.PrimDot() - mixin.BaliParser.PrimDot() assigned to SYNTAX
+Line#1642 supposed to be ignored: mixin.BaliParser.jj_2_32(int xla) - mixin.BaliParser.jj_2_32(int xla) assigned to SYNTAX
+Line#1644 supposed to be ignored: mixin.BaliParser.jj_2_33(int xla) - mixin.BaliParser.jj_2_33(int xla) assigned to SYNTAX
+Line#1646 supposed to be ignored: mixin.BaliParser.ExtendsClause() - mixin.BaliParser.ExtendsClause() assigned to SYNTAX
+Line#1647 supposed to be ignored: mixin.BaliParserConstants.EXTENDS - mixin.BaliParserConstants.EXTENDS assigned to SYNTAX
+Line#1650 supposed to be ignored: mixin.BaliParser.Finally() - mixin.BaliParser.Finally() assigned to SYNTAX
+Line#1651 supposed to be ignored: mixin.BaliParserConstants.FINALLY - mixin.BaliParserConstants.FINALLY assigned to SYNTAX
+Line#1652 supposed to be ignored: mixin.BaliParser.ForInit() - mixin.BaliParser.ForInit() assigned to SYNTAX
+Line#1654 supposed to be ignored: mixin.BaliParserConstants.ESTM_ESCAPE - mixin.BaliParserConstants.ESTM_ESCAPE assigned to SYNTAX
+Line#1656 supposed to be ignored: mixin.BaliParser.jj_2_34(int xla) - mixin.BaliParser.jj_2_34(int xla) assigned to SYNTAX
+Line#1657 supposed to be ignored: mixin.BaliParser.StatementExpressionList() - mixin.BaliParser.StatementExpressionList() assigned to SYNTAX
+Line#1659 supposed to be ignored: mixin.BaliParser.ForStatement() - mixin.BaliParser.ForStatement() assigned to SYNTAX
+Line#1660 supposed to be ignored: mixin.BaliParser.ForUpdate() - mixin.BaliParser.ForUpdate() assigned to SYNTAX
+Line#1665 supposed to be ignored: mixin.BaliParser.jj_2_35(int xla) - mixin.BaliParser.jj_2_35(int xla) assigned to SYNTAX
+Line#1667 supposed to be ignored: mixin.BaliParser.VariableDeclaratorId() - mixin.BaliParser.VariableDeclaratorId() assigned to SYNTAX
+Line#1669 supposed to be ignored: mixin.BaliParser.IOEBody() - mixin.BaliParser.IOEBody() assigned to SYNTAX
+Line#1670 supposed to be ignored: mixin.BaliParserConstants.BIT_OR - mixin.BaliParserConstants.BIT_OR assigned to SYNTAX
+Line#1671 supposed to be ignored: mixin.BaliParser.IfStatement() - mixin.BaliParser.IfStatement() assigned to SYNTAX
+Line#1674 supposed to be ignored: mixin.BaliParser.ImplementsClause() - mixin.BaliParser.ImplementsClause() assigned to SYNTAX
+Line#1675 supposed to be ignored: mixin.BaliParserConstants.IMPLEMENTS - mixin.BaliParserConstants.IMPLEMENTS assigned to SYNTAX
+Line#1681 supposed to be ignored: mixin.BaliParser.jj_2_36(int xla) - mixin.BaliParser.jj_2_36(int xla) assigned to SYNTAX
+Line#1682 supposed to be ignored: mixin.BaliParser.MoreInclOrExpr() - mixin.BaliParser.MoreInclOrExpr() assigned to SYNTAX
+Line#1687 supposed to be ignored: mixin.BaliParserConstants.INSTANCEOF - mixin.BaliParserConstants.INSTANCEOF assigned to SYNTAX
+Line#1689 supposed to be ignored: mixin.BaliParser.RelationalExpression() - mixin.BaliParser.RelationalExpression() assigned to SYNTAX
+Line#1690 supposed to be ignored: mixin.BaliParser.jj_2_37(int xla) - mixin.BaliParser.jj_2_37(int xla) assigned to SYNTAX
+Line#1692 supposed to be ignored: mixin.BaliParser.IntExtClause() - mixin.BaliParser.IntExtClause() assigned to SYNTAX
+Line#1693 supposed to be ignored: mixin.BaliParser.InterfaceMemberDeclaration() - mixin.BaliParser.InterfaceMemberDeclaration() assigned to SYNTAX
+Line#1697 supposed to be ignored: mixin.BaliParser.jj_2_38(int xla) - mixin.BaliParser.jj_2_38(int xla) assigned to SYNTAX
+Line#1699 supposed to be ignored: mixin.BaliParser.jj_2_39(int xla) - mixin.BaliParser.jj_2_39(int xla) assigned to SYNTAX
+Line#1700 supposed to be ignored: mixin.BaliParser.jj_2_40(int xla) - mixin.BaliParser.jj_2_40(int xla) assigned to SYNTAX
+Line#1703 supposed to be ignored: mixin.BaliParser.InterfaceMemberDeclarations() - mixin.BaliParser.InterfaceMemberDeclarations() assigned to SYNTAX
+Line#1706 supposed to be ignored: mixin.BaliParserConstants.EXP_END - mixin.BaliParserConstants.EXP_END assigned to SYNTAX
+Line#1707 supposed to be ignored: mixin.BaliParserConstants.STM_END - mixin.BaliParserConstants.STM_END assigned to SYNTAX
+Line#1709 supposed to be ignored: mixin.BaliParserConstants.CASE_END - mixin.BaliParserConstants.CASE_END assigned to SYNTAX
+Line#1710 supposed to be ignored: mixin.BaliParserConstants.MTH_END - mixin.BaliParserConstants.MTH_END assigned to SYNTAX
+Line#1712 supposed to be ignored: mixin.BaliParserConstants.CLS_END - mixin.BaliParserConstants.CLS_END assigned to SYNTAX
+Line#1714 supposed to be ignored: mixin.BaliParserConstants.PRG_END - mixin.BaliParserConstants.PRG_END assigned to SYNTAX
+Line#1715 supposed to be ignored: mixin.BaliParserConstants.TYP_END - mixin.BaliParserConstants.TYP_END assigned to SYNTAX
+Line#1717 supposed to be ignored: mixin.BaliParserConstants.ID_END - mixin.BaliParserConstants.ID_END assigned to SYNTAX
+Line#1719 supposed to be ignored: mixin.BaliParserConstants.PLST_END - mixin.BaliParserConstants.PLST_END assigned to SYNTAX
+Line#1721 supposed to be ignored: mixin.BaliParserConstants.XLST_END - mixin.BaliParserConstants.XLST_END assigned to SYNTAX
+Line#1723 supposed to be ignored: mixin.BaliParserConstants.TLST_END - mixin.BaliParserConstants.TLST_END assigned to SYNTAX
+Line#1725 supposed to be ignored: mixin.BaliParserConstants.IMP_END - mixin.BaliParserConstants.IMP_END assigned to SYNTAX
+Line#1727 supposed to be ignored: mixin.BaliParserConstants.MOD_END - mixin.BaliParserConstants.MOD_END assigned to SYNTAX
+Line#1728 supposed to be ignored: mixin.BaliParserConstants.VLST_END - mixin.BaliParserConstants.VLST_END assigned to SYNTAX
+Line#1730 supposed to be ignored: mixin.BaliParserConstants.VI_END - mixin.BaliParserConstants.VI_END assigned to SYNTAX
+Line#1731 supposed to be ignored: mixin.BaliParserConstants.AI_END - mixin.BaliParserConstants.AI_END assigned to SYNTAX
+Line#1733 supposed to be ignored: mixin.BaliParserConstants.ESTM_END - mixin.BaliParserConstants.ESTM_END assigned to SYNTAX
+Line#1735 supposed to be ignored: mixin.BaliParserConstants.CAT_END - mixin.BaliParserConstants.CAT_END assigned to SYNTAX
+Line#1750 supposed to be ignored: mixin.BaliParser.LabeledStatement() - mixin.BaliParser.LabeledStatement() assigned to SYNTAX
+Line#1757 supposed to be ignored: mixin.BaliParser.NullLiteral() - mixin.BaliParser.NullLiteral() assigned to SYNTAX
+Line#1760 supposed to be ignored: mixin.BaliParser.MEBody() - mixin.BaliParser.MEBody() assigned to SYNTAX
+Line#1763 supposed to be ignored: mixin.BaliParser.MultExprChoices() - mixin.BaliParser.MultExprChoices() assigned to SYNTAX
+Line#1765 supposed to be ignored: mixin.BaliParser.MethodDeclSuffix() - mixin.BaliParser.MethodDeclSuffix() assigned to SYNTAX
+Line#1773 supposed to be ignored: mixin.BaliParser.MethodDeclarator() - mixin.BaliParser.MethodDeclarator() assigned to SYNTAX
+Line#1775 supposed to be ignored: mixin.BaliParser.MethodDeclarationLookahead() - mixin.BaliParser.MethodDeclarationLookahead() assigned to SYNTAX
+Line#1805 supposed to be ignored: mixin.BaliParser.jj_2_41(int xla) - mixin.BaliParser.jj_2_41(int xla) assigned to SYNTAX
+Line#1806 supposed to be ignored: mixin.BaliParser.jj_2_42(int xla) - mixin.BaliParser.jj_2_42(int xla) assigned to SYNTAX
+Line#1809 supposed to be ignored: mixin.BaliParser.jj_2_43(int xla) - mixin.BaliParser.jj_2_43(int xla) assigned to SYNTAX
+Line#1812 supposed to be ignored: mixin.BaliParser.jj_2_44(int xla) - mixin.BaliParser.jj_2_44(int xla) assigned to SYNTAX
+Line#1815 supposed to be ignored: mixin.BaliParser.jj_2_45(int xla) - mixin.BaliParser.jj_2_45(int xla) assigned to SYNTAX
+Line#1818 supposed to be ignored: mixin.BaliParser.jj_2_46(int xla) - mixin.BaliParser.jj_2_46(int xla) assigned to SYNTAX
+Line#1821 supposed to be ignored: mixin.BaliParser.jj_2_47(int xla) - mixin.BaliParser.jj_2_47(int xla) assigned to SYNTAX
+Line#1822 supposed to be ignored: mixin.BaliParser.MoreMultExpr() - mixin.BaliParser.MoreMultExpr() assigned to SYNTAX
+Line#1826 supposed to be ignored: mixin.BaliParser.jj_2_48(int xla) - mixin.BaliParser.jj_2_48(int xla) assigned to SYNTAX
+Line#1827 supposed to be ignored: mixin.BaliParser.MoreRelExpr() - mixin.BaliParser.MoreRelExpr() assigned to SYNTAX
+Line#1830 supposed to be ignored: mixin.BaliParser.REBody() - mixin.BaliParser.REBody() assigned to SYNTAX
+Line#1832 supposed to be ignored: mixin.BaliParser.jj_2_49(int xla) - mixin.BaliParser.jj_2_49(int xla) assigned to SYNTAX
+Line#1833 supposed to be ignored: mixin.BaliParser.MoreShiftExpr() - mixin.BaliParser.MoreShiftExpr() assigned to SYNTAX
+Line#1836 supposed to be ignored: mixin.BaliParser.SEBody() - mixin.BaliParser.SEBody() assigned to SYNTAX
+Line#1838 supposed to be ignored: mixin.BaliParser.jj_2_50(int xla) - mixin.BaliParser.jj_2_50(int xla) assigned to SYNTAX
+Line#1840 supposed to be ignored: mixin.BaliParserConstants.SLASH - mixin.BaliParserConstants.SLASH assigned to SYNTAX
+Line#1842 supposed to be ignored: mixin.BaliParserConstants.REM - mixin.BaliParserConstants.REM assigned to SYNTAX
+Line#1848 supposed to be ignored: mixin.BaliParser.jj_2_51(int xla) - mixin.BaliParser.jj_2_51(int xla) assigned to SYNTAX
+Line#1853 supposed to be ignored: mixin.BaliParser.SmDeclaration() - mixin.BaliParser.SmDeclaration() assigned to SYNTAX
+Line#1855 supposed to be ignored: mixin.BaliParser.NoTransitionClause() - mixin.BaliParser.NoTransitionClause() assigned to SYNTAX
+Line#1857 supposed to be ignored: mixin.BaliParserConstants.UNRECOGNIZABLE_STATE - mixin.BaliParserConstants.UNRECOGNIZABLE_STATE assigned to SYNTAX
+Line#1862 supposed to be ignored: mixin.BaliParser.OtherwiseClause() - mixin.BaliParser.OtherwiseClause() assigned to SYNTAX
+Line#1864 supposed to be ignored: mixin.BaliParserConstants.OTHERWISE_DEFAULT - mixin.BaliParserConstants.OTHERWISE_DEFAULT assigned to SYNTAX
+Line#1867 supposed to be ignored: mixin.BaliParser.OtherwiseClauses() - mixin.BaliParser.OtherwiseClauses() assigned to SYNTAX
+Line#1871 supposed to be ignored: mixin.BaliParser.PEPostIncDec() - mixin.BaliParser.PEPostIncDec() assigned to SYNTAX
+Line#1878 supposed to be ignored: mixin.BaliParser.PostfixExpression() - mixin.BaliParser.PostfixExpression() assigned to SYNTAX
+Line#1879 supposed to be ignored: mixin.BaliParser.PrimaryExpression() - mixin.BaliParser.PrimaryExpression() assigned to SYNTAX
+Line#1880 supposed to be ignored: mixin.BaliParser.jj_2_52(int xla) - mixin.BaliParser.jj_2_52(int xla) assigned to SYNTAX
+Line#1881 supposed to be ignored: mixin.BaliParser.PreDecrementExpression() - mixin.BaliParser.PreDecrementExpression() assigned to SYNTAX
+Line#1884 supposed to be ignored: mixin.BaliParser.PreIncrementExpression() - mixin.BaliParser.PreIncrementExpression() assigned to SYNTAX
+Line#1889 supposed to be ignored: mixin.BaliParser.PrimaryPrefix() - mixin.BaliParser.PrimaryPrefix() assigned to SYNTAX
+Line#1890 supposed to be ignored: mixin.BaliParser.jj_2_53(int xla) - mixin.BaliParser.jj_2_53(int xla) assigned to SYNTAX
+Line#1891 supposed to be ignored: mixin.BaliParser.Suffixes() - mixin.BaliParser.Suffixes() assigned to SYNTAX
+Line#1900 supposed to be ignored: mixin.BaliParser.StringEscape() - mixin.BaliParser.StringEscape() assigned to SYNTAX
+Line#1904 supposed to be ignored: mixin.BaliParser.jj_2_54(int xla) - mixin.BaliParser.jj_2_54(int xla) assigned to SYNTAX
+Line#1905 supposed to be ignored: mixin.BaliParser.PrimarySuffix() - mixin.BaliParser.PrimarySuffix() assigned to SYNTAX
+Line#1909 supposed to be ignored: mixin.BaliParser.jj_2_55(int xla) - mixin.BaliParser.jj_2_55(int xla) assigned to SYNTAX
+Line#1911 supposed to be ignored: mixin.BaliParser.jj_2_56(int xla) - mixin.BaliParser.jj_2_56(int xla) assigned to SYNTAX
+Line#1932 supposed to be ignored: mixin.BaliParser.QNameList() - mixin.BaliParser.QNameList() assigned to SYNTAX
+Line#1936 supposed to be ignored: mixin.BaliParser.RelExprChoices() - mixin.BaliParser.RelExprChoices() assigned to SYNTAX
+Line#1937 supposed to be ignored: mixin.BaliParser.ShiftExpression() - mixin.BaliParser.ShiftExpression() assigned to SYNTAX
+Line#1938 supposed to be ignored: mixin.BaliParserConstants.LT - mixin.BaliParserConstants.LT assigned to SYNTAX
+Line#1939 supposed to be ignored: mixin.BaliParserConstants.GT - mixin.BaliParserConstants.GT assigned to SYNTAX
+Line#1940 supposed to be ignored: mixin.BaliParserConstants.LE - mixin.BaliParserConstants.LE assigned to SYNTAX
+Line#1941 supposed to be ignored: mixin.BaliParserConstants.GE - mixin.BaliParserConstants.GE assigned to SYNTAX
+Line#1945 supposed to be ignored: mixin.BaliParser.jj_2_57(int xla) - mixin.BaliParser.jj_2_57(int xla) assigned to SYNTAX
+Line#1947 supposed to be ignored: mixin.BaliParser.ReturnStatement() - mixin.BaliParser.ReturnStatement() assigned to SYNTAX
+Line#1948 supposed to be ignored: mixin.BaliParser.RootClause() - mixin.BaliParser.RootClause() assigned to SYNTAX
+Line#1952 supposed to be ignored: mixin.BaliParser.ShiftExprChoices() - mixin.BaliParser.ShiftExprChoices() assigned to SYNTAX
+Line#1954 supposed to be ignored: mixin.BaliParserConstants.LSHIFT - mixin.BaliParserConstants.LSHIFT assigned to SYNTAX
+Line#1956 supposed to be ignored: mixin.BaliParserConstants.RSIGNEDSHIFT - mixin.BaliParserConstants.RSIGNEDSHIFT assigned to SYNTAX
+Line#1958 supposed to be ignored: mixin.BaliParserConstants.RUNSIGNEDSHIFT - mixin.BaliParserConstants.RUNSIGNEDSHIFT assigned to SYNTAX
+Line#1962 supposed to be ignored: mixin.BaliParser.jj_2_58(int xla) - mixin.BaliParser.jj_2_58(int xla) assigned to SYNTAX
+Line#1964 supposed to be ignored: mixin.BaliParser.SmClassBody() - mixin.BaliParser.SmClassBody() assigned to SYNTAX
+Line#1966 supposed to be ignored: mixin.BaliParserConstants.NESTED_STATE - mixin.BaliParserConstants.NESTED_STATE assigned to SYNTAX
+Line#1967 supposed to be ignored: mixin.BaliParserConstants.STATES - mixin.BaliParserConstants.STATES assigned to SYNTAX
+Line#1969 supposed to be ignored: mixin.BaliParser.StatesList() - mixin.BaliParser.StatesList() assigned to SYNTAX
+Line#1971 supposed to be ignored: mixin.BaliParser.SmExtendsClause() - mixin.BaliParser.SmExtendsClause() assigned to SYNTAX
+Line#1973 supposed to be ignored: mixin.BaliParser.jj_2_59(int xla) - mixin.BaliParser.jj_2_59(int xla) assigned to SYNTAX
+Line#1975 supposed to be ignored: mixin.BaliParser.jj_2_60(int xla) - mixin.BaliParser.jj_2_60(int xla) assigned to SYNTAX
+Line#1982 supposed to be ignored: mixin.BaliParserConstants.AUGMENT - mixin.BaliParserConstants.AUGMENT assigned to SYNTAX
+Line#1984 supposed to be ignored: mixin.BaliParserConstants.PARENT - mixin.BaliParserConstants.PARENT assigned to SYNTAX
+Line#1988 supposed to be ignored: mixin.BaliParser.jj_2_61(int xla) - mixin.BaliParser.jj_2_61(int xla) assigned to SYNTAX
+Line#1991 supposed to be ignored: mixin.BaliParser.jj_2_62(int xla) - mixin.BaliParser.jj_2_62(int xla) assigned to SYNTAX
+Line#1992 supposed to be ignored: mixin.BaliParser.SwitchStatement() - mixin.BaliParser.SwitchStatement() assigned to SYNTAX
+Line#1993 supposed to be ignored: mixin.BaliParser.WhileStatement() - mixin.BaliParser.WhileStatement() assigned to SYNTAX
+Line#1994 supposed to be ignored: mixin.BaliParser.ThrowStatement() - mixin.BaliParser.ThrowStatement() assigned to SYNTAX
+Line#1995 supposed to be ignored: mixin.BaliParser.SynchronizedStatement() - mixin.BaliParser.SynchronizedStatement() assigned to SYNTAX
+Line#1996 supposed to be ignored: mixin.BaliParser.TryStatement() - mixin.BaliParser.TryStatement() assigned to SYNTAX
+Line#2003 supposed to be ignored: mixin.BaliParser.StmtExprChoices() - mixin.BaliParser.StmtExprChoices() assigned to SYNTAX
+Line#2008 supposed to be ignored: mixin.BaliParser.StatesClause() - mixin.BaliParser.StatesClause() assigned to SYNTAX
+Line#2021 supposed to be ignored: mixin.BaliParser.jj_2_63(int xla) - mixin.BaliParser.jj_2_63(int xla) assigned to SYNTAX
+Line#2025 supposed to be ignored: mixin.BaliParser.SwitchLabel() - mixin.BaliParser.SwitchLabel() assigned to SYNTAX
+Line#2040 supposed to be ignored: mixin.BaliParserConstants.ROOT - mixin.BaliParserConstants.ROOT assigned to SYNTAX
+Line#2048 supposed to be ignored: mixin.BaliParser.UnmodifiedTypeDeclaration() - mixin.BaliParser.UnmodifiedTypeDeclaration() assigned to SYNTAX
+Line#2059 supposed to be ignored: mixin.BaliParser.jj_2_64(int xla) - mixin.BaliParser.jj_2_64(int xla) assigned to SYNTAX
+Line#2062 supposed to be ignored: mixin.BaliParser.UnmodifiedTypeExtension() - mixin.BaliParser.UnmodifiedTypeExtension() assigned to SYNTAX
+Line#2070 supposed to be ignored: mixin.BaliParser.VarAssign() - mixin.BaliParser.VarAssign() assigned to SYNTAX
+Line#2071 supposed to be ignored: mixin.BaliParserConstants.VLST_ESCAPE - mixin.BaliParserConstants.VLST_ESCAPE assigned to SYNTAX
+Line#2078 supposed to be ignored: mixin.BaliParser.jj_la - mixin.BaliParser.jj_la assigned to SYNTAX
+Line#2079 supposed to be ignored: mixin.BaliParser.jj_lastpos - mixin.BaliParser.jj_lastpos assigned to SYNTAX
+Line#2080 supposed to be ignored: mixin.BaliParser.jj_scanpos - mixin.BaliParser.jj_scanpos assigned to SYNTAX
+Line#2081 supposed to be ignored: mixin.BaliParser.token - mixin.BaliParser.token assigned to SYNTAX
+Line#2083 supposed to be ignored: mixin.BaliParser.jj_3_1() - mixin.BaliParser.jj_3_1() assigned to SYNTAX
+Line#2084 supposed to be ignored: mixin.BaliParser.jj_save(int index, int xla) - mixin.BaliParser.jj_save(int index, int xla) assigned to SYNTAX
+Line#2085 supposed to be ignored: mixin.BaliParser.jj_3_2() - mixin.BaliParser.jj_3_2() assigned to SYNTAX
+Line#2086 supposed to be ignored: mixin.BaliParser.jj_3_3() - mixin.BaliParser.jj_3_3() assigned to SYNTAX
+Line#2087 supposed to be ignored: mixin.BaliParser.jj_3_4() - mixin.BaliParser.jj_3_4() assigned to SYNTAX
+Line#2088 supposed to be ignored: mixin.BaliParser.jj_3_5() - mixin.BaliParser.jj_3_5() assigned to SYNTAX
+Line#2089 supposed to be ignored: mixin.BaliParser.jj_3_6() - mixin.BaliParser.jj_3_6() assigned to SYNTAX
+Line#2090 supposed to be ignored: mixin.BaliParser.jj_3_7() - mixin.BaliParser.jj_3_7() assigned to SYNTAX
+Line#2091 supposed to be ignored: mixin.BaliParser.jj_3_8() - mixin.BaliParser.jj_3_8() assigned to SYNTAX
+Line#2092 supposed to be ignored: mixin.BaliParser.jj_3_9() - mixin.BaliParser.jj_3_9() assigned to SYNTAX
+Line#2093 supposed to be ignored: mixin.BaliParser.jj_3_10() - mixin.BaliParser.jj_3_10() assigned to SYNTAX
+Line#2094 supposed to be ignored: mixin.BaliParser.jj_3_11() - mixin.BaliParser.jj_3_11() assigned to SYNTAX
+Line#2095 supposed to be ignored: mixin.BaliParser.jj_3_12() - mixin.BaliParser.jj_3_12() assigned to SYNTAX
+Line#2096 supposed to be ignored: mixin.BaliParser.jj_3_13() - mixin.BaliParser.jj_3_13() assigned to SYNTAX
+Line#2097 supposed to be ignored: mixin.BaliParser.jj_3_14() - mixin.BaliParser.jj_3_14() assigned to SYNTAX
+Line#2098 supposed to be ignored: mixin.BaliParser.jj_3_15() - mixin.BaliParser.jj_3_15() assigned to SYNTAX
+Line#2099 supposed to be ignored: mixin.BaliParser.jj_3_16() - mixin.BaliParser.jj_3_16() assigned to SYNTAX
+Line#2100 supposed to be ignored: mixin.BaliParser.jj_3_17() - mixin.BaliParser.jj_3_17() assigned to SYNTAX
+Line#2101 supposed to be ignored: mixin.BaliParser.jj_3_18() - mixin.BaliParser.jj_3_18() assigned to SYNTAX
+Line#2102 supposed to be ignored: mixin.BaliParser.jj_3_19() - mixin.BaliParser.jj_3_19() assigned to SYNTAX
+Line#2103 supposed to be ignored: mixin.BaliParser.jj_3_20() - mixin.BaliParser.jj_3_20() assigned to SYNTAX
+Line#2104 supposed to be ignored: mixin.BaliParser.jj_3_21() - mixin.BaliParser.jj_3_21() assigned to SYNTAX
+Line#2105 supposed to be ignored: mixin.BaliParser.jj_3_22() - mixin.BaliParser.jj_3_22() assigned to SYNTAX
+Line#2106 supposed to be ignored: mixin.BaliParser.jj_3_23() - mixin.BaliParser.jj_3_23() assigned to SYNTAX
+Line#2107 supposed to be ignored: mixin.BaliParser.jj_3_24() - mixin.BaliParser.jj_3_24() assigned to SYNTAX
+Line#2108 supposed to be ignored: mixin.BaliParser.jj_3_25() - mixin.BaliParser.jj_3_25() assigned to SYNTAX
+Line#2109 supposed to be ignored: mixin.BaliParser.jj_3_26() - mixin.BaliParser.jj_3_26() assigned to SYNTAX
+Line#2110 supposed to be ignored: mixin.BaliParser.jj_3_27() - mixin.BaliParser.jj_3_27() assigned to SYNTAX
+Line#2111 supposed to be ignored: mixin.BaliParser.jj_3_28() - mixin.BaliParser.jj_3_28() assigned to SYNTAX
+Line#2112 supposed to be ignored: mixin.BaliParser.jj_3_29() - mixin.BaliParser.jj_3_29() assigned to SYNTAX
+Line#2113 supposed to be ignored: mixin.BaliParser.jj_3_30() - mixin.BaliParser.jj_3_30() assigned to SYNTAX
+Line#2114 supposed to be ignored: mixin.BaliParser.jj_3_31() - mixin.BaliParser.jj_3_31() assigned to SYNTAX
+Line#2115 supposed to be ignored: mixin.BaliParser.jj_3_32() - mixin.BaliParser.jj_3_32() assigned to SYNTAX
+Line#2116 supposed to be ignored: mixin.BaliParser.jj_3_33() - mixin.BaliParser.jj_3_33() assigned to SYNTAX
+Line#2117 supposed to be ignored: mixin.BaliParser.jj_3_34() - mixin.BaliParser.jj_3_34() assigned to SYNTAX
+Line#2118 supposed to be ignored: mixin.BaliParser.jj_3_35() - mixin.BaliParser.jj_3_35() assigned to SYNTAX
+Line#2119 supposed to be ignored: mixin.BaliParser.jj_3_36() - mixin.BaliParser.jj_3_36() assigned to SYNTAX
+Line#2120 supposed to be ignored: mixin.BaliParser.jj_3_37() - mixin.BaliParser.jj_3_37() assigned to SYNTAX
+Line#2121 supposed to be ignored: mixin.BaliParser.jj_3_38() - mixin.BaliParser.jj_3_38() assigned to SYNTAX
+Line#2122 supposed to be ignored: mixin.BaliParser.jj_3_39() - mixin.BaliParser.jj_3_39() assigned to SYNTAX
+Line#2123 supposed to be ignored: mixin.BaliParser.jj_3_40() - mixin.BaliParser.jj_3_40() assigned to SYNTAX
+Line#2124 supposed to be ignored: mixin.BaliParser.jj_3_41() - mixin.BaliParser.jj_3_41() assigned to SYNTAX
+Line#2125 supposed to be ignored: mixin.BaliParser.jj_3_42() - mixin.BaliParser.jj_3_42() assigned to SYNTAX
+Line#2126 supposed to be ignored: mixin.BaliParser.jj_3_43() - mixin.BaliParser.jj_3_43() assigned to SYNTAX
+Line#2127 supposed to be ignored: mixin.BaliParser.jj_3_44() - mixin.BaliParser.jj_3_44() assigned to SYNTAX
+Line#2128 supposed to be ignored: mixin.BaliParser.jj_3_45() - mixin.BaliParser.jj_3_45() assigned to SYNTAX
+Line#2129 supposed to be ignored: mixin.BaliParser.jj_3_46() - mixin.BaliParser.jj_3_46() assigned to SYNTAX
+Line#2130 supposed to be ignored: mixin.BaliParser.jj_3_47() - mixin.BaliParser.jj_3_47() assigned to SYNTAX
+Line#2131 supposed to be ignored: mixin.BaliParser.jj_3_48() - mixin.BaliParser.jj_3_48() assigned to SYNTAX
+Line#2132 supposed to be ignored: mixin.BaliParser.jj_3_49() - mixin.BaliParser.jj_3_49() assigned to SYNTAX
+Line#2133 supposed to be ignored: mixin.BaliParser.jj_3_50() - mixin.BaliParser.jj_3_50() assigned to SYNTAX
+Line#2134 supposed to be ignored: mixin.BaliParser.jj_3_51() - mixin.BaliParser.jj_3_51() assigned to SYNTAX
+Line#2135 supposed to be ignored: mixin.BaliParser.jj_3_52() - mixin.BaliParser.jj_3_52() assigned to SYNTAX
+Line#2136 supposed to be ignored: mixin.BaliParser.jj_3_53() - mixin.BaliParser.jj_3_53() assigned to SYNTAX
+Line#2137 supposed to be ignored: mixin.BaliParser.jj_3_54() - mixin.BaliParser.jj_3_54() assigned to SYNTAX
+Line#2138 supposed to be ignored: mixin.BaliParser.jj_3_55() - mixin.BaliParser.jj_3_55() assigned to SYNTAX
+Line#2139 supposed to be ignored: mixin.BaliParser.jj_3_56() - mixin.BaliParser.jj_3_56() assigned to SYNTAX
+Line#2140 supposed to be ignored: mixin.BaliParser.jj_3_57() - mixin.BaliParser.jj_3_57() assigned to SYNTAX
+Line#2141 supposed to be ignored: mixin.BaliParser.jj_3_58() - mixin.BaliParser.jj_3_58() assigned to SYNTAX
+Line#2142 supposed to be ignored: mixin.BaliParser.jj_3_59() - mixin.BaliParser.jj_3_59() assigned to SYNTAX
+Line#2143 supposed to be ignored: mixin.BaliParser.jj_3_60() - mixin.BaliParser.jj_3_60() assigned to SYNTAX
+Line#2144 supposed to be ignored: mixin.BaliParser.jj_3_61() - mixin.BaliParser.jj_3_61() assigned to SYNTAX
+Line#2145 supposed to be ignored: mixin.BaliParser.jj_3_62() - mixin.BaliParser.jj_3_62() assigned to SYNTAX
+Line#2146 supposed to be ignored: mixin.BaliParser.jj_3_63() - mixin.BaliParser.jj_3_63() assigned to SYNTAX
+Line#2147 supposed to be ignored: mixin.BaliParser.jj_3_64() - mixin.BaliParser.jj_3_64() assigned to SYNTAX
+Line#2148 supposed to be ignored: mixin.BaliParser.jj_3R_435() - mixin.BaliParser.jj_3R_435() assigned to SYNTAX
+Line#2149 supposed to be ignored: mixin.BaliParser.jj_scan_token(int kind) - mixin.BaliParser.jj_scan_token(int kind) assigned to SYNTAX
+Line#2150 supposed to be ignored: mixin.BaliParser.jj_3R_109() - mixin.BaliParser.jj_3R_109() assigned to SYNTAX
+Line#2151 supposed to be ignored: mixin.BaliParser.jj_3R_428() - mixin.BaliParser.jj_3R_428() assigned to SYNTAX
+Line#2152 supposed to be ignored: mixin.BaliParser.jj_3R_35() - mixin.BaliParser.jj_3R_35() assigned to SYNTAX
+Line#2153 supposed to be ignored: mixin.BaliParser.jj_3R_68() - mixin.BaliParser.jj_3R_68() assigned to SYNTAX
+Line#2154 supposed to be ignored: mixin.BaliParser.jj_3R_127() - mixin.BaliParser.jj_3R_127() assigned to SYNTAX
+Line#2155 supposed to be ignored: mixin.BaliParser.jj_3R_399() - mixin.BaliParser.jj_3R_399() assigned to SYNTAX
+Line#2156 supposed to be ignored: mixin.BaliParser.jj_3R_42() - mixin.BaliParser.jj_3R_42() assigned to SYNTAX
+Line#2157 supposed to be ignored: mixin.BaliParser.jj_3R_129() - mixin.BaliParser.jj_3R_129() assigned to SYNTAX
+Line#2158 supposed to be ignored: mixin.BaliParser.jj_3R_159() - mixin.BaliParser.jj_3R_159() assigned to SYNTAX
+Line#2159 supposed to be ignored: mixin.BaliParser.jj_3R_67() - mixin.BaliParser.jj_3R_67() assigned to SYNTAX
+Line#2160 supposed to be ignored: mixin.BaliParser.jj_3R_126() - mixin.BaliParser.jj_3R_126() assigned to SYNTAX
+Line#2161 supposed to be ignored: mixin.BaliParser.jj_3R_86() - mixin.BaliParser.jj_3R_86() assigned to SYNTAX
+Line#2162 supposed to be ignored: mixin.BaliParser.jj_3R_453() - mixin.BaliParser.jj_3R_453() assigned to SYNTAX
+Line#2163 supposed to be ignored: mixin.BaliParser.jj_3R_85() - mixin.BaliParser.jj_3R_85() assigned to SYNTAX
+Line#2164 supposed to be ignored: mixin.BaliParser.jj_3R_146() - mixin.BaliParser.jj_3R_146() assigned to SYNTAX
+Line#2165 supposed to be ignored: mixin.BaliParser.jj_3R_324() - mixin.BaliParser.jj_3R_324() assigned to SYNTAX
+Line#2166 supposed to be ignored: mixin.BaliParser.jj_3R_45() - mixin.BaliParser.jj_3R_45() assigned to SYNTAX
+Line#2167 supposed to be ignored: mixin.BaliParser.jj_3R_103() - mixin.BaliParser.jj_3R_103() assigned to SYNTAX
+Line#2168 supposed to be ignored: mixin.BaliParser.jj_3R_84() - mixin.BaliParser.jj_3R_84() assigned to SYNTAX
+Line#2169 supposed to be ignored: mixin.BaliParser.jj_3R_269() - mixin.BaliParser.jj_3R_269() assigned to SYNTAX
+Line#2170 supposed to be ignored: mixin.BaliParser.jj_3R_62() - mixin.BaliParser.jj_3R_62() assigned to SYNTAX
+Line#2171 supposed to be ignored: mixin.BaliParser.jj_3R_268() - mixin.BaliParser.jj_3R_268() assigned to SYNTAX
+Line#2172 supposed to be ignored: mixin.BaliParser.jj_3R_259() - mixin.BaliParser.jj_3R_259() assigned to SYNTAX
+Line#2173 supposed to be ignored: mixin.BaliParser.jj_3R_95() - mixin.BaliParser.jj_3R_95() assigned to SYNTAX
+Line#2174 supposed to be ignored: mixin.BaliParser.jj_3R_94() - mixin.BaliParser.jj_3R_94() assigned to SYNTAX
+Line#2175 supposed to be ignored: mixin.BaliParser.jj_3R_131() - mixin.BaliParser.jj_3R_131() assigned to SYNTAX
+Line#2176 supposed to be ignored: mixin.BaliParser.jj_3R_258() - mixin.BaliParser.jj_3R_258() assigned to SYNTAX
+Line#2177 supposed to be ignored: mixin.BaliParser.jj_3R_266() - mixin.BaliParser.jj_3R_266() assigned to SYNTAX
+Line#2178 supposed to be ignored: mixin.BaliParser.jj_3R_93() - mixin.BaliParser.jj_3R_93() assigned to SYNTAX
+Line#2179 supposed to be ignored: mixin.BaliParser.jj_3R_257() - mixin.BaliParser.jj_3R_257() assigned to SYNTAX
+Line#2180 supposed to be ignored: mixin.BaliParser.jj_3R_265() - mixin.BaliParser.jj_3R_265() assigned to SYNTAX
+Line#2181 supposed to be ignored: mixin.BaliParser.jj_3R_92() - mixin.BaliParser.jj_3R_92() assigned to SYNTAX
+Line#2182 supposed to be ignored: mixin.BaliParser.jj_3R_256() - mixin.BaliParser.jj_3R_256() assigned to SYNTAX
+Line#2183 supposed to be ignored: mixin.BaliParser.jj_3R_264() - mixin.BaliParser.jj_3R_264() assigned to SYNTAX
+Line#2184 supposed to be ignored: mixin.BaliParser.jj_3R_91() - mixin.BaliParser.jj_3R_91() assigned to SYNTAX
+Line#2185 supposed to be ignored: mixin.BaliParser.jj_3R_402() - mixin.BaliParser.jj_3R_402() assigned to SYNTAX
+Line#2186 supposed to be ignored: mixin.BaliParser.jj_3R_433() - mixin.BaliParser.jj_3R_433() assigned to SYNTAX
+Line#2187 supposed to be ignored: mixin.BaliParser.jj_3R_90() - mixin.BaliParser.jj_3R_90() assigned to SYNTAX
+Line#2188 supposed to be ignored: mixin.BaliParser.jj_3R_255() - mixin.BaliParser.jj_3R_255() assigned to SYNTAX
+Line#2189 supposed to be ignored: mixin.BaliParser.jj_3R_263() - mixin.BaliParser.jj_3R_263() assigned to SYNTAX
+Line#2190 supposed to be ignored: mixin.BaliParser.jj_3R_89() - mixin.BaliParser.jj_3R_89() assigned to SYNTAX
+Line#2191 supposed to be ignored: mixin.BaliParser.jj_3R_383() - mixin.BaliParser.jj_3R_383() assigned to SYNTAX
+Line#2192 supposed to be ignored: mixin.BaliParser.jj_3R_43() - mixin.BaliParser.jj_3R_43() assigned to SYNTAX
+Line#2193 supposed to be ignored: mixin.BaliParser.jj_3R_88() - mixin.BaliParser.jj_3R_88() assigned to SYNTAX
+Line#2194 supposed to be ignored: mixin.BaliParser.jj_3R_245() - mixin.BaliParser.jj_3R_245() assigned to SYNTAX
+Line#2195 supposed to be ignored: mixin.BaliParser.jj_3R_254() - mixin.BaliParser.jj_3R_254() assigned to SYNTAX
+Line#2196 supposed to be ignored: mixin.BaliParser.jj_3R_87() - mixin.BaliParser.jj_3R_87() assigned to SYNTAX
+Line#2197 supposed to be ignored: mixin.BaliParser.jj_3R_38() - mixin.BaliParser.jj_3R_38() assigned to SYNTAX
+Line#2198 supposed to be ignored: mixin.BaliParser.jj_3R_382() - mixin.BaliParser.jj_3R_382() assigned to SYNTAX
+Line#2199 supposed to be ignored: mixin.BaliParser.jj_3R_360() - mixin.BaliParser.jj_3R_360() assigned to SYNTAX
+Line#2200 supposed to be ignored: mixin.BaliParser.jj_3R_321() - mixin.BaliParser.jj_3R_321() assigned to SYNTAX
+Line#2201 supposed to be ignored: mixin.BaliParser.jj_3R_51() - mixin.BaliParser.jj_3R_51() assigned to SYNTAX
+Line#2202 supposed to be ignored: mixin.BaliParser.jj_3R_143() - mixin.BaliParser.jj_3R_143() assigned to SYNTAX
+Line#2203 supposed to be ignored: mixin.BaliParser.jj_3R_59() - mixin.BaliParser.jj_3R_59() assigned to SYNTAX
+Line#2204 supposed to be ignored: mixin.BaliParser.jj_3R_148() - mixin.BaliParser.jj_3R_148() assigned to SYNTAX
+Line#2205 supposed to be ignored: mixin.BaliParser.jj_3R_177() - mixin.BaliParser.jj_3R_177() assigned to SYNTAX
+Line#2206 supposed to be ignored: mixin.BaliParser.jj_3R_384() - mixin.BaliParser.jj_3R_384() assigned to SYNTAX
+Line#2207 supposed to be ignored: mixin.BaliParser.jj_3R_36() - mixin.BaliParser.jj_3R_36() assigned to SYNTAX
+Line#2208 supposed to be ignored: mixin.BaliParser.jj_3R_142() - mixin.BaliParser.jj_3R_142() assigned to SYNTAX
+Line#2209 supposed to be ignored: mixin.BaliParser.jj_3R_434() - mixin.BaliParser.jj_3R_434() assigned to SYNTAX
+Line#2210 supposed to be ignored: mixin.BaliParser.jj_3R_361() - mixin.BaliParser.jj_3R_361() assigned to SYNTAX
+Line#2211 supposed to be ignored: mixin.BaliParser.jj_3R_141() - mixin.BaliParser.jj_3R_141() assigned to SYNTAX
+Line#2212 supposed to be ignored: mixin.BaliParser.jj_3R_122() - mixin.BaliParser.jj_3R_122() assigned to SYNTAX
+Line#2213 supposed to be ignored: mixin.BaliParser.jj_3R_362() - mixin.BaliParser.jj_3R_362() assigned to SYNTAX
+Line#2214 supposed to be ignored: mixin.BaliParser.jj_3R_385() - mixin.BaliParser.jj_3R_385() assigned to SYNTAX
+Line#2215 supposed to be ignored: mixin.BaliParser.jj_3R_449() - mixin.BaliParser.jj_3R_449() assigned to SYNTAX
+Line#2216 supposed to be ignored: mixin.BaliParser.jj_3R_470() - mixin.BaliParser.jj_3R_470() assigned to SYNTAX
+Line#2217 supposed to be ignored: mixin.BaliParser.jj_3R_78() - mixin.BaliParser.jj_3R_78() assigned to SYNTAX
+Line#2218 supposed to be ignored: mixin.BaliParser.jj_3R_121() - mixin.BaliParser.jj_3R_121() assigned to SYNTAX
+Line#2219 supposed to be ignored: mixin.BaliParser.jj_3R_340() - mixin.BaliParser.jj_3R_340() assigned to SYNTAX
+Line#2220 supposed to be ignored: mixin.BaliParser.jj_3R_120() - mixin.BaliParser.jj_3R_120() assigned to SYNTAX
+Line#2221 supposed to be ignored: mixin.BaliParser.jj_3R_82() - mixin.BaliParser.jj_3R_82() assigned to SYNTAX
+Line#2222 supposed to be ignored: mixin.BaliParser.jj_3R_320() - mixin.BaliParser.jj_3R_320() assigned to SYNTAX
+Line#2223 supposed to be ignored: mixin.BaliParser.jj_3R_119() - mixin.BaliParser.jj_3R_119() assigned to SYNTAX
+Line#2224 supposed to be ignored: mixin.BaliParser.jj_3R_339() - mixin.BaliParser.jj_3R_339() assigned to SYNTAX
+Line#2225 supposed to be ignored: mixin.BaliParser.jj_3R_310() - mixin.BaliParser.jj_3R_310() assigned to SYNTAX
+Line#2226 supposed to be ignored: mixin.BaliParser.jj_3R_118() - mixin.BaliParser.jj_3R_118() assigned to SYNTAX
+Line#2227 supposed to be ignored: mixin.BaliParser.jj_3R_117() - mixin.BaliParser.jj_3R_117() assigned to SYNTAX
+Line#2228 supposed to be ignored: mixin.BaliParser.jj_3R_116() - mixin.BaliParser.jj_3R_116() assigned to SYNTAX
+Line#2229 supposed to be ignored: mixin.BaliParser.jj_3R_190() - mixin.BaliParser.jj_3R_190() assigned to SYNTAX
+Line#2230 supposed to be ignored: mixin.BaliParser.jj_3R_71() - mixin.BaliParser.jj_3R_71() assigned to SYNTAX
+Line#2231 supposed to be ignored: mixin.BaliParser.jj_3R_115() - mixin.BaliParser.jj_3R_115() assigned to SYNTAX
+Line#2232 supposed to be ignored: mixin.BaliParser.jj_3R_41() - mixin.BaliParser.jj_3R_41() assigned to SYNTAX
+Line#2233 supposed to be ignored: mixin.BaliParser.jj_3R_114() - mixin.BaliParser.jj_3R_114() assigned to SYNTAX
+Line#2234 supposed to be ignored: mixin.BaliParser.jj_3R_189() - mixin.BaliParser.jj_3R_189() assigned to SYNTAX
+Line#2235 supposed to be ignored: mixin.BaliParser.jj_3R_113() - mixin.BaliParser.jj_3R_113() assigned to SYNTAX
+Line#2236 supposed to be ignored: mixin.BaliParser.jj_3R_188() - mixin.BaliParser.jj_3R_188() assigned to SYNTAX
+Line#2237 supposed to be ignored: mixin.BaliParser.jj_3R_469() - mixin.BaliParser.jj_3R_469() assigned to SYNTAX
+Line#2238 supposed to be ignored: mixin.BaliParser.jj_3R_359() - mixin.BaliParser.jj_3R_359() assigned to SYNTAX
+Line#2239 supposed to be ignored: mixin.BaliParser.jj_3R_112() - mixin.BaliParser.jj_3R_112() assigned to SYNTAX
+Line#2240 supposed to be ignored: mixin.BaliParser.jj_3R_483() - mixin.BaliParser.jj_3R_483() assigned to SYNTAX
+Line#2241 supposed to be ignored: mixin.BaliParser.jj_3R_187() - mixin.BaliParser.jj_3R_187() assigned to SYNTAX
+Line#2242 supposed to be ignored: mixin.BaliParser.jj_3R_111() - mixin.BaliParser.jj_3R_111() assigned to SYNTAX
+Line#2243 supposed to be ignored: mixin.BaliParser.jj_3R_61() - mixin.BaliParser.jj_3R_61() assigned to SYNTAX
+Line#2244 supposed to be ignored: mixin.BaliParser.jj_3R_468() - mixin.BaliParser.jj_3R_468() assigned to SYNTAX
+Line#2245 supposed to be ignored: mixin.BaliParser.jj_3R_389() - mixin.BaliParser.jj_3R_389() assigned to SYNTAX
+Line#2246 supposed to be ignored: mixin.BaliParser.jj_3R_358() - mixin.BaliParser.jj_3R_358() assigned to SYNTAX
+Line#2247 supposed to be ignored: mixin.BaliParser.jj_3R_186() - mixin.BaliParser.jj_3R_186() assigned to SYNTAX
+Line#2248 supposed to be ignored: mixin.BaliParser.jj_3R_482() - mixin.BaliParser.jj_3R_482() assigned to SYNTAX
+Line#2249 supposed to be ignored: mixin.BaliParser.jj_3R_436() - mixin.BaliParser.jj_3R_436() assigned to SYNTAX
+Line#2250 supposed to be ignored: mixin.BaliParser.jj_3R_185() - mixin.BaliParser.jj_3R_185() assigned to SYNTAX
+Line#2251 supposed to be ignored: mixin.BaliParser.jj_3R_481() - mixin.BaliParser.jj_3R_481() assigned to SYNTAX
+Line#2252 supposed to be ignored: mixin.BaliParser.jj_3R_357() - mixin.BaliParser.jj_3R_357() assigned to SYNTAX
+Line#2253 supposed to be ignored: mixin.BaliParser.jj_3R_336() - mixin.BaliParser.jj_3R_336() assigned to SYNTAX
+Line#2254 supposed to be ignored: mixin.BaliParser.jj_3R_184() - mixin.BaliParser.jj_3R_184() assigned to SYNTAX
+Line#2255 supposed to be ignored: mixin.BaliParser.jj_3R_240() - mixin.BaliParser.jj_3R_240() assigned to SYNTAX
+Line#2256 supposed to be ignored: mixin.BaliParser.jj_3R_467() - mixin.BaliParser.jj_3R_467() assigned to SYNTAX
+Line#2257 supposed to be ignored: mixin.BaliParser.jj_3R_480() - mixin.BaliParser.jj_3R_480() assigned to SYNTAX
+Line#2258 supposed to be ignored: mixin.BaliParser.jj_3R_342() - mixin.BaliParser.jj_3R_342() assigned to SYNTAX
+Line#2259 supposed to be ignored: mixin.BaliParser.jj_3R_183() - mixin.BaliParser.jj_3R_183() assigned to SYNTAX
+Line#2260 supposed to be ignored: mixin.BaliParser.jj_3R_472() - mixin.BaliParser.jj_3R_472() assigned to SYNTAX
+Line#2261 supposed to be ignored: mixin.BaliParser.jj_3R_486() - mixin.BaliParser.jj_3R_486() assigned to SYNTAX
+Line#2262 supposed to be ignored: mixin.BaliParser.jj_3R_466() - mixin.BaliParser.jj_3R_466() assigned to SYNTAX
+Line#2263 supposed to be ignored: mixin.BaliParser.jj_3R_439() - mixin.BaliParser.jj_3R_439() assigned to SYNTAX
+Line#2264 supposed to be ignored: mixin.BaliParser.jj_3R_447() - mixin.BaliParser.jj_3R_447() assigned to SYNTAX
+Line#2265 supposed to be ignored: mixin.BaliParser.jj_3R_182() - mixin.BaliParser.jj_3R_182() assigned to SYNTAX
+Line#2266 supposed to be ignored: mixin.BaliParser.jj_3R_239() - mixin.BaliParser.jj_3R_239() assigned to SYNTAX
+Line#2267 supposed to be ignored: mixin.BaliParser.jj_3R_348() - mixin.BaliParser.jj_3R_348() assigned to SYNTAX
+Line#2268 supposed to be ignored: mixin.BaliParser.jj_3R_280() - mixin.BaliParser.jj_3R_280() assigned to SYNTAX
+Line#2269 supposed to be ignored: mixin.BaliParser.jj_3R_267() - mixin.BaliParser.jj_3R_267() assigned to SYNTAX
+Line#2270 supposed to be ignored: mixin.BaliParser.jj_3R_452() - mixin.BaliParser.jj_3R_452() assigned to SYNTAX
+Line#2271 supposed to be ignored: mixin.BaliParser.jj_3R_451() - mixin.BaliParser.jj_3R_451() assigned to SYNTAX
+Line#2272 supposed to be ignored: mixin.BaliParser.jj_3R_330() - mixin.BaliParser.jj_3R_330() assigned to SYNTAX
+Line#2273 supposed to be ignored: mixin.BaliParser.jj_3R_40() - mixin.BaliParser.jj_3R_40() assigned to SYNTAX
+Line#2274 supposed to be ignored: mixin.BaliParser.jj_3R_181() - mixin.BaliParser.jj_3R_181() assigned to SYNTAX
+Line#2275 supposed to be ignored: mixin.BaliParser.jj_3R_450() - mixin.BaliParser.jj_3R_450() assigned to SYNTAX
+Line#2276 supposed to be ignored: mixin.BaliParser.jj_3R_471() - mixin.BaliParser.jj_3R_471() assigned to SYNTAX
+Line#2277 supposed to be ignored: mixin.BaliParser.jj_3R_432() - mixin.BaliParser.jj_3R_432() assigned to SYNTAX
+Line#2278 supposed to be ignored: mixin.BaliParser.jj_3R_152() - mixin.BaliParser.jj_3R_152() assigned to SYNTAX
+Line#2279 supposed to be ignored: mixin.BaliParser.jj_3R_180() - mixin.BaliParser.jj_3R_180() assigned to SYNTAX
+Line#2280 supposed to be ignored: mixin.BaliParser.jj_3R_431() - mixin.BaliParser.jj_3R_431() assigned to SYNTAX
+Line#2281 supposed to be ignored: mixin.BaliParser.jj_3R_323() - mixin.BaliParser.jj_3R_323() assigned to SYNTAX
+Line#2282 supposed to be ignored: mixin.BaliParser.jj_3R_110() - mixin.BaliParser.jj_3R_110() assigned to SYNTAX
+Line#2283 supposed to be ignored: mixin.BaliParser.jj_3R_154() - mixin.BaliParser.jj_3R_154() assigned to SYNTAX
+Line#2284 supposed to be ignored: mixin.BaliParser.jj_3R_430() - mixin.BaliParser.jj_3R_430() assigned to SYNTAX
+Line#2285 supposed to be ignored: mixin.BaliParser.jj_3R_429() - mixin.BaliParser.jj_3R_429() assigned to SYNTAX
+Line#2286 supposed to be ignored: mixin.BaliParser.jj_3R_412() - mixin.BaliParser.jj_3R_412() assigned to SYNTAX
+Line#2287 supposed to be ignored: mixin.BaliParser.jj_3R_401() - mixin.BaliParser.jj_3R_401() assigned to SYNTAX
+Line#2288 supposed to be ignored: mixin.BaliParser.jj_3R_485() - mixin.BaliParser.jj_3R_485() assigned to SYNTAX
+Line#2289 supposed to be ignored: mixin.BaliParser.jj_3R_39() - mixin.BaliParser.jj_3R_39() assigned to SYNTAX
+Line#2290 supposed to be ignored: mixin.BaliParser.jj_3R_484() - mixin.BaliParser.jj_3R_484() assigned to SYNTAX
+Line#2291 supposed to be ignored: mixin.BaliParser.jj_3R_77() - mixin.BaliParser.jj_3R_77() assigned to SYNTAX
+Line#2292 supposed to be ignored: mixin.BaliParser.jj_3R_410() - mixin.BaliParser.jj_3R_410() assigned to SYNTAX
+Line#2293 supposed to be ignored: mixin.BaliParser.jj_3R_130() - mixin.BaliParser.jj_3R_130() assigned to SYNTAX
+Line#2294 supposed to be ignored: mixin.BaliParser.jj_3R_125() - mixin.BaliParser.jj_3R_125() assigned to SYNTAX
+Line#2295 supposed to be ignored: mixin.BaliParser.jj_3R_409() - mixin.BaliParser.jj_3R_409() assigned to SYNTAX
+Line#2296 supposed to be ignored: mixin.BaliParser.jj_3R_108() - mixin.BaliParser.jj_3R_108() assigned to SYNTAX
+Line#2297 supposed to be ignored: mixin.BaliParser.jj_3R_473() - mixin.BaliParser.jj_3R_473() assigned to SYNTAX
+Line#2298 supposed to be ignored: mixin.BaliParser.jj_3R_446() - mixin.BaliParser.jj_3R_446() assigned to SYNTAX
+Line#2299 supposed to be ignored: mixin.BaliParser.jj_3R_102() - mixin.BaliParser.jj_3R_102() assigned to SYNTAX
+Line#2300 supposed to be ignored: mixin.BaliParser.jj_3R_140() - mixin.BaliParser.jj_3R_140() assigned to SYNTAX
+Line#2301 supposed to be ignored: mixin.BaliParser.jj_3R_331() - mixin.BaliParser.jj_3R_331() assigned to SYNTAX
+Line#2302 supposed to be ignored: mixin.BaliParser.jj_3R_408() - mixin.BaliParser.jj_3R_408() assigned to SYNTAX
+Line#2303 supposed to be ignored: mixin.BaliParser.jj_3R_57() - mixin.BaliParser.jj_3R_57() assigned to SYNTAX
+Line#2304 supposed to be ignored: mixin.BaliParser.jj_3R_427() - mixin.BaliParser.jj_3R_427() assigned to SYNTAX
+Line#2305 supposed to be ignored: mixin.BaliParser.jj_3R_279() - mixin.BaliParser.jj_3R_279() assigned to SYNTAX
+Line#2306 supposed to be ignored: mixin.BaliParser.jj_3R_407() - mixin.BaliParser.jj_3R_407() assigned to SYNTAX
+Line#2307 supposed to be ignored: mixin.BaliParser.jj_3R_81() - mixin.BaliParser.jj_3R_81() assigned to SYNTAX
+Line#2308 supposed to be ignored: mixin.BaliParser.jj_3R_445() - mixin.BaliParser.jj_3R_445() assigned to SYNTAX
+Line#2309 supposed to be ignored: mixin.BaliParser.jj_3R_465() - mixin.BaliParser.jj_3R_465() assigned to SYNTAX
+Line#2310 supposed to be ignored: mixin.BaliParser.jj_3R_426() - mixin.BaliParser.jj_3R_426() assigned to SYNTAX
+Line#2311 supposed to be ignored: mixin.BaliParser.jj_3R_398() - mixin.BaliParser.jj_3R_398() assigned to SYNTAX
+Line#2312 supposed to be ignored: mixin.BaliParser.jj_3R_194() - mixin.BaliParser.jj_3R_194() assigned to SYNTAX
+Line#2313 supposed to be ignored: mixin.BaliParser.jj_3R_83() - mixin.BaliParser.jj_3R_83() assigned to SYNTAX
+Line#2314 supposed to be ignored: mixin.BaliParser.jj_3R_365() - mixin.BaliParser.jj_3R_365() assigned to SYNTAX
+Line#2315 supposed to be ignored: mixin.BaliParser.jj_3R_244() - mixin.BaliParser.jj_3R_244() assigned to SYNTAX
+Line#2316 supposed to be ignored: mixin.BaliParser.jj_3R_253() - mixin.BaliParser.jj_3R_253() assigned to SYNTAX
+Line#2317 supposed to be ignored: mixin.BaliParser.jj_3R_350() - mixin.BaliParser.jj_3R_350() assigned to SYNTAX
+Line#2318 supposed to be ignored: mixin.BaliParser.jj_3R_195() - mixin.BaliParser.jj_3R_195() assigned to SYNTAX
+Line#2319 supposed to be ignored: mixin.BaliParser.jj_3R_349() - mixin.BaliParser.jj_3R_349() assigned to SYNTAX
+Line#2320 supposed to be ignored: mixin.BaliParser.jj_3R_243() - mixin.BaliParser.jj_3R_243() assigned to SYNTAX
+Line#2321 supposed to be ignored: mixin.BaliParser.jj_3R_252() - mixin.BaliParser.jj_3R_252() assigned to SYNTAX
+Line#2322 supposed to be ignored: mixin.BaliParser.jj_3R_242() - mixin.BaliParser.jj_3R_242() assigned to SYNTAX
+Line#2323 supposed to be ignored: mixin.BaliParser.jj_3R_133() - mixin.BaliParser.jj_3R_133() assigned to SYNTAX
+Line#2324 supposed to be ignored: mixin.BaliParser.jj_3R_76() - mixin.BaliParser.jj_3R_76() assigned to SYNTAX
+Line#2325 supposed to be ignored: mixin.BaliParser.jj_3R_37() - mixin.BaliParser.jj_3R_37() assigned to SYNTAX
+Line#2326 supposed to be ignored: mixin.BaliParser.jj_3R_196() - mixin.BaliParser.jj_3R_196() assigned to SYNTAX
+Line#2327 supposed to be ignored: mixin.BaliParser.jj_3R_241() - mixin.BaliParser.jj_3R_241() assigned to SYNTAX
+Line#2328 supposed to be ignored: mixin.BaliParser.jj_3R_105() - mixin.BaliParser.jj_3R_105() assigned to SYNTAX
+Line#2329 supposed to be ignored: mixin.BaliParser.jj_3R_137() - mixin.BaliParser.jj_3R_137() assigned to SYNTAX
+Line#2330 supposed to be ignored: mixin.BaliParser.jj_3R_124() - mixin.BaliParser.jj_3R_124() assigned to SYNTAX
+Line#2331 supposed to be ignored: mixin.BaliParser.jj_3R_167() - mixin.BaliParser.jj_3R_167() assigned to SYNTAX
+Line#2332 supposed to be ignored: mixin.BaliParser.jj_3R_166() - mixin.BaliParser.jj_3R_166() assigned to SYNTAX
+Line#2333 supposed to be ignored: mixin.BaliParser.jj_3R_60() - mixin.BaliParser.jj_3R_60() assigned to SYNTAX
+Line#2334 supposed to be ignored: mixin.BaliParser.jj_3R_165() - mixin.BaliParser.jj_3R_165() assigned to SYNTAX
+Line#2335 supposed to be ignored: mixin.BaliParser.jj_3R_356() - mixin.BaliParser.jj_3R_356() assigned to SYNTAX
+Line#2336 supposed to be ignored: mixin.BaliParser.jj_3R_156() - mixin.BaliParser.jj_3R_156() assigned to SYNTAX
+Line#2337 supposed to be ignored: mixin.BaliParser.jj_3R_164() - mixin.BaliParser.jj_3R_164() assigned to SYNTAX
+Line#2338 supposed to be ignored: mixin.BaliParser.jj_3R_123() - mixin.BaliParser.jj_3R_123() assigned to SYNTAX
+Line#2339 supposed to be ignored: mixin.BaliParser.jj_3R_155() - mixin.BaliParser.jj_3R_155() assigned to SYNTAX
+Line#2340 supposed to be ignored: mixin.BaliParser.jj_3R_355() - mixin.BaliParser.jj_3R_355() assigned to SYNTAX
+Line#2341 supposed to be ignored: mixin.BaliParser.jj_3R_335() - mixin.BaliParser.jj_3R_335() assigned to SYNTAX
+Line#2342 supposed to be ignored: mixin.BaliParser.jj_3R_163() - mixin.BaliParser.jj_3R_163() assigned to SYNTAX
+Line#2343 supposed to be ignored: mixin.BaliParser.jj_3R_65() - mixin.BaliParser.jj_3R_65() assigned to SYNTAX
+Line#2344 supposed to be ignored: mixin.BaliParser.jj_3R_139() - mixin.BaliParser.jj_3R_139() assigned to SYNTAX
+Line#2345 supposed to be ignored: mixin.BaliParser.jj_3R_107() - mixin.BaliParser.jj_3R_107() assigned to SYNTAX
+Line#2346 supposed to be ignored: mixin.BaliParser.jj_3R_138() - mixin.BaliParser.jj_3R_138() assigned to SYNTAX
+Line#2347 supposed to be ignored: mixin.BaliParser.jj_3R_381() - mixin.BaliParser.jj_3R_381() assigned to SYNTAX
+Line#2348 supposed to be ignored: mixin.BaliParser.jj_3R_400() - mixin.BaliParser.jj_3R_400() assigned to SYNTAX
+Line#2349 supposed to be ignored: mixin.BaliParser.jj_3R_98() - mixin.BaliParser.jj_3R_98() assigned to SYNTAX
+Line#2350 supposed to be ignored: mixin.BaliParser.jj_3R_493() - mixin.BaliParser.jj_3R_493() assigned to SYNTAX
+Line#2351 supposed to be ignored: mixin.BaliParser.jj_3R_498() - mixin.BaliParser.jj_3R_498() assigned to SYNTAX
+Line#2352 supposed to be ignored: mixin.BaliParser.jj_3R_106() - mixin.BaliParser.jj_3R_106() assigned to SYNTAX
+Line#2353 supposed to be ignored: mixin.BaliParser.jj_3R_380() - mixin.BaliParser.jj_3R_380() assigned to SYNTAX
+Line#2354 supposed to be ignored: mixin.BaliParser.jj_3R_341() - mixin.BaliParser.jj_3R_341() assigned to SYNTAX
+Line#2355 supposed to be ignored: mixin.BaliParser.jj_3R_379() - mixin.BaliParser.jj_3R_379() assigned to SYNTAX
+Line#2356 supposed to be ignored: mixin.BaliParser.jj_3R_476() - mixin.BaliParser.jj_3R_476() assigned to SYNTAX
+Line#2357 supposed to be ignored: mixin.BaliParser.jj_3R_58() - mixin.BaliParser.jj_3R_58() assigned to SYNTAX
+Line#2358 supposed to be ignored: mixin.BaliParser.jj_3R_97() - mixin.BaliParser.jj_3R_97() assigned to SYNTAX
+Line#2359 supposed to be ignored: mixin.BaliParser.jj_3R_53() - mixin.BaliParser.jj_3R_53() assigned to SYNTAX
+Line#2360 supposed to be ignored: mixin.BaliParser.jj_3R_378() - mixin.BaliParser.jj_3R_378() assigned to SYNTAX
+Line#2361 supposed to be ignored: mixin.BaliParser.jj_3R_96() - mixin.BaliParser.jj_3R_96() assigned to SYNTAX
+Line#2362 supposed to be ignored: mixin.BaliParser.jj_3R_377() - mixin.BaliParser.jj_3R_377() assigned to SYNTAX
+Line#2363 supposed to be ignored: mixin.BaliParser.jj_3R_56() - mixin.BaliParser.jj_3R_56() assigned to SYNTAX
+Line#2364 supposed to be ignored: mixin.BaliParser.jj_3R_311() - mixin.BaliParser.jj_3R_311() assigned to SYNTAX
+Line#2365 supposed to be ignored: mixin.BaliParser.jj_3R_260() - mixin.BaliParser.jj_3R_260() assigned to SYNTAX
+Line#2366 supposed to be ignored: mixin.BaliParser.jj_3R_376() - mixin.BaliParser.jj_3R_376() assigned to SYNTAX
+Line#2367 supposed to be ignored: mixin.BaliParser.jj_3R_354() - mixin.BaliParser.jj_3R_354() assigned to SYNTAX
+Line#2368 supposed to be ignored: mixin.BaliParser.jj_3R_497() - mixin.BaliParser.jj_3R_497() assigned to SYNTAX
+Line#2369 supposed to be ignored: mixin.BaliParser.jj_3R_457() - mixin.BaliParser.jj_3R_457() assigned to SYNTAX
+Line#2370 supposed to be ignored: mixin.BaliParser.jj_3R_456() - mixin.BaliParser.jj_3R_456() assigned to SYNTAX
+Line#2371 supposed to be ignored: mixin.BaliParser.jj_3R_316() - mixin.BaliParser.jj_3R_316() assigned to SYNTAX
+Line#2372 supposed to be ignored: mixin.BaliParser.jj_3R_238() - mixin.BaliParser.jj_3R_238() assigned to SYNTAX
+Line#2373 supposed to be ignored: mixin.BaliParser.jj_3R_153() - mixin.BaliParser.jj_3R_153() assigned to SYNTAX
+Line#2374 supposed to be ignored: mixin.BaliParser.jj_3R_411() - mixin.BaliParser.jj_3R_411() assigned to SYNTAX
+Line#2375 supposed to be ignored: mixin.BaliParser.jj_3R_392() - mixin.BaliParser.jj_3R_392() assigned to SYNTAX
+Line#2376 supposed to be ignored: mixin.BaliParser.jj_3R_329() - mixin.BaliParser.jj_3R_329() assigned to SYNTAX
+Line#2377 supposed to be ignored: mixin.BaliParser.jj_3R_416() - mixin.BaliParser.jj_3R_416() assigned to SYNTAX
+Line#2378 supposed to be ignored: mixin.BaliParser.jj_3R_395() - mixin.BaliParser.jj_3R_395() assigned to SYNTAX
+Line#2379 supposed to be ignored: mixin.BaliParser.jj_3R_509() - mixin.BaliParser.jj_3R_509() assigned to SYNTAX
+Line#2380 supposed to be ignored: mixin.BaliParser.jj_3R_440() - mixin.BaliParser.jj_3R_440() assigned to SYNTAX
+Line#2381 supposed to be ignored: mixin.BaliParser.jj_3R_101() - mixin.BaliParser.jj_3R_101() assigned to SYNTAX
+Line#2382 supposed to be ignored: mixin.BaliParser.jj_3R_415() - mixin.BaliParser.jj_3R_415() assigned to SYNTAX
+Line#2383 supposed to be ignored: mixin.BaliParser.jj_3R_394() - mixin.BaliParser.jj_3R_394() assigned to SYNTAX
+Line#2384 supposed to be ignored: mixin.BaliParser.jj_3R_100() - mixin.BaliParser.jj_3R_100() assigned to SYNTAX
+Line#2385 supposed to be ignored: mixin.BaliParser.jj_3R_327() - mixin.BaliParser.jj_3R_327() assigned to SYNTAX
+Line#2386 supposed to be ignored: mixin.BaliParser.jj_3R_508() - mixin.BaliParser.jj_3R_508() assigned to SYNTAX
+Line#2387 supposed to be ignored: mixin.BaliParser.jj_3R_510() - mixin.BaliParser.jj_3R_510() assigned to SYNTAX
+Line#2388 supposed to be ignored: mixin.BaliParser.jj_3R_99() - mixin.BaliParser.jj_3R_99() assigned to SYNTAX
+Line#2389 supposed to be ignored: mixin.BaliParser.jj_3R_75() - mixin.BaliParser.jj_3R_75() assigned to SYNTAX
+Line#2390 supposed to be ignored: mixin.BaliParser.jj_3R_507() - mixin.BaliParser.jj_3R_507() assigned to SYNTAX
+Line#2391 supposed to be ignored: mixin.BaliParser.jj_3R_192() - mixin.BaliParser.jj_3R_192() assigned to SYNTAX
+Line#2392 supposed to be ignored: mixin.BaliParser.jj_3R_302() - mixin.BaliParser.jj_3R_302() assigned to SYNTAX
+Line#2393 supposed to be ignored: mixin.BaliParser.jj_3R_332() - mixin.BaliParser.jj_3R_332() assigned to SYNTAX
+Line#2394 supposed to be ignored: mixin.BaliParser.jj_3R_506() - mixin.BaliParser.jj_3R_506() assigned to SYNTAX
+Line#2395 supposed to be ignored: mixin.BaliParser.jj_3R_191() - mixin.BaliParser.jj_3R_191() assigned to SYNTAX
+Line#2396 supposed to be ignored: mixin.BaliParser.jj_3R_271() - mixin.BaliParser.jj_3R_271() assigned to SYNTAX
+Line#2397 supposed to be ignored: mixin.BaliParser.jj_3R_505() - mixin.BaliParser.jj_3R_505() assigned to SYNTAX
+Line#2398 supposed to be ignored: mixin.BaliParser.jj_3R_162() - mixin.BaliParser.jj_3R_162() assigned to SYNTAX
+Line#2399 supposed to be ignored: mixin.BaliParser.jj_3R_504() - mixin.BaliParser.jj_3R_504() assigned to SYNTAX
+Line#2400 supposed to be ignored: mixin.BaliParser.jj_3R_219() - mixin.BaliParser.jj_3R_219() assigned to SYNTAX
+Line#2401 supposed to be ignored: mixin.BaliParser.jj_3R_161() - mixin.BaliParser.jj_3R_161() assigned to SYNTAX
+Line#2402 supposed to be ignored: mixin.BaliParser.jj_3R_503() - mixin.BaliParser.jj_3R_503() assigned to SYNTAX
+Line#2403 supposed to be ignored: mixin.BaliParser.jj_3R_500() - mixin.BaliParser.jj_3R_500() assigned to SYNTAX
+Line#2404 supposed to be ignored: mixin.BaliParser.jj_3R_132() - mixin.BaliParser.jj_3R_132() assigned to SYNTAX
+Line#2405 supposed to be ignored: mixin.BaliParser.jj_3R_160() - mixin.BaliParser.jj_3R_160() assigned to SYNTAX
+Line#2406 supposed to be ignored: mixin.BaliParser.jj_3R_328() - mixin.BaliParser.jj_3R_328() assigned to SYNTAX
+Line#2407 supposed to be ignored: mixin.BaliParser.jj_3R_74() - mixin.BaliParser.jj_3R_74() assigned to SYNTAX
+Line#2408 supposed to be ignored: mixin.BaliParser.jj_3R_448() - mixin.BaliParser.jj_3R_448() assigned to SYNTAX
+Line#2409 supposed to be ignored: mixin.BaliParser.jj_3R_55() - mixin.BaliParser.jj_3R_55() assigned to SYNTAX
+Line#2410 supposed to be ignored: mixin.BaliParser.jj_3R_80() - mixin.BaliParser.jj_3R_80() assigned to SYNTAX
+Line#2411 supposed to be ignored: mixin.BaliParser.jj_3R_319() - mixin.BaliParser.jj_3R_319() assigned to SYNTAX
+Line#2412 supposed to be ignored: mixin.BaliParser.jj_3R_73() - mixin.BaliParser.jj_3R_73() assigned to SYNTAX
+Line#2413 supposed to be ignored: mixin.BaliParser.jj_3R_337() - mixin.BaliParser.jj_3R_337() assigned to SYNTAX
+Line#2414 supposed to be ignored: mixin.BaliParser.jj_3R_79() - mixin.BaliParser.jj_3R_79() assigned to SYNTAX
+Line#2415 supposed to be ignored: mixin.BaliParser.jj_3R_391() - mixin.BaliParser.jj_3R_391() assigned to SYNTAX
+Line#2416 supposed to be ignored: mixin.BaliParser.jj_3R_158() - mixin.BaliParser.jj_3R_158() assigned to SYNTAX
+Line#2417 supposed to be ignored: mixin.BaliParser.jj_3R_308() - mixin.BaliParser.jj_3R_308() assigned to SYNTAX
+Line#2418 supposed to be ignored: mixin.BaliParser.jj_3R_72() - mixin.BaliParser.jj_3R_72() assigned to SYNTAX
+Line#2419 supposed to be ignored: mixin.BaliParser.jj_3R_128() - mixin.BaliParser.jj_3R_128() assigned to SYNTAX
+Line#2420 supposed to be ignored: mixin.BaliParser.jj_3R_157() - mixin.BaliParser.jj_3R_157() assigned to SYNTAX
+Line#2421 supposed to be ignored: mixin.BaliParser.jj_3R_390() - mixin.BaliParser.jj_3R_390() assigned to SYNTAX
+Line#2422 supposed to be ignored: mixin.BaliParser.jj_3R_366() - mixin.BaliParser.jj_3R_366() assigned to SYNTAX
+Line#2423 supposed to be ignored: mixin.BaliParser.jj_3R_147() - mixin.BaliParser.jj_3R_147() assigned to SYNTAX
+Line#2424 supposed to be ignored: mixin.BaliParser.jj_3R_176() - mixin.BaliParser.jj_3R_176() assigned to SYNTAX
+Line#2425 supposed to be ignored: mixin.BaliParser.jj_3R_367() - mixin.BaliParser.jj_3R_367() assigned to SYNTAX
+Line#2426 supposed to be ignored: mixin.BaliParser.jj_3R_318() - mixin.BaliParser.jj_3R_318() assigned to SYNTAX
+Line#2427 supposed to be ignored: mixin.BaliParser.jj_3R_352() - mixin.BaliParser.jj_3R_352() assigned to SYNTAX
+Line#2428 supposed to be ignored: mixin.BaliParser.jj_3R_351() - mixin.BaliParser.jj_3R_351() assigned to SYNTAX
+Line#2429 supposed to be ignored: mixin.BaliParser.jj_3R_338() - mixin.BaliParser.jj_3R_338() assigned to SYNTAX
+Line#2430 supposed to be ignored: mixin.BaliParser.jj_3R_495() - mixin.BaliParser.jj_3R_495() assigned to SYNTAX
+Line#2431 supposed to be ignored: mixin.BaliParser.jj_3R_309() - mixin.BaliParser.jj_3R_309() assigned to SYNTAX
+Line#2432 supposed to be ignored: mixin.BaliParser.jj_3R_70() - mixin.BaliParser.jj_3R_70() assigned to SYNTAX
+Line#2433 supposed to be ignored: mixin.BaliParser.jj_3R_478() - mixin.BaliParser.jj_3R_478() assigned to SYNTAX
+Line#2434 supposed to be ignored: mixin.BaliParser.jj_3R_333() - mixin.BaliParser.jj_3R_333() assigned to SYNTAX
+Line#2435 supposed to be ignored: mixin.BaliParser.jj_3R_353() - mixin.BaliParser.jj_3R_353() assigned to SYNTAX
+Line#2436 supposed to be ignored: mixin.BaliParser.jj_3R_303() - mixin.BaliParser.jj_3R_303() assigned to SYNTAX
+Line#2437 supposed to be ignored: mixin.BaliParser.jj_3R_69() - mixin.BaliParser.jj_3R_69() assigned to SYNTAX
+Line#2438 supposed to be ignored: mixin.BaliParser.jj_3R_315() - mixin.BaliParser.jj_3R_315() assigned to SYNTAX
+Line#2439 supposed to be ignored: mixin.BaliParser.jj_3R_314() - mixin.BaliParser.jj_3R_314() assigned to SYNTAX
+Line#2440 supposed to be ignored: mixin.BaliParser.jj_3R_281() - mixin.BaliParser.jj_3R_281() assigned to SYNTAX
+Line#2441 supposed to be ignored: mixin.BaliParser.jj_3R_405() - mixin.BaliParser.jj_3R_405() assigned to SYNTAX
+Line#2442 supposed to be ignored: mixin.BaliParser.jj_3R_52() - mixin.BaliParser.jj_3R_52() assigned to SYNTAX
+Line#2443 supposed to be ignored: mixin.BaliParser.jj_3R_404() - mixin.BaliParser.jj_3R_404() assigned to SYNTAX
+Line#2444 supposed to be ignored: mixin.BaliParser.jj_3R_403() - mixin.BaliParser.jj_3R_403() assigned to SYNTAX
+Line#2445 supposed to be ignored: mixin.BaliParser.jj_3R_386() - mixin.BaliParser.jj_3R_386() assigned to SYNTAX
+Line#2446 supposed to be ignored: mixin.BaliParser.jj_3R_334() - mixin.BaliParser.jj_3R_334() assigned to SYNTAX
+Line#2447 supposed to be ignored: mixin.BaliParser.jj_3R_494() - mixin.BaliParser.jj_3R_494() assigned to SYNTAX
+Line#2448 supposed to be ignored: mixin.BaliParser.jj_3R_499() - mixin.BaliParser.jj_3R_499() assigned to SYNTAX
+Line#2449 supposed to be ignored: mixin.BaliParser.jj_3R_50() - mixin.BaliParser.jj_3R_50() assigned to SYNTAX
+Line#2450 supposed to be ignored: mixin.BaliParser.jj_3R_304() - mixin.BaliParser.jj_3R_304() assigned to SYNTAX
+Line#2451 supposed to be ignored: mixin.BaliParser.jj_3R_322() - mixin.BaliParser.jj_3R_322() assigned to SYNTAX
+Line#2452 supposed to be ignored: mixin.BaliParser.jj_3R_477() - mixin.BaliParser.jj_3R_477() assigned to SYNTAX
+Line#2453 supposed to be ignored: mixin.BaliParser.jj_3R_66() - mixin.BaliParser.jj_3R_66() assigned to SYNTAX
+Line#2454 supposed to be ignored: mixin.BaliParser.jj_3R_347() - mixin.BaliParser.jj_3R_347() assigned to SYNTAX
+Line#2455 supposed to be ignored: mixin.BaliParser.jj_3R_364() - mixin.BaliParser.jj_3R_364() assigned to SYNTAX
+Line#2456 supposed to be ignored: mixin.BaliParser.jj_3R_54() - mixin.BaliParser.jj_3R_54() assigned to SYNTAX
+Line#2457 supposed to be ignored: mixin.BaliParser.jj_3R_502() - mixin.BaliParser.jj_3R_502() assigned to SYNTAX
+Line#2458 supposed to be ignored: mixin.BaliParser.jj_3R_313() - mixin.BaliParser.jj_3R_313() assigned to SYNTAX
+Line#2459 supposed to be ignored: mixin.BaliParser.jj_3R_501() - mixin.BaliParser.jj_3R_501() assigned to SYNTAX
+Line#2460 supposed to be ignored: mixin.BaliParser.jj_3R_312() - mixin.BaliParser.jj_3R_312() assigned to SYNTAX
+Line#2461 supposed to be ignored: mixin.BaliParser.jj_3R_496() - mixin.BaliParser.jj_3R_496() assigned to SYNTAX
+Line#2462 supposed to be ignored: mixin.BaliParser.jj_3R_218() - mixin.BaliParser.jj_3R_218() assigned to SYNTAX
+Line#2463 supposed to be ignored: mixin.BaliParser.jj_3R_193() - mixin.BaliParser.jj_3R_193() assigned to SYNTAX
+Line#2464 supposed to be ignored: mixin.BaliParser.jj_3R_217() - mixin.BaliParser.jj_3R_217() assigned to SYNTAX
+Line#2465 supposed to be ignored: mixin.BaliParser.jj_3R_491() - mixin.BaliParser.jj_3R_491() assigned to SYNTAX
+Line#2466 supposed to be ignored: mixin.BaliParser.jj_3R_216() - mixin.BaliParser.jj_3R_216() assigned to SYNTAX
+Line#2467 supposed to be ignored: mixin.BaliParser.jj_3R_215() - mixin.BaliParser.jj_3R_215() assigned to SYNTAX
+Line#2468 supposed to be ignored: mixin.BaliParser.jj_3R_479() - mixin.BaliParser.jj_3R_479() assigned to SYNTAX
+Line#2469 supposed to be ignored: mixin.BaliParser.jj_3R_214() - mixin.BaliParser.jj_3R_214() assigned to SYNTAX
+Line#2470 supposed to be ignored: mixin.BaliParser.jj_3R_363() - mixin.BaliParser.jj_3R_363() assigned to SYNTAX
+Line#2471 supposed to be ignored: mixin.BaliParser.jj_3R_213() - mixin.BaliParser.jj_3R_213() assigned to SYNTAX
+Line#2472 supposed to be ignored: mixin.BaliParser.jj_3R_346() - mixin.BaliParser.jj_3R_346() assigned to SYNTAX
+Line#2473 supposed to be ignored: mixin.BaliParser.jj_3R_212() - mixin.BaliParser.jj_3R_212() assigned to SYNTAX
+Line#2474 supposed to be ignored: mixin.BaliParser.jj_3R_345() - mixin.BaliParser.jj_3R_345() assigned to SYNTAX
+Line#2475 supposed to be ignored: mixin.BaliParser.jj_3R_211() - mixin.BaliParser.jj_3R_211() assigned to SYNTAX
+Line#2476 supposed to be ignored: mixin.BaliParser.jj_3R_344() - mixin.BaliParser.jj_3R_344() assigned to SYNTAX
+Line#2477 supposed to be ignored: mixin.BaliParser.jj_3R_210() - mixin.BaliParser.jj_3R_210() assigned to SYNTAX
+Line#2478 supposed to be ignored: mixin.BaliParser.jj_3R_307() - mixin.BaliParser.jj_3R_307() assigned to SYNTAX
+Line#2479 supposed to be ignored: mixin.BaliParser.jj_3R_454() - mixin.BaliParser.jj_3R_454() assigned to SYNTAX
+Line#2480 supposed to be ignored: mixin.BaliParser.jj_3R_306() - mixin.BaliParser.jj_3R_306() assigned to SYNTAX
+Line#2481 supposed to be ignored: mixin.BaliParser.jj_3R_209() - mixin.BaliParser.jj_3R_209() assigned to SYNTAX
+Line#2482 supposed to be ignored: mixin.BaliParser.jj_3R_305() - mixin.BaliParser.jj_3R_305() assigned to SYNTAX
+Line#2483 supposed to be ignored: mixin.BaliParser.jj_3R_343() - mixin.BaliParser.jj_3R_343() assigned to SYNTAX
+Line#2484 supposed to be ignored: mixin.BaliParser.jj_3R_325() - mixin.BaliParser.jj_3R_325() assigned to SYNTAX
+Line#2485 supposed to be ignored: mixin.BaliParser.jj_3R_274() - mixin.BaliParser.jj_3R_274() assigned to SYNTAX
+Line#2486 supposed to be ignored: mixin.BaliParser.jj_3R_208() - mixin.BaliParser.jj_3R_208() assigned to SYNTAX
+Line#2487 supposed to be ignored: mixin.BaliParser.jj_3R_207() - mixin.BaliParser.jj_3R_207() assigned to SYNTAX
+Line#2488 supposed to be ignored: mixin.BaliParser.jj_3R_414() - mixin.BaliParser.jj_3R_414() assigned to SYNTAX
+Line#2489 supposed to be ignored: mixin.BaliParser.jj_3R_206() - mixin.BaliParser.jj_3R_206() assigned to SYNTAX
+Line#2490 supposed to be ignored: mixin.BaliParser.jj_3R_413() - mixin.BaliParser.jj_3R_413() assigned to SYNTAX
+Line#2491 supposed to be ignored: mixin.BaliParser.jj_3R_301() - mixin.BaliParser.jj_3R_301() assigned to SYNTAX
+Line#2492 supposed to be ignored: mixin.BaliParser.jj_3R_442() - mixin.BaliParser.jj_3R_442() assigned to SYNTAX
+Line#2493 supposed to be ignored: mixin.BaliParser.jj_3R_393() - mixin.BaliParser.jj_3R_393() assigned to SYNTAX
+Line#2494 supposed to be ignored: mixin.BaliParser.jj_3R_300() - mixin.BaliParser.jj_3R_300() assigned to SYNTAX
+Line#2495 supposed to be ignored: mixin.BaliParser.jj_3R_441() - mixin.BaliParser.jj_3R_441() assigned to SYNTAX
+Line#2496 supposed to be ignored: mixin.BaliParser.jj_3R_299() - mixin.BaliParser.jj_3R_299() assigned to SYNTAX
+Line#2497 supposed to be ignored: mixin.BaliParser.jj_3R_423() - mixin.BaliParser.jj_3R_423() assigned to SYNTAX
+Line#2498 supposed to be ignored: mixin.BaliParser.jj_3R_298() - mixin.BaliParser.jj_3R_298() assigned to SYNTAX
+Line#2499 supposed to be ignored: mixin.BaliParser.jj_3R_297() - mixin.BaliParser.jj_3R_297() assigned to SYNTAX
+Line#2500 supposed to be ignored: mixin.BaliParser.jj_3R_326() - mixin.BaliParser.jj_3R_326() assigned to SYNTAX
+Line#2501 supposed to be ignored: mixin.BaliParser.jj_3R_421() - mixin.BaliParser.jj_3R_421() assigned to SYNTAX
+Line#2502 supposed to be ignored: mixin.BaliParser.jj_3R_420() - mixin.BaliParser.jj_3R_420() assigned to SYNTAX
+Line#2503 supposed to be ignored: mixin.BaliParser.jj_3R_296() - mixin.BaliParser.jj_3R_296() assigned to SYNTAX
+Line#2504 supposed to be ignored: mixin.BaliParser.jj_3R_419() - mixin.BaliParser.jj_3R_419() assigned to SYNTAX
+Line#2505 supposed to be ignored: mixin.BaliParser.jj_3R_295() - mixin.BaliParser.jj_3R_295() assigned to SYNTAX
+Line#2506 supposed to be ignored: mixin.BaliParser.jj_3R_418() - mixin.BaliParser.jj_3R_418() assigned to SYNTAX
+Line#2507 supposed to be ignored: mixin.BaliParser.jj_3R_104() - mixin.BaliParser.jj_3R_104() assigned to SYNTAX
+Line#2508 supposed to be ignored: mixin.BaliParser.jj_3R_294() - mixin.BaliParser.jj_3R_294() assigned to SYNTAX
+Line#2509 supposed to be ignored: mixin.BaliParser.jj_3R_417() - mixin.BaliParser.jj_3R_417() assigned to SYNTAX
+Line#2510 supposed to be ignored: mixin.BaliParser.jj_3R_49() - mixin.BaliParser.jj_3R_49() assigned to SYNTAX
+Line#2511 supposed to be ignored: mixin.BaliParser.jj_3R_396() - mixin.BaliParser.jj_3R_396() assigned to SYNTAX
+Line#2512 supposed to be ignored: mixin.BaliParser.jj_3R_293() - mixin.BaliParser.jj_3R_293() assigned to SYNTAX
+Line#2513 supposed to be ignored: mixin.BaliParser.jj_3R_292() - mixin.BaliParser.jj_3R_292() assigned to SYNTAX
+Line#2514 supposed to be ignored: mixin.BaliParser.jj_3R_291() - mixin.BaliParser.jj_3R_291() assigned to SYNTAX
+Line#2515 supposed to be ignored: mixin.BaliParser.jj_3R_424() - mixin.BaliParser.jj_3R_424() assigned to SYNTAX
+Line#2516 supposed to be ignored: mixin.BaliParser.jj_3R_290() - mixin.BaliParser.jj_3R_290() assigned to SYNTAX
+Line#2517 supposed to be ignored: mixin.BaliParser.jj_3R_422() - mixin.BaliParser.jj_3R_422() assigned to SYNTAX
+Line#2518 supposed to be ignored: mixin.BaliParser.jj_3R_289() - mixin.BaliParser.jj_3R_289() assigned to SYNTAX
+Line#2519 supposed to be ignored: mixin.BaliParser.jj_3R_397() - mixin.BaliParser.jj_3R_397() assigned to SYNTAX
+Line#2520 supposed to be ignored: mixin.BaliParser.jj_3R_425() - mixin.BaliParser.jj_3R_425() assigned to SYNTAX
+Line#2521 supposed to be ignored: mixin.BaliParser.jj_3R_288() - mixin.BaliParser.jj_3R_288() assigned to SYNTAX
+Line#2522 supposed to be ignored: mixin.BaliParser.jj_3R_287() - mixin.BaliParser.jj_3R_287() assigned to SYNTAX
+Line#2523 supposed to be ignored: mixin.BaliParser.jj_3R_317() - mixin.BaliParser.jj_3R_317() assigned to SYNTAX
+Line#2524 supposed to be ignored: mixin.BaliParser.jj_3R_179() - mixin.BaliParser.jj_3R_179() assigned to SYNTAX
+Line#2525 supposed to be ignored: mixin.BaliParser.jj_3R_444() - mixin.BaliParser.jj_3R_444() assigned to SYNTAX
+Line#2526 supposed to be ignored: mixin.BaliParser.jj_3R_286() - mixin.BaliParser.jj_3R_286() assigned to SYNTAX
+Line#2527 supposed to be ignored: mixin.BaliParser.jj_3R_443() - mixin.BaliParser.jj_3R_443() assigned to SYNTAX
+Line#2528 supposed to be ignored: mixin.BaliParser.jj_3R_285() - mixin.BaliParser.jj_3R_285() assigned to SYNTAX
+Line#2529 supposed to be ignored: mixin.BaliParser.jj_3R_151() - mixin.BaliParser.jj_3R_151() assigned to SYNTAX
+Line#2530 supposed to be ignored: mixin.BaliParser.jj_3R_150() - mixin.BaliParser.jj_3R_150() assigned to SYNTAX
+Line#2531 supposed to be ignored: mixin.BaliParser.jj_3R_178() - mixin.BaliParser.jj_3R_178() assigned to SYNTAX
+Line#2532 supposed to be ignored: mixin.BaliParser.jj_3R_284() - mixin.BaliParser.jj_3R_284() assigned to SYNTAX
+Line#2533 supposed to be ignored: mixin.BaliParser.jj_3R_149() - mixin.BaliParser.jj_3R_149() assigned to SYNTAX
+Line#2534 supposed to be ignored: mixin.BaliParser.jj_3R_283() - mixin.BaliParser.jj_3R_283() assigned to SYNTAX
+Line#2535 supposed to be ignored: mixin.BaliParser.jj_3R_251() - mixin.BaliParser.jj_3R_251() assigned to SYNTAX
+Line#2536 supposed to be ignored: mixin.BaliParser.jj_3R_250() - mixin.BaliParser.jj_3R_250() assigned to SYNTAX
+Line#2537 supposed to be ignored: mixin.BaliParser.jj_3R_249() - mixin.BaliParser.jj_3R_249() assigned to SYNTAX
+Line#2538 supposed to be ignored: mixin.BaliParser.jj_3R_248() - mixin.BaliParser.jj_3R_248() assigned to SYNTAX
+Line#2539 supposed to be ignored: mixin.BaliParser.jj_3R_247() - mixin.BaliParser.jj_3R_247() assigned to SYNTAX
+Line#2540 supposed to be ignored: mixin.BaliParser.jj_3R_246() - mixin.BaliParser.jj_3R_246() assigned to SYNTAX
+Line#2541 supposed to be ignored: mixin.BaliParser.jj_3R_48() - mixin.BaliParser.jj_3R_48() assigned to SYNTAX
+Line#2542 supposed to be ignored: mixin.BaliParser.jj_3R_512() - mixin.BaliParser.jj_3R_512() assigned to SYNTAX
+Line#2543 supposed to be ignored: mixin.BaliParser.jj_3R_511() - mixin.BaliParser.jj_3R_511() assigned to SYNTAX
+Line#2544 supposed to be ignored: mixin.BaliParser.jj_3R_47() - mixin.BaliParser.jj_3R_47() assigned to SYNTAX
+Line#2545 supposed to be ignored: mixin.BaliParser.jj_3R_375() - mixin.BaliParser.jj_3R_375() assigned to SYNTAX
+Line#2546 supposed to be ignored: mixin.BaliParser.jj_3R_46() - mixin.BaliParser.jj_3R_46() assigned to SYNTAX
+Line#2547 supposed to be ignored: mixin.BaliParser.jj_3R_374() - mixin.BaliParser.jj_3R_374() assigned to SYNTAX
+Line#2548 supposed to be ignored: mixin.BaliParser.jj_3R_282() - mixin.BaliParser.jj_3R_282() assigned to SYNTAX
+Line#2549 supposed to be ignored: mixin.BaliParser.jj_3R_373() - mixin.BaliParser.jj_3R_373() assigned to SYNTAX
+Line#2550 supposed to be ignored: mixin.BaliParser.jj_3R_237() - mixin.BaliParser.jj_3R_237() assigned to SYNTAX
+Line#2551 supposed to be ignored: mixin.BaliParser.jj_3R_372() - mixin.BaliParser.jj_3R_372() assigned to SYNTAX
+Line#2552 supposed to be ignored: mixin.BaliParser.jj_3R_459() - mixin.BaliParser.jj_3R_459() assigned to SYNTAX
+Line#2553 supposed to be ignored: mixin.BaliParser.jj_3R_236() - mixin.BaliParser.jj_3R_236() assigned to SYNTAX
+Line#2554 supposed to be ignored: mixin.BaliParser.jj_3R_371() - mixin.BaliParser.jj_3R_371() assigned to SYNTAX
+Line#2555 supposed to be ignored: mixin.BaliParser.jj_3R_235() - mixin.BaliParser.jj_3R_235() assigned to SYNTAX
+Line#2556 supposed to be ignored: mixin.BaliParser.jj_3R_438() - mixin.BaliParser.jj_3R_438() assigned to SYNTAX
+Line#2557 supposed to be ignored: mixin.BaliParser.jj_3R_437() - mixin.BaliParser.jj_3R_437() assigned to SYNTAX
+Line#2558 supposed to be ignored: mixin.BaliParser.jj_3R_44() - mixin.BaliParser.jj_3R_44() assigned to SYNTAX
+Line#2559 supposed to be ignored: mixin.BaliParser.jj_3R_370() - mixin.BaliParser.jj_3R_370() assigned to SYNTAX
+Line#2560 supposed to be ignored: mixin.BaliParser.jj_3R_234() - mixin.BaliParser.jj_3R_234() assigned to SYNTAX
+Line#2561 supposed to be ignored: mixin.BaliParser.jj_3R_233() - mixin.BaliParser.jj_3R_233() assigned to SYNTAX
+Line#2562 supposed to be ignored: mixin.BaliParser.jj_3R_369() - mixin.BaliParser.jj_3R_369() assigned to SYNTAX
+Line#2563 supposed to be ignored: mixin.BaliParser.jj_3R_278() - mixin.BaliParser.jj_3R_278() assigned to SYNTAX
+Line#2564 supposed to be ignored: mixin.BaliParser.jj_3R_232() - mixin.BaliParser.jj_3R_232() assigned to SYNTAX
+Line#2565 supposed to be ignored: mixin.BaliParser.jj_3R_368() - mixin.BaliParser.jj_3R_368() assigned to SYNTAX
+Line#2566 supposed to be ignored: mixin.BaliParser.jj_3R_464() - mixin.BaliParser.jj_3R_464() assigned to SYNTAX
+Line#2567 supposed to be ignored: mixin.BaliParser.jj_3R_277() - mixin.BaliParser.jj_3R_277() assigned to SYNTAX
+Line#2568 supposed to be ignored: mixin.BaliParser.jj_3R_463() - mixin.BaliParser.jj_3R_463() assigned to SYNTAX
+Line#2569 supposed to be ignored: mixin.BaliParser.jj_3R_462() - mixin.BaliParser.jj_3R_462() assigned to SYNTAX
+Line#2570 supposed to be ignored: mixin.BaliParser.jj_3R_461() - mixin.BaliParser.jj_3R_461() assigned to SYNTAX
+Line#2571 supposed to be ignored: mixin.BaliParser.jj_3R_231() - mixin.BaliParser.jj_3R_231() assigned to SYNTAX
+Line#2572 supposed to be ignored: mixin.BaliParser.jj_3R_460() - mixin.BaliParser.jj_3R_460() assigned to SYNTAX
+Line#2573 supposed to be ignored: mixin.BaliParser.jj_3R_475() - mixin.BaliParser.jj_3R_475() assigned to SYNTAX
+Line#2574 supposed to be ignored: mixin.BaliParser.jj_3R_230() - mixin.BaliParser.jj_3R_230() assigned to SYNTAX
+Line#2575 supposed to be ignored: mixin.BaliParser.jj_3R_276() - mixin.BaliParser.jj_3R_276() assigned to SYNTAX
+Line#2576 supposed to be ignored: mixin.BaliParser.jj_3R_229() - mixin.BaliParser.jj_3R_229() assigned to SYNTAX
+Line#2577 supposed to be ignored: mixin.BaliParser.jj_3R_406() - mixin.BaliParser.jj_3R_406() assigned to SYNTAX
+Line#2578 supposed to be ignored: mixin.BaliParser.jj_3R_275() - mixin.BaliParser.jj_3R_275() assigned to SYNTAX
+Line#2579 supposed to be ignored: mixin.BaliParser.jj_3R_228() - mixin.BaliParser.jj_3R_228() assigned to SYNTAX
+Line#2580 supposed to be ignored: mixin.BaliParser.jj_3R_227() - mixin.BaliParser.jj_3R_227() assigned to SYNTAX
+Line#2581 supposed to be ignored: mixin.BaliParser.jj_3R_135() - mixin.BaliParser.jj_3R_135() assigned to SYNTAX
+Line#2582 supposed to be ignored: mixin.BaliParser.jj_3R_226() - mixin.BaliParser.jj_3R_226() assigned to SYNTAX
+Line#2583 supposed to be ignored: mixin.BaliParser.jj_3R_388() - mixin.BaliParser.jj_3R_388() assigned to SYNTAX
+Line#2584 supposed to be ignored: mixin.BaliParser.jj_3R_225() - mixin.BaliParser.jj_3R_225() assigned to SYNTAX
+Line#2585 supposed to be ignored: mixin.BaliParser.jj_3R_273() - mixin.BaliParser.jj_3R_273() assigned to SYNTAX
+Line#2586 supposed to be ignored: mixin.BaliParser.jj_3R_387() - mixin.BaliParser.jj_3R_387() assigned to SYNTAX
+Line#2587 supposed to be ignored: mixin.BaliParser.jj_3R_174() - mixin.BaliParser.jj_3R_174() assigned to SYNTAX
+Line#2588 supposed to be ignored: mixin.BaliParser.jj_3R_224() - mixin.BaliParser.jj_3R_224() assigned to SYNTAX
+Line#2589 supposed to be ignored: mixin.BaliParser.jj_3R_173() - mixin.BaliParser.jj_3R_173() assigned to SYNTAX
+Line#2590 supposed to be ignored: mixin.BaliParser.jj_3R_272() - mixin.BaliParser.jj_3R_272() assigned to SYNTAX
+Line#2591 supposed to be ignored: mixin.BaliParser.jj_3R_136() - mixin.BaliParser.jj_3R_136() assigned to SYNTAX
+Line#2592 supposed to be ignored: mixin.BaliParser.jj_3R_172() - mixin.BaliParser.jj_3R_172() assigned to SYNTAX
+Line#2593 supposed to be ignored: mixin.BaliParser.jj_3R_223() - mixin.BaliParser.jj_3R_223() assigned to SYNTAX
+Line#2594 supposed to be ignored: mixin.BaliParser.jj_3R_205() - mixin.BaliParser.jj_3R_205() assigned to SYNTAX
+Line#2595 supposed to be ignored: mixin.BaliParser.jj_3R_204() - mixin.BaliParser.jj_3R_204() assigned to SYNTAX
+Line#2596 supposed to be ignored: mixin.BaliParser.jj_3R_222() - mixin.BaliParser.jj_3R_222() assigned to SYNTAX
+Line#2597 supposed to be ignored: mixin.BaliParser.jj_3R_270() - mixin.BaliParser.jj_3R_270() assigned to SYNTAX
+Line#2598 supposed to be ignored: mixin.BaliParser.jj_3R_203() - mixin.BaliParser.jj_3R_203() assigned to SYNTAX
+Line#2599 supposed to be ignored: mixin.BaliParser.jj_3R_221() - mixin.BaliParser.jj_3R_221() assigned to SYNTAX
+Line#2600 supposed to be ignored: mixin.BaliParser.jj_3R_202() - mixin.BaliParser.jj_3R_202() assigned to SYNTAX
+Line#2601 supposed to be ignored: mixin.BaliParser.jj_3R_492() - mixin.BaliParser.jj_3R_492() assigned to SYNTAX
+Line#2602 supposed to be ignored: mixin.BaliParser.jj_3R_201() - mixin.BaliParser.jj_3R_201() assigned to SYNTAX
+Line#2603 supposed to be ignored: mixin.BaliParser.jj_3R_220() - mixin.BaliParser.jj_3R_220() assigned to SYNTAX
+Line#2604 supposed to be ignored: mixin.BaliParser.jj_3R_200() - mixin.BaliParser.jj_3R_200() assigned to SYNTAX
+Line#2605 supposed to be ignored: mixin.BaliParser.jj_3R_199() - mixin.BaliParser.jj_3R_199() assigned to SYNTAX
+Line#2606 supposed to be ignored: mixin.BaliParser.jj_3R_455() - mixin.BaliParser.jj_3R_455() assigned to SYNTAX
+Line#2607 supposed to be ignored: mixin.BaliParser.jj_3R_198() - mixin.BaliParser.jj_3R_198() assigned to SYNTAX
+Line#2608 supposed to be ignored: mixin.BaliParser.jj_3R_175() - mixin.BaliParser.jj_3R_175() assigned to SYNTAX
+Line#2609 supposed to be ignored: mixin.BaliParser.jj_3R_197() - mixin.BaliParser.jj_3R_197() assigned to SYNTAX
+Line#2610 supposed to be ignored: mixin.BaliParser.jj_3R_145() - mixin.BaliParser.jj_3R_145() assigned to SYNTAX
+Line#2611 supposed to be ignored: mixin.BaliParser.jj_3R_458() - mixin.BaliParser.jj_3R_458() assigned to SYNTAX
+Line#2612 supposed to be ignored: mixin.BaliParser.jj_3R_474() - mixin.BaliParser.jj_3R_474() assigned to SYNTAX
+Line#2613 supposed to be ignored: mixin.BaliParser.jj_3R_144() - mixin.BaliParser.jj_3R_144() assigned to SYNTAX
+Line#2614 supposed to be ignored: mixin.BaliParser.jj_3R_64() - mixin.BaliParser.jj_3R_64() assigned to SYNTAX
+Line#2615 supposed to be ignored: mixin.BaliParser.jj_3R_63() - mixin.BaliParser.jj_3R_63() assigned to SYNTAX
+Line#2616 supposed to be ignored: mixin.BaliParser.jj_3R_171() - mixin.BaliParser.jj_3R_171() assigned to SYNTAX
+Line#2617 supposed to be ignored: mixin.BaliParser.jj_3R_490() - mixin.BaliParser.jj_3R_490() assigned to SYNTAX
+Line#2618 supposed to be ignored: mixin.BaliParser.jj_3R_170() - mixin.BaliParser.jj_3R_170() assigned to SYNTAX
+Line#2619 supposed to be ignored: mixin.BaliParser.jj_3R_489() - mixin.BaliParser.jj_3R_489() assigned to SYNTAX
+Line#2620 supposed to be ignored: mixin.BaliParser.jj_3R_169() - mixin.BaliParser.jj_3R_169() assigned to SYNTAX
+Line#2621 supposed to be ignored: mixin.BaliParser.jj_3R_488() - mixin.BaliParser.jj_3R_488() assigned to SYNTAX
+Line#2622 supposed to be ignored: mixin.BaliParser.jj_3R_134() - mixin.BaliParser.jj_3R_134() assigned to SYNTAX
+Line#2623 supposed to be ignored: mixin.BaliParser.jj_3R_168() - mixin.BaliParser.jj_3R_168() assigned to SYNTAX
+Line#2624 supposed to be ignored: mixin.BaliParser.jj_3R_262() - mixin.BaliParser.jj_3R_262() assigned to SYNTAX
+Line#2625 supposed to be ignored: mixin.BaliParser.jj_3R_487() - mixin.BaliParser.jj_3R_487() assigned to SYNTAX
+Line#2626 supposed to be ignored: mixin.BaliParser.jj_3R_261() - mixin.BaliParser.jj_3R_261() assigned to SYNTAX
+Line#2627 supposed to be ignored: mixin.BaliParser.token_source - mixin.BaliParser.token_source assigned to SYNTAX
+Line#2628 supposed to be ignored: mixin.BaliParserTokenManager - mixin.BaliParserTokenManager assigned to SYNTAX
+Line#2629 supposed to be ignored: mixin.BaliParser.jj_input_stream - mixin.BaliParser.jj_input_stream assigned to SYNTAX
+Line#2630 supposed to be ignored: mixin.BaliParser.jj_la1_0 - mixin.BaliParser.jj_la1_0 assigned to SYNTAX
+Line#2631 supposed to be ignored: mixin.BaliParser.jj_la1_1 - mixin.BaliParser.jj_la1_1 assigned to SYNTAX
+Line#2632 supposed to be ignored: mixin.BaliParser.jj_la1_2 - mixin.BaliParser.jj_la1_2 assigned to SYNTAX
+Line#2633 supposed to be ignored: mixin.BaliParser.jj_la1_3 - mixin.BaliParser.jj_la1_3 assigned to SYNTAX
+Line#2634 supposed to be ignored: mixin.BaliParser.jj_la1_4 - mixin.BaliParser.jj_la1_4 assigned to SYNTAX
+Line#2635 supposed to be ignored: mixin.BaliParser.jj_la1_5 - mixin.BaliParser.jj_la1_5 assigned to SYNTAX
+Line#2636 supposed to be ignored: mixin.BaliParser.jj_la1_6 - mixin.BaliParser.jj_la1_6 assigned to SYNTAX
+Line#2637 supposed to be ignored: mixin.BaliParser.jj_la1_init_0() - mixin.BaliParser.jj_la1_init_0() assigned to SYNTAX
+Line#2638 supposed to be ignored: mixin.BaliParser.jj_la1_init_1() - mixin.BaliParser.jj_la1_init_1() assigned to SYNTAX
+Line#2639 supposed to be ignored: mixin.BaliParser.jj_la1_init_2() - mixin.BaliParser.jj_la1_init_2() assigned to SYNTAX
+Line#2640 supposed to be ignored: mixin.BaliParser.jj_la1_init_3() - mixin.BaliParser.jj_la1_init_3() assigned to SYNTAX
+Line#2641 supposed to be ignored: mixin.BaliParser.jj_la1_init_4() - mixin.BaliParser.jj_la1_init_4() assigned to SYNTAX
+Line#2642 supposed to be ignored: mixin.BaliParser.jj_la1_init_5() - mixin.BaliParser.jj_la1_init_5() assigned to SYNTAX
+Line#2643 supposed to be ignored: mixin.BaliParser.jj_la1_init_6() - mixin.BaliParser.jj_la1_init_6() assigned to SYNTAX
+Line#2644 supposed to be ignored: mixin.BaliParser.jj_2_rtns - mixin.BaliParser.jj_2_rtns assigned to SYNTAX
+Line#2646 supposed to be ignored: mixin.BaliParser.jj_rescan - mixin.BaliParser.jj_rescan assigned to SYNTAX
+Line#2647 supposed to be ignored: mixin.BaliParser.jj_gc - mixin.BaliParser.jj_gc assigned to SYNTAX
+Line#2648 supposed to be ignored: mixin.BaliParser.BaliParser(java.io.InputStream stream) - mixin.BaliParser.BaliParser(java.io.InputStream stream) assigned to SYNTAX
+Line#2649 supposed to be ignored: mixin.BaliParser.BaliParser(java.io.InputStream stream, String encoding) - mixin.BaliParser.BaliParser(java.io.InputStream stream, String encoding) assigned to SYNTAX
+Line#2650 supposed to be ignored: mixin.Token.next - mixin.Token.next assigned to SYNTAX
+Line#2651 supposed to be ignored: mixin.BaliParserTokenManager.getNextToken() - mixin.BaliParserTokenManager.getNextToken() assigned to SYNTAX
+Line#2652 supposed to be ignored: mixin.BaliParser.ReInit(java.io.InputStream stream) - mixin.BaliParser.ReInit(java.io.InputStream stream) assigned to SYNTAX
+Line#2653 supposed to be ignored: mixin.BaliParser.ReInit(java.io.InputStream stream, String encoding) - mixin.BaliParser.ReInit(java.io.InputStream stream, String encoding) assigned to SYNTAX
+Line#2654 supposed to be ignored: mixin.BaliParserTokenManager.ReInit(JavaCharStream stream) - mixin.BaliParserTokenManager.ReInit(JavaCharStream stream) assigned to SYNTAX
+Line#2655 supposed to be ignored: mixin.BaliParser.BaliParser(java.io.Reader stream) - mixin.BaliParser.BaliParser(java.io.Reader stream) assigned to SYNTAX
+Line#2656 supposed to be ignored: mixin.BaliParser.ReInit(java.io.Reader stream) - mixin.BaliParser.ReInit(java.io.Reader stream) assigned to SYNTAX
+Line#2657 supposed to be ignored: mixin.BaliParser.BaliParser(BaliParserTokenManager tm) - mixin.BaliParser.BaliParser(BaliParserTokenManager tm) assigned to SYNTAX
+Line#2658 supposed to be ignored: mixin.BaliParser.ReInit(BaliParserTokenManager tm) - mixin.BaliParser.ReInit(BaliParserTokenManager tm) assigned to SYNTAX
+Line#2659 supposed to be ignored: mixin.BaliParser.JJCalls.gen - mixin.BaliParser.JJCalls.gen assigned to SYNTAX
+Line#2660 supposed to be ignored: mixin.BaliParser.JJCalls.first - mixin.BaliParser.JJCalls.first assigned to SYNTAX
+Line#2661 supposed to be ignored: mixin.BaliParser.JJCalls.next - mixin.BaliParser.JJCalls.next assigned to SYNTAX
+Line#2662 supposed to be ignored: mixin.BaliParser.jj_kind - mixin.BaliParser.jj_kind assigned to SYNTAX
+Line#2663 supposed to be ignored: mixin.BaliParser.generateParseException() - mixin.BaliParser.generateParseException() assigned to SYNTAX
+Line#2664 supposed to be ignored: mixin.BaliParser.jj_ls - mixin.BaliParser.jj_ls assigned to SYNTAX
+Line#2665 supposed to be ignored: mixin.BaliParser.jj_add_error_token(int kind, int pos) - mixin.BaliParser.jj_add_error_token(int kind, int pos) assigned to SYNTAX
+Line#2666 supposed to be ignored: mixin.BaliParser.getNextToken() - mixin.BaliParser.getNextToken() assigned to SYNTAX
+Line#2667 supposed to be ignored: mixin.BaliParser.getToken(int index) - mixin.BaliParser.getToken(int index) assigned to SYNTAX
+Line#2668 supposed to be ignored: mixin.BaliParser.jj_expentries - mixin.BaliParser.jj_expentries assigned to SYNTAX
+Line#2669 supposed to be ignored: mixin.BaliParser.jj_expentry - mixin.BaliParser.jj_expentry assigned to SYNTAX
+Line#2670 supposed to be ignored: mixin.BaliParser.jj_lasttokens - mixin.BaliParser.jj_lasttokens assigned to SYNTAX
+Line#2671 supposed to be ignored: mixin.BaliParser.jj_endpos - mixin.BaliParser.jj_endpos assigned to SYNTAX
+Line#2672 supposed to be ignored: mixin.BaliParserConstants.tokenImage - mixin.BaliParserConstants.tokenImage assigned to SYNTAX
+Line#2673 supposed to be ignored: mixin.BaliParser.jj_rescan_token() - mixin.BaliParser.jj_rescan_token() assigned to SYNTAX
+Line#2674 supposed to be ignored: mixin.BaliParser.enable_tracing() - mixin.BaliParser.enable_tracing() assigned to SYNTAX
+Line#2675 supposed to be ignored: mixin.BaliParser.disable_tracing() - mixin.BaliParser.disable_tracing() assigned to SYNTAX
+Line#2676 supposed to be ignored: mixin.BaliParser.JJCalls.arg - mixin.BaliParser.JJCalls.arg assigned to SYNTAX
+Line#2793 supposed to be ignored: mixin.Parser.reset(Reader reader) - mixin.Parser.reset(Reader reader) assigned to SYNTAX
+Line#2797 supposed to be ignored: mixin.Parser.baliParser - mixin.Parser.baliParser assigned to SYNTAX
+Line#2800 supposed to be ignored: mixin.Parser.parseEOF() - mixin.Parser.parseEOF() assigned to SYNTAX
+Line#2801 supposed to be ignored: mixin.Parser.Parser(Reader reader) - mixin.Parser.Parser(Reader reader) assigned to SYNTAX
+Line#3128 supposed to be ignored: mixin.BaliParserConstants.SINGLE_LINE_COMMENT - mixin.BaliParserConstants.SINGLE_LINE_COMMENT assigned to SYNTAX
+Line#3129 supposed to be ignored: mixin.BaliParserConstants.FORMAL_COMMENT - mixin.BaliParserConstants.FORMAL_COMMENT assigned to SYNTAX
+Line#3130 supposed to be ignored: mixin.BaliParserConstants.MULTI_LINE_COMMENT - mixin.BaliParserConstants.MULTI_LINE_COMMENT assigned to SYNTAX
+Line#3131 supposed to be ignored: mixin.BaliParserConstants.LETTER - mixin.BaliParserConstants.LETTER assigned to SYNTAX
+Line#3132 supposed to be ignored: mixin.BaliParserConstants.DIGIT - mixin.BaliParserConstants.DIGIT assigned to SYNTAX
+Line#3133 supposed to be ignored: mixin.BaliParserConstants.CONST - mixin.BaliParserConstants.CONST assigned to SYNTAX
+Line#3134 supposed to be ignored: mixin.BaliParserConstants.GOTO - mixin.BaliParserConstants.GOTO assigned to SYNTAX
+Line#3135 supposed to be ignored: mixin.BaliParserConstants.DECIMAL_LITERAL - mixin.BaliParserConstants.DECIMAL_LITERAL assigned to SYNTAX
+Line#3136 supposed to be ignored: mixin.BaliParserConstants.HEX_LITERAL - mixin.BaliParserConstants.HEX_LITERAL assigned to SYNTAX
+Line#3137 supposed to be ignored: mixin.BaliParserConstants.OCTAL_LITERAL - mixin.BaliParserConstants.OCTAL_LITERAL assigned to SYNTAX
+Line#3138 supposed to be ignored: mixin.BaliParserConstants.EXPONENT - mixin.BaliParserConstants.EXPONENT assigned to SYNTAX
+Line#3139 supposed to be ignored: mixin.BaliParserConstants.OTHER - mixin.BaliParserConstants.OTHER assigned to SYNTAX
+Line#3140 supposed to be ignored: mixin.BaliParserConstants.DEFAULT - mixin.BaliParserConstants.DEFAULT assigned to SYNTAX
+Line#3141 supposed to be ignored: mixin.BaliParserConstants.IN_SINGLE_LINE_COMMENT - mixin.BaliParserConstants.IN_SINGLE_LINE_COMMENT assigned to SYNTAX
+Line#3142 supposed to be ignored: mixin.BaliParserConstants.IN_FORMAL_COMMENT - mixin.BaliParserConstants.IN_FORMAL_COMMENT assigned to SYNTAX
+Line#3143 supposed to be ignored: mixin.BaliParserConstants.IN_MULTI_LINE_COMMENT - mixin.BaliParserConstants.IN_MULTI_LINE_COMMENT assigned to SYNTAX
+Line#3277 supposed to be ignored: mixin.Token.serialVersionUID - mixin.Token.serialVersionUID assigned to SYNTAX
+Line#3278 supposed to be ignored: mixin.Token.beginLine - mixin.Token.beginLine assigned to SYNTAX
+Line#3279 supposed to be ignored: mixin.Token.beginColumn - mixin.Token.beginColumn assigned to SYNTAX
+Line#3280 supposed to be ignored: mixin.Token.endColumn - mixin.Token.endColumn assigned to SYNTAX
+Line#3281 supposed to be ignored: mixin.Token.getValue() - mixin.Token.getValue() assigned to SYNTAX
+Line#3282 supposed to be ignored: mixin.Token.Token() - mixin.Token.Token() assigned to SYNTAX
+Line#3283 supposed to be ignored: mixin.Token.Token(int kind) - mixin.Token.Token(int kind) assigned to SYNTAX
+Line#3284 supposed to be ignored: mixin.Token.Token(int kind, String image) - mixin.Token.Token(int kind, String image) assigned to SYNTAX
+Line#3285 supposed to be ignored: mixin.Token.newToken(int ofKind, String image) - mixin.Token.newToken(int ofKind, String image) assigned to SYNTAX
+Line#3286 supposed to be ignored: mixin.Token.newToken(int ofKind) - mixin.Token.newToken(int ofKind) assigned to SYNTAX
+Line#3530 supposed to be ignored: mixin.BaliParserTokenManager.debugStream - mixin.BaliParserTokenManager.debugStream assigned to SYNTAX
+Line#3531 supposed to be ignored: mixin.BaliParserTokenManager.setDebugStream(java.io.PrintStream ds) - mixin.BaliParserTokenManager.setDebugStream(java.io.PrintStream ds) assigned to SYNTAX
+Line#3532 supposed to be ignored: mixin.BaliParserTokenManager.jjStopStringLiteralDfa_0(int pos, long active0, long active1, long active2, long active3) - mixin.BaliParserTokenManager.jjStopStringLiteralDfa_0(int pos, long active0, long active1, long active2, long active3) assigned to SYNTAX
+Line#3533 supposed to be ignored: mixin.BaliParserTokenManager.jjmatchedKind - mixin.BaliParserTokenManager.jjmatchedKind assigned to SYNTAX
+Line#3534 supposed to be ignored: mixin.BaliParserTokenManager.jjmatchedPos - mixin.BaliParserTokenManager.jjmatchedPos assigned to SYNTAX
+Line#3535 supposed to be ignored: mixin.BaliParserTokenManager.jjStartNfa_0(int pos, long active0, long active1, long active2, long active3) - mixin.BaliParserTokenManager.jjStartNfa_0(int pos, long active0, long active1, long active2, long active3) assigned to SYNTAX
+Line#3536 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveNfa_0(int startState, int curPos) - mixin.BaliParserTokenManager.jjMoveNfa_0(int startState, int curPos) assigned to SYNTAX
+Line#3537 supposed to be ignored: mixin.BaliParserTokenManager.jjStopAtPos(int pos, int kind) - mixin.BaliParserTokenManager.jjStopAtPos(int pos, int kind) assigned to SYNTAX
+Line#3538 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_0() - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_0() assigned to SYNTAX
+Line#3539 supposed to be ignored: mixin.BaliParserTokenManager.curChar - mixin.BaliParserTokenManager.curChar assigned to SYNTAX
+Line#3540 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_0(long active0, long active1, long active2, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_0(long active0, long active1, long active2, long active3) assigned to SYNTAX
+Line#3541 supposed to be ignored: mixin.BaliParserTokenManager.jjStartNfaWithStates_0(int pos, int kind, int state) - mixin.BaliParserTokenManager.jjStartNfaWithStates_0(int pos, int kind, int state) assigned to SYNTAX
+Line#3542 supposed to be ignored: mixin.BaliParserTokenManager.input_stream - mixin.BaliParserTokenManager.input_stream assigned to SYNTAX
+Line#3543 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa2_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa2_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) assigned to SYNTAX
+Line#3544 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa3_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa3_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) assigned to SYNTAX
+Line#3545 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa4_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa4_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) assigned to SYNTAX
+Line#3546 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa5_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa5_0(long old0, long active0, long old1, long active1, long old2, long active2, long old3, long active3) assigned to SYNTAX
+Line#3547 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa6_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa6_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3548 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa7_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa7_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3549 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa8_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa8_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3550 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa9_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa9_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3551 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa10_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa10_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3552 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa11_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa11_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3553 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa12_0(long old0, long active0, long old1, long active1, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa12_0(long old0, long active0, long old1, long active1, long old3, long active3) assigned to SYNTAX
+Line#3554 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa13_0(long old0, long active0, long old3, long active3) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa13_0(long old0, long active0, long old3, long active3) assigned to SYNTAX
+Line#3555 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa14_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa14_0(long old0, long active0) assigned to SYNTAX
+Line#3556 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa15_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa15_0(long old0, long active0) assigned to SYNTAX
+Line#3557 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa16_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa16_0(long old0, long active0) assigned to SYNTAX
+Line#3558 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa17_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa17_0(long old0, long active0) assigned to SYNTAX
+Line#3559 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa18_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa18_0(long old0, long active0) assigned to SYNTAX
+Line#3560 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa19_0(long old0, long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa19_0(long old0, long active0) assigned to SYNTAX
+Line#3561 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec0 - mixin.BaliParserTokenManager.jjbitVec0 assigned to SYNTAX
+Line#3562 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec2 - mixin.BaliParserTokenManager.jjbitVec2 assigned to SYNTAX
+Line#3563 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec3 - mixin.BaliParserTokenManager.jjbitVec3 assigned to SYNTAX
+Line#3564 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec4 - mixin.BaliParserTokenManager.jjbitVec4 assigned to SYNTAX
+Line#3565 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec5 - mixin.BaliParserTokenManager.jjbitVec5 assigned to SYNTAX
+Line#3566 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec6 - mixin.BaliParserTokenManager.jjbitVec6 assigned to SYNTAX
+Line#3567 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec7 - mixin.BaliParserTokenManager.jjbitVec7 assigned to SYNTAX
+Line#3568 supposed to be ignored: mixin.BaliParserTokenManager.jjbitVec8 - mixin.BaliParserTokenManager.jjbitVec8 assigned to SYNTAX
+Line#3569 supposed to be ignored: mixin.BaliParserTokenManager.jjnewStateCnt - mixin.BaliParserTokenManager.jjnewStateCnt assigned to SYNTAX
+Line#3570 supposed to be ignored: mixin.BaliParserTokenManager.jjstateSet - mixin.BaliParserTokenManager.jjstateSet assigned to SYNTAX
+Line#3571 supposed to be ignored: mixin.BaliParserTokenManager.jjround - mixin.BaliParserTokenManager.jjround assigned to SYNTAX
+Line#3572 supposed to be ignored: mixin.BaliParserTokenManager.ReInitRounds() - mixin.BaliParserTokenManager.ReInitRounds() assigned to SYNTAX
+Line#3573 supposed to be ignored: mixin.BaliParserTokenManager.jjCheckNAddStates(int start, int end) - mixin.BaliParserTokenManager.jjCheckNAddStates(int start, int end) assigned to SYNTAX
+Line#3574 supposed to be ignored: mixin.BaliParserTokenManager.jjCheckNAdd(int state) - mixin.BaliParserTokenManager.jjCheckNAdd(int state) assigned to SYNTAX
+Line#3575 supposed to be ignored: mixin.BaliParserTokenManager.jjAddStates(int start, int end) - mixin.BaliParserTokenManager.jjAddStates(int start, int end) assigned to SYNTAX
+Line#3576 supposed to be ignored: mixin.BaliParserTokenManager.jjCheckNAddTwoStates(int state1, int state2) - mixin.BaliParserTokenManager.jjCheckNAddTwoStates(int state1, int state2) assigned to SYNTAX
+Line#3577 supposed to be ignored: mixin.BaliParserTokenManager.jjCanMove_1(int hiByte, int i1, int i2, long l1, long l2) - mixin.BaliParserTokenManager.jjCanMove_1(int hiByte, int i1, int i2, long l1, long l2) assigned to SYNTAX
+Line#3578 supposed to be ignored: mixin.BaliParserTokenManager.jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) - mixin.BaliParserTokenManager.jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) assigned to SYNTAX
+Line#3579 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_3() - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_3() assigned to SYNTAX
+Line#3580 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_3(long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_3(long active0) assigned to SYNTAX
+Line#3581 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_1() - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_1() assigned to SYNTAX
+Line#3582 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveNfa_1(int startState, int curPos) - mixin.BaliParserTokenManager.jjMoveNfa_1(int startState, int curPos) assigned to SYNTAX
+Line#3583 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_2() - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa0_2() assigned to SYNTAX
+Line#3584 supposed to be ignored: mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_2(long active0) - mixin.BaliParserTokenManager.jjMoveStringLiteralDfa1_2(long active0) assigned to SYNTAX
+Line#3585 supposed to be ignored: mixin.BaliParserTokenManager.jjnextStates - mixin.BaliParserTokenManager.jjnextStates assigned to SYNTAX
+Line#3586 supposed to be ignored: mixin.BaliParserTokenManager.jjstrLiteralImages - mixin.BaliParserTokenManager.jjstrLiteralImages assigned to SYNTAX
+Line#3587 supposed to be ignored: mixin.BaliParserTokenManager.jjFillToken() - mixin.BaliParserTokenManager.jjFillToken() assigned to SYNTAX
+Line#3588 supposed to be ignored: mixin.BaliParserTokenManager.curLexState - mixin.BaliParserTokenManager.curLexState assigned to SYNTAX
+Line#3589 supposed to be ignored: mixin.BaliParserTokenManager.defaultLexState - mixin.BaliParserTokenManager.defaultLexState assigned to SYNTAX
+Line#3590 supposed to be ignored: mixin.BaliParserTokenManager.image - mixin.BaliParserTokenManager.image assigned to SYNTAX
+Line#3591 supposed to be ignored: mixin.BaliParserTokenManager.jjimage - mixin.BaliParserTokenManager.jjimage assigned to SYNTAX
+Line#3592 supposed to be ignored: mixin.BaliParserTokenManager.jjimageLen - mixin.BaliParserTokenManager.jjimageLen assigned to SYNTAX
+Line#3593 supposed to be ignored: mixin.BaliParserTokenManager.jjtoToken - mixin.BaliParserTokenManager.jjtoToken assigned to SYNTAX
+Line#3594 supposed to be ignored: mixin.BaliParserTokenManager.jjnewLexState - mixin.BaliParserTokenManager.jjnewLexState assigned to SYNTAX
+Line#3595 supposed to be ignored: mixin.BaliParserTokenManager.jjtoSkip - mixin.BaliParserTokenManager.jjtoSkip assigned to SYNTAX
+Line#3596 supposed to be ignored: mixin.BaliParserTokenManager.jjtoSpecial - mixin.BaliParserTokenManager.jjtoSpecial assigned to SYNTAX
+Line#3597 supposed to be ignored: mixin.BaliParserTokenManager.SkipLexicalActions(Token matchedToken) - mixin.BaliParserTokenManager.SkipLexicalActions(Token matchedToken) assigned to SYNTAX
+Line#3598 supposed to be ignored: mixin.BaliParserTokenManager.MoreLexicalActions() - mixin.BaliParserTokenManager.MoreLexicalActions() assigned to SYNTAX
+Line#3599 supposed to be ignored: mixin.BaliParserTokenManager.lengthOfMatch - mixin.BaliParserTokenManager.lengthOfMatch assigned to SYNTAX
+Line#3600 supposed to be ignored: mixin.BaliParserTokenManager.jjrounds - mixin.BaliParserTokenManager.jjrounds assigned to SYNTAX
+Line#3601 supposed to be ignored: mixin.BaliParserTokenManager.BaliParserTokenManager(JavaCharStream stream) - mixin.BaliParserTokenManager.BaliParserTokenManager(JavaCharStream stream) assigned to SYNTAX
+Line#3602 supposed to be ignored: mixin.BaliParserTokenManager.BaliParserTokenManager(JavaCharStream stream, int lexState) - mixin.BaliParserTokenManager.BaliParserTokenManager(JavaCharStream stream, int lexState) assigned to SYNTAX
+Line#3603 supposed to be ignored: mixin.BaliParserTokenManager.SwitchTo(int lexState) - mixin.BaliParserTokenManager.SwitchTo(int lexState) assigned to SYNTAX
+Line#3604 supposed to be ignored: mixin.BaliParserTokenManager.ReInit(JavaCharStream stream, int lexState) - mixin.BaliParserTokenManager.ReInit(JavaCharStream stream, int lexState) assigned to SYNTAX
+Line#3605 supposed to be ignored: mixin.BaliParserTokenManager.lexStateNames - mixin.BaliParserTokenManager.lexStateNames assigned to SYNTAX
+Line#3606 supposed to be ignored: mixin.BaliParserTokenManager.jjtoMore - mixin.BaliParserTokenManager.jjtoMore assigned to SYNTAX
+Line#3802 supposed to be ignored: mixin.ParseException.ParseException(Token currentTokenVal, int[][] expectedTokenSequencesVal, String[] tokenImageVal) - mixin.ParseException.ParseException(Token currentTokenVal, int[][] expectedTokenSequencesVal, String[] tokenImageVal) assigned to SYNTAX
+Line#3803 supposed to be ignored: mixin.ParseException.currentToken - mixin.ParseException.currentToken assigned to SYNTAX
+Line#3806 supposed to be ignored: mixin.ParseException.initialise(Token currentToken, int[][] expectedTokenSequences, String[] tokenImage) - mixin.ParseException.initialise(Token currentToken, int[][] expectedTokenSequences, String[] tokenImage) assigned to SYNTAX
+elements to classify before filter: []
+elements to classify before filter: []
