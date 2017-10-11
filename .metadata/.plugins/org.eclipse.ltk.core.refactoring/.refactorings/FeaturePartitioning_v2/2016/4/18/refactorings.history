@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;lower_bound&apos; in &apos;bttf.Partition.get_element_feature_bounds(...)&apos; to &apos;lower_part_bound&apos;&#x0D;&#x0A;- Original project: &apos;FeaturePartitioning_v2&apos;&#x0D;&#x0A;- Original element: &apos;bttf.Partition.get_element_feature_bounds(Element, Feature).lower_bound&apos;&#x0D;&#x0A;- Renamed element: &apos;lower_bound&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;lower_bound&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;bttf{Partition.java[Partition~get_element_feature_bounds~QElement;~QFeature;@lower_bound!17220!17371!17228!17238!QFeature;!0!false" name="lower_part_bound" references="true" stamp="1461877926373" version="1.0"/>
+</session>

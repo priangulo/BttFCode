@@ -1,0 +1,17 @@
+1467694559844	Delete element
+1467696486142	Rename local variable 'file'
+1467701238473	Rename type 'Main'
+1467744239546	Rename field 'annotation'
+1467744250372	Rename local variable 'annotation'
+1467744636157	Move package
+1467760188277	Rename type 'ElementsRetrievalException'
+1467762858252	Rename type 'BodyIndexes'
+1467762866515	Rename field 'body_start_index'
+1467762875526	Rename field 'body_end_index'
+1467762883908	Rename local variable 'body_start_index'
+1467762890446	Rename local variable 'body_end_index'
+1467912526036	Rename local variable 'lit_braks'
+1467919993816	Rename method 'find_word'
+1467920025420	Rename method 'util_find_word'
+1467920039689	Rename method 'getBodyIndexes'
+1467922964247	Rename local variable 'lastcomma'

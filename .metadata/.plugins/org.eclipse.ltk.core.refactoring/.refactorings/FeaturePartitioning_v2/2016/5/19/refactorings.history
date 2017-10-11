@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;active_feature&apos; in &apos;gui.InputFile.get_elements_from_csv_file(...)&apos; to &apos;parent_feature&apos;&#x0D;&#x0A;- Original project: &apos;FeaturePartitioning_v2&apos;&#x0D;&#x0A;- Original element: &apos;gui.InputFile.get_elements_from_csv_file(String, ArrayList&lt;String&gt;).active_feature&apos;&#x0D;&#x0A;- Renamed element: &apos;active_feature&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;active_feature&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;gui{InputFile.java[InputFile~get_elements_from_csv_file~QString;~QArrayList\&lt;QString;&gt;;@active_feature!2465!2494!2473!2486!QFeature;!0!false" name="parent_feature" references="true" stamp="1462398165628" version="1.0"/>
+</session>

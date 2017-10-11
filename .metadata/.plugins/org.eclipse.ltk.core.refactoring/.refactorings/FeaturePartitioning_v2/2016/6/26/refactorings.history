@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;identificator&apos; in &apos;bttf.Element.setIdentifier(...)&apos; to &apos;identifier&apos;&#x0D;&#x0A;- Original project: &apos;FeaturePartitioning_v2&apos;&#x0D;&#x0A;- Original element: &apos;bttf.Element.setIdentifier(String).identificator&apos;&#x0D;&#x0A;- Renamed element: &apos;identificator&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;identificator&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;bttf{Element.java[Element~setIdentifier~QString;@identificator!960!979!967!979!QString;!0!true" name="identifier" references="true" stamp="1466648587001" version="1.0"/>
+</session>

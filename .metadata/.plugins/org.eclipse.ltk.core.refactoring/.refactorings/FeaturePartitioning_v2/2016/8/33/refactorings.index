@@ -1,0 +1,4 @@
+1470771692100	Rename local variable 'tag_file_name'
+1470771767643	Rename local variable 'tag_file_name'
+1470771859216	Rename field 'TAG_EXTENSION'
+1470774784916	Rename method 'get_featuremodel_from_tagfile'

@@ -1,0 +1,849 @@
+package gui;
+
+
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
+
+import bttf.Element;
+import bttf.ElementType;
+import bttf.FactsInferences;
+import bttf.Feature;
+import bttf.Partition;
+/*
+ * Created by JFormDesigner on Wed Jan 27 13:31:28 CST 2016
+ */
+
+
+
+/**
+ * @author Priscila Angulo
+ */
+public class bttf_main extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final String private_modifier = "PRIVATE";
+	private final String public_modifier = "PUBLIC";
+	private final String skip_text = "Skip";
+	private final String exception_text = "Enable all options";
+	private final String action_regex = "\\w+ : (Base|BASE) (\\w+(( \\+ )|( ?)))+";
+	private final String error_action_format = "Error: Wrong action text format.";
+	private final String priv_endfix = "-priv";
+	private final String pub_endfix = "-pub";
+	
+	DefaultListModel<String> actions_listmodel = new DefaultListModel<String>();
+	private ButtonGroup bg_partitions;
+	ArrayList<JButton> bt_partitions_list = new ArrayList<JButton>();
+	ArrayList<Element> elements_skiped = new ArrayList<Element>();
+	private Partition partition;
+	private Element current_element;
+	ArrayList<FactsInferences> factsInferences = new ArrayList<FactsInferences>();
+	private boolean cycle_same_feature;
+
+	public bttf_main(Partition partition) {
+		this.partition = partition;
+		initComponents();
+	}
+	
+	public void setCycle_same_feature(boolean cycle_same_feature) {
+		this.cycle_same_feature = cycle_same_feature;
+	}
+	
+
+	/*
+	 * add an action button
+	 */
+	private void bt_addActionMouseClicked(MouseEvent e) {
+		if(!tx_addAction.getText().isEmpty() && tx_addAction.getText().matches(action_regex)){
+			if(!actions_listmodel.contains(tx_addAction.getText().trim().toUpperCase())){
+				actions_listmodel.addElement(tx_addAction.getText().trim().toUpperCase());
+				tx_addAction.setText("");
+			}
+		}
+		else{
+			JOptionPane.showMessageDialog(this.getContentPane(), error_action_format, "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	
+	/*
+	 * process an action button
+	 */
+	private void bt_processActionMouseClicked(MouseEvent e){
+		if(ls_actionList.getSelectedValue() != null){
+			String action = ls_actionList.getSelectedValue().toString();
+			if(action.matches(action_regex)){
+				clean_current_action();
+				lb_action.setText(action);
+				ArrayList<String> partition_names = create_partition_buttons(action);
+				partition.init(partition_names);
+				if(partition.getCycle_list() != null && partition.getCycle_list().size() > 0){
+					cycle_elements cycle_elem_frame = new cycle_elements(this, partition.getCycle_list());
+					this.setVisible(false);
+					cycle_elem_frame.setVisible(true);
+				}
+				display_next_element();
+				tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Partitions"));
+			}
+			else{
+				JOptionPane.showMessageDialog(this.getContentPane(), error_action_format, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	/*
+	 * delete an action button
+	 */
+	private void bt_deleteActionMouseClicked(MouseEvent e){
+		if(!ls_actionList.isSelectionEmpty()){
+			if(lb_action.getText().equals(ls_actionList.getSelectedValue())){
+				clean_current_action();
+			}
+			actions_listmodel.remove(ls_actionList.getSelectedIndex());
+		}
+	}
+	
+	/* 
+	 * click partition button  
+	 */	
+	private void partitionButtonClicked(MouseEvent e, String part_name, Boolean is_fprivate){
+		if(part_name.equals(exception_text)){
+			refresh_buttons(true, true, null, null);
+		}
+		else{
+			if(part_name.equals(skip_text)){
+				elements_skiped.add(current_element);
+			}
+			
+			else{
+				Feature feature = partition.get_feature_by_name(part_name);			
+				if(elements_skiped.contains(current_element)){
+					elements_skiped.remove(current_element);
+				}
+				
+				partition.add_element_to_feature_gui(feature, current_element, is_fprivate);
+				refresh_facts();
+			}
+			display_next_element();
+		}
+	}
+	
+	
+	/*
+	 * Click on a fact displays its inferences 
+	 */
+	private void ls_factsMouseClicked(MouseEvent e){
+		ls_inferences.setListData(new String[0]);
+		String fact = ls_facts.getSelectedValue();
+		if (fact != null && !fact.isEmpty()){
+			FactsInferences factinf = 
+				factsInferences.stream()
+				.filter(f -> f.getFact().equals(fact))
+				.collect(Collectors.toList()).get(0);
+			if(factinf != null && factinf.getInferences() != null && !factinf.getInferences().isEmpty()){
+				ls_inferences.setListData((String[]) factinf.getInferences().toArray(new String[0]));
+			}
+		}
+	}
+	
+	/*
+	 * Deletes a fact and consequent facts
+	 */
+	private void bt_deleteFactMouseClicked(MouseEvent e){
+		String fact = ls_facts.getSelectedValue();
+		if (fact != null && !fact.isEmpty()){
+			int answer = JOptionPane.showConfirmDialog(this.getContentPane(), "Deleting a fact will also delete consequent facts, do you want to continue?", "Are you sure?", JOptionPane.YES_NO_OPTION);
+			if(answer == JOptionPane.YES_OPTION){
+				partition.delete_fact(fact);
+				refresh_facts();
+				display_next_element();
+			}
+		}
+	}
+	
+	/*
+	 * Opens the more info window for an element
+	 */
+	private void bt_moreInfoMouseClicked(MouseEvent e){
+		if(current_element != null){
+			element_moreinfo more_info_fram = new element_moreinfo(current_element);
+			more_info_fram.setVisible(true);
+		}
+	}
+	
+	/*
+	 * Resets partitions tab 
+	 */
+	private void clean_current_action(){
+		lb_action.setText("");
+		bt_partitions_list = new ArrayList<JButton>();
+		bg_partitions = new ButtonGroup();
+		pn_partitionButtons.removeAll();
+	}
+	
+	/*
+	 * Displays buttons for partitions
+	 */
+	private ArrayList<String> create_partition_buttons(String action){
+		String partitions_names = action.substring(action.indexOf(":")+2);
+		String[] partitions = partitions_names.split(" ");
+		ArrayList<String> no_duplicate_parts = new ArrayList<String>();
+		
+		int i = 0;
+		for (String part : partitions){
+			if(!no_duplicate_parts.contains(part)){
+				no_duplicate_parts.add(part);
+				
+				//create feature private button
+				create_partition_button("bt_partition_priv_" + part, i + "-" + part + priv_endfix, part, true, true);
+				//create feature public button
+				create_partition_button("bt_partition_pub_" + part, i + "-" + part + pub_endfix, part, false, true);
+				
+				i++;
+			}
+		}
+		//create skip button
+		create_partition_button("bt_skip", skip_text, skip_text, false, true);
+		
+		//create exception button
+		create_partition_button("bt_exception", exception_text, exception_text, false, false);
+		
+		return no_duplicate_parts;
+	}	
+	
+	/*
+	 * creates a button for the partition buttons area 
+	 */
+	private void create_partition_button(String name, String text, String partition_name, Boolean fprivate, Boolean visible){
+		JButton button = new JButton();
+		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		//button.setPreferredSize(new Dimension(140, 20));
+		button.setPreferredSize(new Dimension(100, 25));
+		button.setName(name);
+		button.setText(text);				
+		button.setVisible(visible);
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				partitionButtonClicked(e, partition_name, fprivate);
+			}
+		});
+		bt_partitions_list.add(button);
+		bg_partitions.add(button);
+		pn_partitionButtons.add(button);
+	}
+
+	
+	/*
+	 * Displays next element to be classified
+	 */
+	private void display_next_element(){
+		ArrayList<Element> elements_to_classify = partition.get_next_elems_to_classify();
+		
+		if(elements_to_classify.isEmpty()){
+			current_element = null;
+			ta_element.setText("");
+			JOptionPane.showMessageDialog(this.getContentPane(), "No more elements to classify.", "Done!", JOptionPane.INFORMATION_MESSAGE);
+			refresh_buttons(false, false, null, null);
+		}
+		else{
+			if (elements_skiped.containsAll(elements_to_classify)){
+				JOptionPane.showMessageDialog(this.getContentPane(), "No more elements to skip.", "Make a decision...", JOptionPane.INFORMATION_MESSAGE);
+				elements_skiped.clear();
+			}
+			
+			for(Element elem : elements_to_classify){
+				if(!elements_skiped.contains(elem)){
+					current_element = elem;
+					ta_element.setText(current_element.displayElement());
+					
+					//already hook by inference, needs to rectify feature
+					if( current_element.isIs_hook() ||
+						( current_element.getElement_type().equals(ElementType.ELEM_TYPE_FIELD)
+							&& current_element.getCalls_to() != null
+							&& current_element.getCalls_to().size() > 0 
+							&& !current_element.getCalls_to().stream().map(e -> e.getFeature()).collect(Collectors.toList()).contains(null)
+						) ||
+						( //current_element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)
+								//&& 
+								current_element.getCalls_to() != null
+								&& current_element.getCalls_to().size() > 0 
+								&& !current_element.getCalls_to().stream().map(e -> e.getFeature()).collect(Collectors.toList()).contains(null)
+								&& current_element.getCalled_from() != null
+								&& current_element.getCalled_from().size() > 0
+								&& !current_element.getCalled_from().stream().map(e -> e.getFeature()).collect(Collectors.toList()).contains(null)
+							)	
+						){
+						ArrayList<Feature> features = (ArrayList<Feature>) current_element.getCalls_to().stream().map(
+								e -> e.getFeature()).collect(Collectors.toList()).stream().filter(f -> f != null).collect(Collectors.toList());
+						
+						//its options are all features from 0 to the minimum of the elements it calls
+						Feature max_feature = features.stream().min((f1, f2) -> Integer.compare(f1.getOrder(), f2.getOrder())).get();
+						ArrayList<String> options = new ArrayList<String>();
+						for(Feature f : partition.get_all_features()){
+							if(f.getOrder() <= max_feature.getOrder()){
+								options.add(f.getFeature_name());
+							}
+						}
+						if(options.size() == 1){
+							partitionButtonClicked(null, options.get(0), false);
+						}
+						else{
+							refresh_buttons(true, false, null, options);
+						}
+					}
+					//normal path
+					else{
+						ArrayList<Feature> callers_feats = new ArrayList<Feature>();
+						//this are the features that caller elements have
+						callers_feats = (ArrayList<Feature>) current_element.getCalled_from().stream().map(e -> e.getFeature()).filter(f -> f != null).distinct().collect(Collectors.toList());
+						
+						//the element can be assigned fprivate of this feature, or fpublic of any 
+						if (callers_feats.size() == 1){
+							refresh_buttons(true, false, callers_feats.get(0).getFeature_name(), null);
+							if(current_element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+								//show cheat button
+								show_exception_button();
+							}
+						}
+						//no fprivate allowed for any feature
+						else if (callers_feats.size() > 1 ){
+							refresh_buttons(true, false, null, null);
+							if(current_element.getElement_type().equals(ElementType.ELEM_TYPE_METHOD)){
+								//show cheat button
+								show_exception_button();
+							}
+							
+						}
+						//all allowed
+						else{
+							refresh_buttons(true, true, null, null);
+						}
+					}
+					
+					break;
+				}
+			}
+		}
+		refresh_facts();
+	}
+
+	/*
+	 * updates the list of facts on screen 
+	 */
+	private void refresh_facts(){
+		factsInferences = partition.get_facts();
+		ls_facts.setListData(
+			(String[]) factsInferences.stream()
+			.map(f -> f.getFact())
+			.collect(Collectors.toList()).toArray(new String[0])
+		);
+		ls_inferences.setListData(new String[0]);
+	}
+	
+	private void refresh_buttons(Boolean allow_public, Boolean allow_private, String only_this_fprivate, ArrayList<String> only_these_options){
+		for(JButton button : bt_partitions_list){
+			button.setEnabled(false);
+			button.setVisible(false);
+		}
+		
+		//hooks discovered later only can be public of certain features
+		if(only_these_options != null){
+			for(String feature : only_these_options){
+				for(JButton button : bt_partitions_list){
+					if( button.getText().contains(feature) && 
+						( 
+							( allow_public && button.getText().endsWith(pub_endfix) )
+							|| ( allow_private && button.getText().endsWith(priv_endfix) )
+						) 
+					){
+						button.setEnabled(true);
+						button.setVisible(true);
+					}
+				}
+			}
+		}
+		else{
+			for(JButton button : bt_partitions_list){
+				if( ( allow_private || allow_public ) &&
+						( (button.getText().endsWith(priv_endfix) && allow_private) 
+						|| (button.getText().endsWith(pub_endfix) && allow_public)
+						|| (only_this_fprivate != null && button.getText().toUpperCase().contains(only_this_fprivate.toUpperCase()))
+						|| button.getText().equals(skip_text) ) )
+				{
+					button.setEnabled(true);
+					button.setVisible(true);
+				}
+			}
+		}
+	}
+	
+	//this button allows to assign fprivate of elements that possibly are related with a hook -> "inverted parents"
+	private void show_exception_button(){
+		JButton bt_exc = bt_partitions_list.stream().filter(b -> b.getText().equals(exception_text)).collect(Collectors.toList()).get(0);
+		bt_exc.setVisible(true);
+		bt_exc.setEnabled(true);
+	}
+	
+	private void initComponents() {
+		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		// Generated using JFormDesigner Evaluation license - Priscila Angulo
+		tabbedPane = new JTabbedPane();
+		pn_actions = new JPanel();
+		lb_addAction = new JLabel();
+		tx_addAction = new JTextField();
+		bt_addAction = new JButton();
+		lb_actionList = new JLabel();
+		scrollPane1 = new JScrollPane();
+		ls_actionList = new JList();
+		bt_deleteAction = new JButton();
+		bt_processAction = new JButton();
+		ta_instructions = new JTextArea();
+		pn_partitions = new JPanel();
+		panel2 = new JPanel();
+		panel5 = new JPanel();
+		panel4 = new JPanel();
+		lb_currentAction = new JLabel();
+		lb_action = new JLabel();
+		panel6 = new JPanel();
+		lb_element = new JLabel();
+		bt_moreinfo = new JButton();
+		scrollPane2 = new JScrollPane();
+		ta_element = new JTextArea();
+		panel3 = new JPanel();
+		lb_facts = new JLabel();
+		bt_deleteFact = new JButton();
+		scrollPane3 = new JScrollPane();
+		ls_facts = new JList();
+		panel7 = new JPanel();
+		lb_inferences = new JLabel();
+		scrollPane4 = new JScrollPane();
+		ls_inferences = new JList();
+		hSpacer1 = new JPanel(null);
+		panel1 = new JPanel();
+		panel8 = new JPanel();
+		lb_partition = new JLabel();
+		pn_partitionButtons = new JPanel();
+		panel9 = new JPanel();
+		bt_finalize = new JButton();
+
+		//======== this ========
+		setTitle("Back to the Future");
+		Container contentPane = getContentPane();
+
+		//======== tabbedPane ========
+		{
+
+			//======== pn_actions ========
+			{
+
+				// JFormDesigner evaluation mark
+				/*pn_actions.setBorder(new javax.swing.border.CompoundBorder(
+					new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+						"JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+						javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+						java.awt.Color.red), pn_actions.getBorder())); pn_actions.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+				*/
+
+				//---- lb_addAction ----
+				lb_addAction.setText("Add action:");
+
+				//---- bt_addAction ----
+				bt_addAction.setText("Add");
+
+				//---- lb_actionList ----
+				lb_actionList.setText("Actions:");
+
+				//======== scrollPane1 ========
+				{
+
+					//---- ls_actionList ----
+					ls_actionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					scrollPane1.setViewportView(ls_actionList);
+				}
+
+				//---- bt_deleteAction ----
+				bt_deleteAction.setText("Delete");
+
+				//---- bt_processAction ----
+				bt_processAction.setText("Process");
+
+				//---- ta_instructions ----
+				ta_instructions.setText("Instructions:\n* The expected format is P : Base A B C\n* First feature should be named Base\n* Order the rest of the features as you would do if they were layers\n");
+				ta_instructions.setFont(new Font("Tahoma", Font.PLAIN, 11));
+				ta_instructions.setBackground(SystemColor.menu);
+				ta_instructions.setEditable(false);
+
+				GroupLayout pn_actionsLayout = new GroupLayout(pn_actions);
+				pn_actions.setLayout(pn_actionsLayout);
+				pn_actionsLayout.setHorizontalGroup(
+					pn_actionsLayout.createParallelGroup()
+						.addGroup(pn_actionsLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(pn_actionsLayout.createParallelGroup()
+								.addGroup(pn_actionsLayout.createSequentialGroup()
+									.addComponent(lb_actionList)
+									//.addContainerGap(1000, Short.MAX_VALUE))
+									.addContainerGap(10, Short.MAX_VALUE))
+								.addGroup(GroupLayout.Alignment.TRAILING, pn_actionsLayout.createSequentialGroup()
+									.addGroup(pn_actionsLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+										.addGroup(pn_actionsLayout.createSequentialGroup()
+											.addComponent(lb_addAction)
+											.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+											//.addComponent(tx_addAction, GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+											.addComponent(tx_addAction, 100, 100, Short.MAX_VALUE)
+											.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+											.addComponent(bt_addAction, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+										//.addComponent(scrollPane1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+										.addComponent(scrollPane1, GroupLayout.Alignment.LEADING, 100, 200, Short.MAX_VALUE)
+										.addGroup(GroupLayout.Alignment.LEADING, pn_actionsLayout.createSequentialGroup()
+											//.addComponent(ta_instructions, GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
+											.addComponent(ta_instructions, 100, 100, Short.MAX_VALUE)
+											.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+											.addComponent(bt_deleteAction)
+											.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+											.addComponent(bt_processAction)))
+									//.addGap(25, 25, 25))))
+									.addGap(2, 2, 2))))
+				);
+				pn_actionsLayout.setVerticalGroup(
+					pn_actionsLayout.createParallelGroup()
+						.addGroup(pn_actionsLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(pn_actionsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+								.addComponent(lb_addAction)
+								.addComponent(bt_addAction)
+								.addComponent(tx_addAction, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+							.addComponent(lb_actionList)
+							.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+							//.addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE)
+							.addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+							//.addGap(18, 18, 18)
+							.addGap(2, 2, 2)
+							.addGroup(pn_actionsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+								.addComponent(ta_instructions)
+								.addComponent(bt_deleteAction)
+								.addComponent(bt_processAction))
+							//.addContainerGap(190, Short.MAX_VALUE))
+							.addContainerGap(10, Short.MAX_VALUE))
+				);
+			}
+			tabbedPane.addTab("Actions", pn_actions);
+
+			//======== pn_partitions ========
+			{
+				pn_partitions.setLayout(new BoxLayout(pn_partitions, BoxLayout.X_AXIS));
+
+				//======== panel2 ========
+				{
+					panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+
+					//======== panel5 ========
+					{
+						//panel5.setMinimumSize(new Dimension(100, 22));
+						panel5.setLayout(new BoxLayout(panel5, BoxLayout.Y_AXIS));
+
+						//======== panel4 ========
+						{
+							//panel4.setPreferredSize(new Dimension(80, 18));
+							panel4.setPreferredSize(new Dimension(40, 10));
+							panel4.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+							//---- lb_currentAction ----
+							lb_currentAction.setText("Current Action:");
+							panel4.add(lb_currentAction);
+
+							//---- lb_action ----
+							lb_action.setText(" ");
+							panel4.add(lb_action);
+						}
+						panel5.add(panel4);
+
+						//======== panel6 ========
+						{
+							//panel6.setPreferredSize(new Dimension(105, 20));
+							panel6.setPreferredSize(new Dimension(40, 10));
+							panel6.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+							//---- lb_element ----
+							lb_element.setText("Element to Classify: ");
+							lb_element.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+							//lb_element.setMinimumSize(new Dimension(80, 14));
+							panel6.add(lb_element);
+
+							//---- bt_moreinfo ----
+							bt_moreinfo.setText("More information");
+							panel6.add(bt_moreinfo);
+						}
+						panel5.add(panel6);
+
+						//======== scrollPane2 ========
+						{
+							//scrollPane2.setPreferredSize(new Dimension(600, 100));
+							scrollPane2.setPreferredSize(new Dimension(40, 50));
+
+							//---- ta_element ----
+							ta_element.setEditable(false);
+							//ta_element.setMinimumSize(new Dimension(4, 44));
+							scrollPane2.setViewportView(ta_element);
+						}
+						panel5.add(scrollPane2);
+
+						//======== panel3 ========
+						{
+							//panel3.setMinimumSize(new Dimension(120, 23));
+							panel3.setPreferredSize(new Dimension(40, 10));
+							panel3.setOpaque(false);
+							panel3.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+							//---- lb_facts ----
+							lb_facts.setText("Facts:  ");
+							//lb_facts.setMinimumSize(new Dimension(100, 14));
+							lb_facts.setPreferredSize(new Dimension(40, 10));
+							lb_facts.setOpaque(true);
+							panel3.add(lb_facts);
+
+							//---- bt_deleteFact ----
+							bt_deleteFact.setText("Delete Fact");
+							panel3.add(bt_deleteFact);
+						}
+						panel5.add(panel3);
+
+						//======== scrollPane3 ========
+						{
+							scrollPane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+							//scrollPane3.setPreferredSize(new Dimension(600, 170));
+							scrollPane3.setPreferredSize(new Dimension(40, 50));
+							scrollPane3.setViewportView(ls_facts);
+						}
+						panel5.add(scrollPane3);
+
+						//======== panel7 ========
+						{
+							//panel7.setPreferredSize(new Dimension(66, 20));
+							panel7.setPreferredSize(new Dimension(40, 10));
+							panel7.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+							//---- lb_inferences ----
+							lb_inferences.setText("Inferences:");
+							panel7.add(lb_inferences);
+						}
+						panel5.add(panel7);
+
+						//======== scrollPane4 ========
+						{
+							scrollPane4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+							//scrollPane4.setPreferredSize(new Dimension(600, 170));
+							scrollPane4.setPreferredSize(new Dimension(40, 50));
+							scrollPane4.setViewportView(ls_inferences);
+						}
+						panel5.add(scrollPane4);
+					}
+					panel2.add(panel5);
+				}
+				pn_partitions.add(panel2);
+				//pn_partitions.add(hSpacer1);
+
+				//======== panel1 ========
+				{
+					//panel1.setPreferredSize(new Dimension(500, 237));
+					panel1.setPreferredSize(new Dimension(50, 50));
+					panel1.setRequestFocusEnabled(false);
+					panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
+
+					//======== panel8 ========
+					{
+						panel8.setOpaque(false);
+						//panel8.setPreferredSize(new Dimension(140, 18));
+						panel8.setPreferredSize(new Dimension(50, 10));
+						panel8.setLayout(new FlowLayout());
+
+						//---- lb_partition ----
+						lb_partition.setText("To which partition belongs?");
+						panel8.add(lb_partition);
+					}
+					panel1.add(panel8);
+
+					//======== pn_partitionButtons ========
+					{
+						//pn_partitionButtons.setPreferredSize(new Dimension(500, 450));
+						pn_partitionButtons.setPreferredSize(new Dimension(50, 100));
+						pn_partitionButtons.setOpaque(false);
+						pn_partitionButtons.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+						//pn_partitionButtons.setMinimumSize(new Dimension(500, 450));
+						//pn_partitionButtons.setMinimumSize(new Dimension(50, 50));
+						//pn_partitionButtons.setMaximumSize(new Dimension(500, 32767));
+						pn_partitionButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+					}
+					panel1.add(pn_partitionButtons);
+
+					//======== panel9 ========
+					{
+						//panel9.setPreferredSize(new Dimension(147, 70));
+						panel9.setPreferredSize(new Dimension(50, 10));
+						panel9.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+
+						//---- bt_finalize ----
+						bt_finalize.setText("FINALIZE ACTION");
+						bt_finalize.setFont(new Font("Tahoma", Font.BOLD, 12));
+						//bt_finalize.setActionCommand("FINALIZE ACTION");
+						panel9.add(bt_finalize);
+					}
+					panel1.add(panel9);
+				}
+				pn_partitions.add(panel1);
+			}
+			tabbedPane.addTab("Partitions", pn_partitions);
+		}
+
+		GroupLayout contentPaneLayout = new GroupLayout(contentPane);
+		contentPane.setLayout(contentPaneLayout);
+		contentPaneLayout.setHorizontalGroup(
+			contentPaneLayout.createParallelGroup()
+				.addGroup(contentPaneLayout.createSequentialGroup()
+					.addContainerGap()
+					//.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1054, Short.MAX_VALUE)
+					.addComponent(tabbedPane, 40, 40, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		contentPaneLayout.setVerticalGroup(
+			contentPaneLayout.createParallelGroup()
+				.addGroup(contentPaneLayout.createSequentialGroup()
+					.addContainerGap()
+					//.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+					.addComponent(tabbedPane, 40, 40, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		//setSize(1090, 690);
+		setSize(100, 100);
+		setLocationRelativeTo(getOwner());
+		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+		
+		register_actions();
+	}
+	
+	private void register_actions(){
+		ls_actionList.setModel(actions_listmodel);
+		
+		bt_addAction.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_addActionMouseClicked(e);
+			}
+		});
+		
+		bt_processAction.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_processActionMouseClicked(e);
+			}
+		});
+		
+		bt_deleteAction.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_deleteActionMouseClicked(e);
+			}
+		});
+
+		ls_facts.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ls_factsMouseClicked(e);
+				
+			}
+		});
+		
+		bt_deleteFact.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_deleteFactMouseClicked(e);
+				
+			}
+		});
+		
+		bt_moreinfo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				bt_moreInfoMouseClicked(e);
+				
+			}
+		});
+	}
+	
+	// JFormDesigner - Begin of variables declaration  //GEN-BEGIN:variables
+	// Generated using JFormDesigner Evaluation license - Priscila Angulo
+	private JTabbedPane tabbedPane;
+	private JPanel pn_actions;
+	private JLabel lb_addAction;
+	private JTextField tx_addAction;
+	private JButton bt_addAction;
+	private JLabel lb_actionList;
+	private JScrollPane scrollPane1;
+	private JList ls_actionList;
+	private JButton bt_deleteAction;
+	private JButton bt_processAction;
+	private JTextArea ta_instructions;
+	private JPanel pn_partitions;
+	private JPanel panel2;
+	private JPanel panel5;
+	private JPanel panel4;
+	private JLabel lb_currentAction;
+	private JLabel lb_action;
+	private JPanel panel6;
+	private JLabel lb_element;
+	private JButton bt_moreinfo;
+	private JScrollPane scrollPane2;
+	private JTextArea ta_element;
+	private JPanel panel3;
+	private JLabel lb_facts;
+	private JButton bt_deleteFact;
+	private JScrollPane scrollPane3;
+	private JList<String> ls_facts;
+	private JPanel panel7;
+	private JLabel lb_inferences;
+	private JScrollPane scrollPane4;
+	private JList<String> ls_inferences;
+	private JPanel hSpacer1;
+	private JPanel panel1;
+	private JPanel panel8;
+	private JLabel lb_partition;
+	private JPanel pn_partitionButtons;
+	private JPanel panel9;
+	private JButton bt_finalize;
+	// JFormDesigner - End of variables declaration  //GEN-END:variables
+	
+}
+

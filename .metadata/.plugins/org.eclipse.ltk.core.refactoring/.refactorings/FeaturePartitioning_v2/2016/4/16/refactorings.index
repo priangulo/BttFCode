@@ -1,0 +1,13 @@
+1460594859718	Rename method 'load_partitionpane'
+1460596009383	Rename local variable 'feature_model'
+1460596022572	Rename local variable 'action'
+1460597697481	Rename local variable 'action'
+1460599191923	Rename field 'action_regex'
+1460604461763	Rename local variable 'action'
+1460604574714	Rename field 'actions_listmodel'
+1460604599916	Rename field 'ls_actionList'
+1460604608833	Rename field 'lb_action'
+1460604616918	Rename field 'lb_tasl'
+1460604655826	Rename field 'tx_addAction'
+1460605944618	Rename method 'partition_finished'
+1460608043724	Delete element

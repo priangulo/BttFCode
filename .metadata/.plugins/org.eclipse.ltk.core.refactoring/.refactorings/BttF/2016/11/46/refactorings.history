@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;modelLines&apos; in &apos;bttf.Partition.get_allfeaturesnames(...)&apos; to &apos;fm_lines&apos;&#x0D;&#x0A;- Original project: &apos;BttF&apos;&#x0D;&#x0A;- Original element: &apos;bttf.Partition.get_allfeaturesnames(ArrayList&lt;String&gt;).modelLines&apos;&#x0D;&#x0A;- Renamed element: &apos;modelLines&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;modelLines&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;bttf{Partition.java[Partition~get_allfeaturesnames~QArrayList\&lt;QString;&gt;;@modelLines!2944!2971!2962!2971!QArrayList\&lt;QString;&gt;;!0!true" name="fm_lines" references="true" stamp="1478763649310" version="1.0"/>
+</session>
