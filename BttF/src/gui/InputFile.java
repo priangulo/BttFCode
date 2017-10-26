@@ -23,6 +23,7 @@ import bttf.FWPlBelongLevel;
 import bttf.Feature;
 import bttf.Partition;
 import bttf.Reference;
+import bttf.SourceLanguage;
 
 public class InputFile {
 	public final static String container_feature_name = "^";
@@ -135,7 +136,7 @@ public class InputFile {
 		return null;
 	}
 
-	public void get_elements_from_csv_file(String file_name, ArrayList<String> features, Boolean reload){
+	public void get_elements_from_csv_file(String file_name, ArrayList<String> features, Boolean reload, SourceLanguage lang){
 		int latest_feature_order = partition.partitionHelper.get_latest_feature_in_task();
 		boolean sanity_check = true;
 		BufferedReader reader = null;
@@ -226,7 +227,7 @@ public class InputFile {
 									|| (fields.length > usercomment_column && !fields[usercomment_column].trim().isEmpty())
 								)
 							){
-							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0, null, null);
+							Element file_elem = new Element(identifier, element_type, null, null, is_terminal, null, null, 0, null, null, lang);
 							file_elem.setFeature(feature);
 							
 							if( ( fields.length > isfprivate_column

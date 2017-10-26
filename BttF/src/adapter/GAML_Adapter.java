@@ -15,7 +15,7 @@ public class GAML_Adapter {
 			case S_SPECIES: return ElementType.ELEM_TYPE_CLASS;
 			case S_DECLARATION: return ElementType.ELEM_TYPE_FIELD;
 			case S_ACTION: return ElementType.ELEM_TYPE_METHOD;
-			case S_EXPERIMENT: return ElementType.ELEM_TYPE_METHOD;
+			case S_EXPERIMENT: return ElementType.ELEM_TYPE_CLASS;
 			case S_REFLEX: return ElementType.ELEM_TYPE_METHOD;
 		}
 		

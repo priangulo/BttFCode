@@ -203,7 +203,7 @@ public class PartitionInferencingHandler {
 		return false;
 	}
 	
-	/*void propagate_members_of_nonterminal(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
+	void propagate_members_of_nonterminal(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && !element.isIs_terminal()){
 			String reason = ", BttF says it's a public/protected member of non-terminal class ";
 			for(Element member : element.getChildrenDeclarations()){
@@ -227,7 +227,7 @@ public class PartitionInferencingHandler {
 				}
 			}
 		}
-	}*/
+	}
 	
 	void propagate_members_of_unbreakable_fwpi(Element element, Feature feature_to_assign, Fact factInf, Feature parent_feature){
 		if(element.getElement_type().equals(ElementType.ELEM_TYPE_CLASS) && 

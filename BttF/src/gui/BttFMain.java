@@ -58,6 +58,7 @@ import bttf.FeatureBoundsWExp;
 import bttf.FeaturePossibility;
 import bttf.Partition;
 import bttf.Reference;
+import bttf.SourceLanguage;
 import errors.InvalidFeatureBounds;
 
 
@@ -111,6 +112,7 @@ public class BttFMain extends JFrame {
 	private boolean usedb = false;
 	private boolean cycle_stuff_on = false;
 	private boolean standalone = false;
+	private SourceLanguage lang = SourceLanguage.LANG_JAVA;
 	
 	
 	public BttFMain() {
@@ -119,6 +121,7 @@ public class BttFMain extends JFrame {
 	
 	public BttFMain(boolean standalone) {
 		this.standalone = standalone;
+		this.lang = SourceLanguage.LANG_GAML;
 		initComponents();
 		this.setTitle("Back to the Future - Standalone");
 		
@@ -132,7 +135,7 @@ public class BttFMain extends JFrame {
 			//get references from file
 			ArrayList<Reference> ref_list = inputFile.get_crg_from_csv(file_name, inputFile.GAML_LANGUAGE);
 			if(ref_list != null && !ref_list.isEmpty()){
-				Partition partition = new Partition(ref_list, getProjectNameFromFileName(file_name));
+				Partition partition = new Partition(ref_list, getProjectNameFromFileName(file_name), this.lang);
 				start_partitioning(partition);
 			}
 		}
@@ -148,6 +151,7 @@ public class BttFMain extends JFrame {
 		this.project_name = project_name;
 		this.outputFile = OutputFile.OutputFileInstance(this, this.project_name, this.partition);
 		this.set_StartPathDir();
+		this.lang = SourceLanguage.LANG_JAVA;
 		initComponents();
 		pb = ProgressBar.StartProgressBar(this);   
 	}
@@ -436,7 +440,7 @@ public class BttFMain extends JFrame {
 		
 		String file_name = (inputFile.getFileFromFileDialog(this, this.start_path, GuiConstants.CSV_EXTENSION, ""));
 		if(file_name != null){
-			inputFile.get_elements_from_csv_file(file_name, partition_names, false);
+			inputFile.get_elements_from_csv_file(file_name, partition_names, false, this.lang);
 			//System.out.println(partition.get_elements_from_file().toString());
 		}
 		
@@ -487,7 +491,7 @@ public class BttFMain extends JFrame {
 		}
 		
 		if(file_name != null){
-			inputFile.get_elements_from_csv_file(file_name, partition_names, false);
+			inputFile.get_elements_from_csv_file(file_name, partition_names, false, this.lang);
 			//System.out.println(partition.get_elements_from_file().toString());
 		}
 		

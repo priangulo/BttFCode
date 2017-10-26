@@ -31,7 +31,7 @@ public class Partition {
 	private ArrayList<String> allFeatures = new ArrayList<String>();
 	public ArrayList<String> featuremodel_alllines;
 	
-	public Partition(ArrayList<Reference> references_list, String project_name) {
+	public Partition(ArrayList<Reference> references_list, String project_name, SourceLanguage lang) {
 		this.references_list = references_list;
 		this.project_name = project_name;
 		
@@ -39,7 +39,7 @@ public class Partition {
 		this.partitionHelper = new PartitionHelper(this);
 		this.boundsCalc = new FeatureBoundsCalculation(this);
 		
-		get_list_of_elements();
+		get_list_of_elements(lang);
 		get_toposort();
 		
 		if(cycle_stuff_on){
@@ -161,10 +161,10 @@ public class Partition {
 	/*
 	 * From the references list gets the individual elements
 	 * */
-	private void get_list_of_elements(){
+	private void get_list_of_elements(SourceLanguage lang){
 		for(Reference ref : references_list){
-			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC(), ref.getCall_from_origType(), ref.getCall_from_returnType());
-			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC(), ref.getCall_to_origType(), ref.getCall_to_returnType());
+			Element call_from = new Element(ref.getCall_from(), ref.getCall_from_type(), ref.getCall_from_mod(), ref.getCall_from_code(), ref.isCall_from_isterminal(), ref.getCall_from_signature(), ref.getCall_from_annotationtext(), ref.getCall_from_LOC(), ref.getCall_from_origType(), ref.getCall_from_returnType(), lang);
+			Element call_to = new Element(ref.getCall_to(), ref.getCall_to_type(), ref.getCall_to_mod(), ref.getCall_to_code(), ref.isCall_to_isterminal(), ref.getCall_to_signature(), ref.getCall_to_annotationtext(), ref.getCall_to_LOC(), ref.getCall_to_origType(), ref.getCall_to_returnType(), lang);
 			if(!elements_list.contains(call_from)){
 				elements_list.add(call_from);
 			}

@@ -220,6 +220,9 @@ public class FeatureBoundsCalculation {
 		//get feature bounds
 		FeatureBoundsWExp bounds = this.get_element_feature_bounds(current_element, parent_feature);
 		if (bounds != null && bounds.getFeatureRange() != null){
+			System.out.println(bounds.getEb_explanation());
+			System.out.println(bounds.getLb_explanation());
+			
 			ArrayList<Feature> feature_options = (ArrayList<Feature>) bounds.getFeatureRange();
 		
 			boolean reduced_options = (feature_options.size() < partition.partitionHelper.get_features_in_task().size());

@@ -39,10 +39,11 @@ public class Element implements Comparable<Element>{
 	private Boolean needsLocalConstructor;
 	private String methodReturnType;
 	private int orderOfAssignment = 0;
+	private SourceLanguage lang = SourceLanguage.LANG_JAVA;
 	
 	
 	public Element(String identifier, ElementType element_type, String modifier, String code, boolean is_terminal, 
-			String method_signature, String annotation_text, int LOC, String origType, String methodReturnType) {
+			String method_signature, String annotation_text, int LOC, String origType, String methodReturnType, SourceLanguage lang) {
 		this.identifier = identifier;
 		this.element_type = element_type;
 		this.modifier = modifier;
@@ -53,6 +54,7 @@ public class Element implements Comparable<Element>{
 		this.LOC = LOC;
 		this.origType = origType;
 		this.methodReturnType = methodReturnType;
+		this.lang = lang;
 		set_packageclassmember_names();
 	}	
 	
@@ -287,12 +289,14 @@ public class Element implements Comparable<Element>{
 			String name = identifier;
 			String pack_and_class = "";
 			int name_end_index;
-			if(identifier.contains(INITIALIZER_TEXT) && identifier.indexOf("(") == -1){
+			if( (identifier.contains(INITIALIZER_TEXT) && identifier.indexOf("(") == -1)
+					|| this.lang.equals(SourceLanguage.LANG_GAML) ){
 				name_end_index = identifier.length() - 1;
 			}
 			else{
 				name_end_index = identifier.indexOf("(");
 			}
+			
 			int name_begin_index = identifier.lastIndexOf(".",name_end_index);
 			name = identifier.substring(name_begin_index+1);
 			
@@ -401,8 +405,13 @@ public class Element implements Comparable<Element>{
 	
 	public String getParentName(){
 		if(this.element_type.equals(ElementType.ELEM_TYPE_METHOD)){
-			String nameNoParams = identifier.substring(0, identifier.lastIndexOf("("));
-			return nameNoParams.substring(0, nameNoParams.lastIndexOf("."));
+			if(this.lang.equals(SourceLanguage.LANG_JAVA)){
+				String nameNoParams = identifier.substring(0, identifier.lastIndexOf("("));
+				return nameNoParams.substring(0, nameNoParams.lastIndexOf("."));
+			}
+			else{ //for gaml
+				return identifier.substring(0, identifier.lastIndexOf("."));
+			}
 		}
 		if(identifier.lastIndexOf(".") != -1){
 			return identifier.substring(0, identifier.lastIndexOf("."));
